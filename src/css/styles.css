@@ -400,8 +400,48 @@ img {
  .lista:hover {
   background-color: #ad8be057;
  }
- .butao:focus{
+ .butao:focus,.meses:focus{
   background-color:  #ad8be057;
  }
+.dashboard-metrica{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 120px 120px;
+  row-gap:20px ;
+  column-gap:20px ;
+}
+.dashboard-metrica>div{
+  background-image: linear-gradient(to right, #FBA85B, #C24E4E);
+  border-radius: 30px;
+  margin-top: 1rem;
+  box-shadow:2px 2px 5px hsl(0,0%,0.8);
+  transition: all .3s ease;
+  color:white;
+}
+.dashboard-metrica>.metrica2{
+  background-image: linear-gradient(to right, #86A1E5, #392686);
+}
+.dashboard-metrica>.metrica3{
+  background-image: linear-gradient(to right, #AB5BFB, #942B90);
+}
 
+.dashboard-metrica>.metrica4{
+  background-image: linear-gradient(to right, #E5FB5B, #59A03F);
+}
+.dashboard-metrica>.metrica5{
+  background-image: linear-gradient(to right, #FB5BD8, #952020);
+}
+.dashboard-metrica>.metrica6{
+  background-image: linear-gradient(to right, #5BFBC2, #2B536A);
+}
+
+.dashboard-metrica>div .valor{
+  font-size: 40px;
+  padding-top: 10px;
+  padding-left: 200px;
+}
+.dashboard-metrica>div .legenda{
+  font-weight: lighter;
+  padding-left: 120px;
+}
 }
