@@ -49,6 +49,7 @@ body {
   font-size: var(--normal-font-size);
   background-color: var(--body-color);
   color: var(--text-color);
+  margin-bottom: 150px; /* Para conseguir acessar o botão MÊS do último gráfico */
 }
 
 h3 {
@@ -417,6 +418,10 @@ img {
   box-shadow:2px 2px 5px hsl(0,0%,0.8);
   transition: all .3s ease;
   color:white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .dashboard-metrica>.metrica2{
   background-image: linear-gradient(to right, #86A1E5, #392686);
@@ -437,11 +442,11 @@ img {
 
 .dashboard-metrica>div .valor{
   font-size: 40px;
-  padding-top: 10px;
-  padding-left: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .dashboard-metrica>div .legenda{
   font-weight: lighter;
-  padding-left: 120px;
 }
 }
