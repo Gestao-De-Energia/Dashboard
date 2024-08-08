@@ -182,6 +182,7 @@ img {
   display: flex;
   align-items: center;
   color: var(--text-color);
+  gap: 6px;
 }
 
 .nav__link:hover {
@@ -497,12 +498,15 @@ img {
 
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1150px) {
   .dashboard-metrica>div .valor{
-    font-size: 20px;
+    font-size: 18px;
   }
   .dashboard-metrica>div .legenda{
     font-size: 13px;
+  }
+  .metrica6>div .legenda{
+    font-size: 11px; /* pq o texto é grande, aí botei um tamanho menor pra se adequar a tamanhos de tela */
   }
 }
 
