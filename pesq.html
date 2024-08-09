@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <html lang="en">
+  <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,148 +9,346 @@
         <!--========== CSS ==========-->
         <link rel="stylesheet" href="src/css/styles.css">
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
+        <!--========= Título página ==========-->
         <title>Dashboard Energético</title>
     </head>
-    <body>
-        <!--========== HEADER ==========-->
+      <body>
+    <!--========== HEADER ==========-->
         <header class="header">
-            <div class="header__container">
-                <img src="assets/img/perfil.jpg" alt="" class="header__img">
-
-                <a href="#" class="header__logo"></a>
-            </div>
+          <div class="header__container">
+            <img src="assets/img/perfil.jpg" alt="" class="header__img">
+            <a href="#" class="header__logo"></a>
+          </div>
         </header>
 
         <!--========== NAV ==========-->
         <div class="nav" id="navbar">
             <nav class="nav__container">
-                <div>
+            <div>
                     <a href="#" class="nav__link nav__logo">
-                        <i class='bx bxs-disc nav__icon' ></i>
-                        <span class="nav__logo-name">Dashboard</span>
+                      <i class='bx bxs-disc nav__icon' ></i>
+                      <span class="nav__logo-name">Dashboard</span>
                     </a>
-    
-                    <div class="nav__list">
-                        <div class="nav__items">
-                            
-                            <a href="home.html" class="nav__link active">
-                                <i class='fa-solid fa-house' ></i>
-                                <span class="nav__name">Home</span>
-                            </a>
-                            
-                            <div class="nav__dropdown">
-                                <a href="#" class="nav__link">
-                                    <i class='fa-solid fa-bolt' ></i>
-                                    <span class="nav__name">Energia</span>
-                                    <i class='fas fa-caret-down'></i>
-                                </a>
+            
+                <div class="nav__list">
+                  <div class="nav__items">        
+                    <a href="home.html" class="nav__link active">
+                      <i class='fa-solid fa-house' ></i>
+                      <span class="nav__name">Home</span>
+                    </a>
+                                    
+                  <div class="nav__dropdown">
+                    <a href="#Energia" class="nav__link">
+                      <i class='fa-solid fa-bolt' ></i>
+                      <span class="nav__name">Energia</span>
+                      <i class='fas fa-caret-down'></i>
+                    </a>
+                    <div class="nav__dropdown-collapse">
+                      <div class="nav__dropdown-content">
+                        <a href="#chart-EneF" class="nav__dropdown-item">Produção de Energia Fotovoltáica</a>
+                        <a href="#chart-EneE" class="nav__dropdown-item">Produção de Energia Eólica</a>
+                        <a href="#chartD" class="nav__dropdown-item">Produção x Demanda </a>
+                        <a href="#chartDe" class="nav__dropdown-item">Desempenho</a>
+                        <a href="#chartN" class="nav__dropdown-item">Produção x Compensação</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown">
+                    <a href="#Bateria" class="nav__link">
+                      <i class='fa-solid fa-car-battery' ></i>
+                      <span class="nav__name">Bateria</span>
+                      <i class='fas fa-caret-down'></i>
+                    </a>
+                    <div class="nav__dropdown-collapse">
+                      <div class="nav__dropdown-content">
+                          <a href="#chartB" class="nav__dropdown-item">Quantidade de carga e descarga</a>
+                          <a href="#chart" class="nav__dropdown-item">Comportamento da bateria</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown">
+                    <a href="#SerieTemp" class="nav__link">
+                      <i class='fa-solid fa-chart-simple' ></i>
+                      <span class="nav__name">Série Temporal</span>
+                      <i class='fas fa-caret-down'></i>
+                    </a>
+                    <div class="nav__dropdown-collapse">
+                      <div class="nav__dropdown-content">
+                        <a href="#chart-timeline" class="nav__dropdown-item">Irradiação solar anual</a>
+                        <a href="#chart-vento" class="nav__dropdown-item">Vento anual</a>
+                      </div>
+                    </div>
+                  </div>
 
-                                <div class="nav__dropdown-collapse">
-                                    <div class="nav__dropdown-content">
-                                        <a href="#" class="nav__dropdown-item">Produção de Energia Fotovoltáica</a>
-                                        <a href="#" class="nav__dropdown-item">Produção de Energia Eólica</a>
-                                        <a href="#" class="nav__dropdown-item">Produção x Demanda </a>
-                                        <a href="#" class="nav__dropdown-item">Desempenho</a>
-                                        <a href="#" class="nav__dropdown-item">Produção x Compensação</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nav__dropdown">
-                                <a href="#" class="nav__link">
-                                    <i class='fa-solid fa-car-battery' ></i>
-                                    <span class="nav__name">Bateria</span>
-                                    <i class='fas fa-caret-down'></i>
-                                </a>
-
-                                <div class="nav__dropdown-collapse">
-                                    <div class="nav__dropdown-content">
-                                        <a href="#" class="nav__dropdown-item">Quantidade de carga e descarga</a>
-                                        <a href="#" class="nav__dropdown-item">Comportamento da bateria</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nav__dropdown">
-                                <a href="#" class="nav__link">
-                                    <i class='fa-solid fa-chart-simple' ></i>
-                                    <span class="nav__name">Série Temporal</span>
-                                    <i class='fas fa-caret-down'></i>
-                                </a>
-
-                                <div class="nav__dropdown-collapse">
-                                    <div class="nav__dropdown-content">
-                                        <a href="#" class="nav__dropdown-item">Irradiação solar anual</a>
-                                        <a href="#" class="nav__dropdown-item">Vento anual</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                        
-                        </div>
-                    </div>    
+                                
                 </div>
-    
-            </nav>
+              </div>    
+            </div>
+            
+          </nav>
         </div>
 
         <!--========== CONTENTS ==========-->
-        <div id="chart" style="width:900px; margin-left: auto;margin-right: auto;">
+        <main>
+          <section>
+            <div class="dashboard-metrica">
+              <div class="metrica1">
+                <div class="left">
+                  <img src="src/assets/icons/mediaFatorRenovavel.png" alt="Ícone" class="icone-metrica">
+                  <div class="metrica-texto">
+                    <h3 class="valor">69%</h3>
+                    <h3 class="legenda">Média Fator Renovável</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="metrica2" styles="background-image: linear-gradient(to right, #E5FB5B, #59A03F);">
+                <div class="left">
+                  <img src="src/assets/icons/perdaCarga.png" alt="Ícone" class="icone-metrica">
+                  <div class="metrica-texto">
+                    <h3 class="valor">7.45%</h3>
+                    <h3 class="legenda">Perda de carga no grid</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="metrica3">
+                <div class="left">
+                  <img src="src/assets/icons/custoEnergia.png" alt="Ícone" class="icone-metrica">
+                  <div class="metrica-texto">
+                    <h3 class="valor">R$0,662</h3>
+                    <h3 class="legenda">Custo de Energia Elétrica</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="metrica4">
+                <div class="left">
+                  <img src="src/assets/icons/numeroCasas.png" alt="Ícone" class="icone-metrica">
+                  <div class="metrica-texto">
+                    <h3 class="valor">19</h3>
+                    <h3 class="legenda">Número de Casas</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="metrica5">
+                <div class="left">
+                  <img src="src/assets/icons/turbinasEolicas.png" alt="Ícone" class="icone-metrica">
+                  <div class="metrica-texto">
+                    <h3 class="valor">4</h3>
+                    <h3 class="legenda">Turbina eólicas</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="metrica6">
+                <div class="left">
+                  <img src="src/assets/icons/geracaoMaxima.png" alt="Ícone" class="icone-metrica">
+                  <div class="metrica-texto">
+                    <h3 class="valor">38,16 Kw/h</h3>
+                    <h3 class="legenda">Geração Máxima dos panéis</h3>
+                  </div>
+                </div>
+              </div>
+                      
+                      
+                      
+            </div>
+            <h2 style="padding-top: 100px;" id="Energia">Energia </h2>
+            <div id="chart-EneF" style="padding-top: 50px"></div>
+            <div class="dropdown">
+              <button class="meses">Mês</button>
+              <div class="mes">
+                <button id="jan1" class="lista">Janeiro(2005)</button>
+                <button id="fev1" class="lista">Fevereiro(2004)</button>
+                <button id="fev51" class="lista">Fevereiro(2005)</button>
+                <button id="mar1" class="lista">Março(2004)</button>
+                <button id="abr1" class="lista">Abril(2004)</button>
+                <button id="mai1" class="lista">Maio(2004)</button>
+                <button id="jun1" class="lista">Junho(2004)</button>
+                <button id="jul1" class="lista">Julho(2004)</button>
+                <button id="ago1" class="lista">Agosto(2004)</button>
+                <button id="set1" class="lista">Setembro(2004)</button>
+                <button id="out1" class="lista">Outubro(2004)</button>
+                <button id="nov1" class="lista">Novembro(2004)</button>
+                <button id="dez1" class="lista">Dezembro(2004)</button>
+              </div>
+            </div>
+            <button id="six_months1" class="butao">6M</button>
+            <button id="one_year1" class="butao">1A</button>
+            <div id="chart-EneE" style="padding-top: 50px;"></div>
+            <div class="dropdown">
+              <button class="meses">Mês</button>
+              <div class="mes">
+                <button id="jan" class="lista">Janeiro(2005)</button>
+                <button id="fev" class="lista">Fevereiro(2004)</button>
+                <button id="fev5" class="lista">Fevereiro(2005)</button>
+                <button id="mar" class="lista">Março(2004)</button>
+                <button id="abr" class="lista">Abril(2004)</button>
+                <button id="mai" class="lista">Maio(2004)</button>
+                <button id="jun" class="lista">Junho(2004)</button>
+                <button id="jul" class="lista">Julho(2004)</button>
+                <button id="ago" class="lista">Agosto(2004)</button>
+                <button id="set" class="lista">Setembro(2004)</button>
+                <button id="out" class="lista">Outubro(2004)</button>
+                <button id="nov" class="lista">Novembro(2004)</button>
+                <button id="dez" class="lista">Dezembro(2004)</button>
+              </div>
+            </div>
+            <button id="six_months" class="butao">6M</button>
+            <button id="one_year" class="butao">1A</button>
+            <div id="chartD" style="padding-top: 50px"></div>
+            <div class="dropdown">
+              <button class="meses">Mês</button>
+              <div class="mes">
+                <button id="jand" class="lista">Janeiro(2005)</button>
+                <button id="fevd" class="lista">Fevereiro(2004)</button>
+                <button id="fev5d" class="lista">Fevereiro(2005)</button>
+                <button id="mard" class="lista">Março(2004)</button>
+                <button id="abrd" class="lista">Abril(2004)</button>
+                <button id="maid" class="lista">Maio(2004)</button>
+                <button id="jund" class="lista">Junho(2004)</button>
+                <button id="juld" class="lista">Julho(2004)</button>
+                <button id="agod" class="lista">Agosto(2004)</button>
+                <button id="setd" class="lista">Setembro(2004)</button>
+                <button id="outd" class="lista">Outubro(2004)</button>
+                <button id="novd" class="lista">Novembro(2004)</button>
+                <button id="dezd" class="lista">Dezembro(2004)</button>
+              </div>
+            </div>
+            <button id="six_monthsd" class="butao">6M</button>
+            <button id="one_yeard" class="butao">1A</button>
+            <div id="chartDe" style="padding-top: 50px"></div>
+            <div class="dropdown">
+              <button class="meses">Mês</button>
+              <div class="mes">
+                <button id="jande" class="lista">Janeiro(2005)</button>
+                <button id="fevde" class="lista">Fevereiro(2004)</button>
+                <button id="fev5de" class="lista">Fevereiro(2005)</button>
+                <button id="marde" class="lista">Março(2004)</button>
+                <button id="abrde" class="lista">Abril(2004)</button>
+                <button id="maide" class="lista">Maio(2004)</button>
+                <button id="junde" class="lista">Junho(2004)</button>
+                <button id="julde" class="lista">Julho(2004)</button>
+                <button id="agode" class="lista">Agosto(2004)</button>
+                <button id="setde" class="lista">Setembro(2004)</button>
+                <button id="outde" class="lista">Outubro(2004)</button>
+                <button id="novde" class="lista">Novembro(2004)</button>
+                <button id="dezde" class="lista">Dezembro(2004)</button>
+              </div>
+            </div>
+            <button id="six_monthsde" class="butao">6M</button>
+            <button id="one_yearde" class="butao">1A</button>
+            <div id="chartN" style="padding-top: 50px"></div>
+            <div class="dropdown">
+              <button class="meses">Mês</button>
+              <div class="mes">
+                <button id="jana" class="lista">Janeiro(2005)</button>
+                <button id="feva" class="lista">Fevereiro(2004)</button>
+                <button id="fev5a" class="lista">Fevereiro(2005)</button>
+                <button id="mara" class="lista">Março(2004)</button>
+                <button id="abra" class="lista">Abril(2004)</button>
+                <button id="maia" class="lista">Maio(2004)</button>
+                <button id="juna" class="lista">Junho(2004)</button>
+                <button id="jula" class="lista">Julho(2004)</button>
+                <button id="agoa" class="lista">Agosto(2004)</button>
+                <button id="seta" class="lista">Setembro(2004)</button>
+                <button id="outa" class="lista">Outubro(2004)</button>
+                <button id="nova" class="lista">Novembro(2004)</button>
+                <button id="deza" class="lista">Dezembro(2004)</button>
+              </div>
+            </div>
+            <button id="six_monthsa" class="butao">6M</button>
+            <button id="one_yeara" class="butao">1A</button>
+            <h2 style="padding-top: 100px;" id="Bateria">Bateria</h2>
+            <div id="chartB" style="padding-top: 50px;"></div>
+            <div class="dropdown">
+              <button class="meses">Mês</button>
+              <div class="mes">
+                <button id="janb" class="lista">Janeiro(2005)</button>
+                <button id="fevb" class="lista">Fevereiro(2004)</button>
+                <button id="fev5b" class="lista">Fevereiro(2005)</button>
+                <button id="marb" class="lista">Março(2004)</button>
+                <button id="abrb" class="lista">Abril(2004)</button>
+                <button id="maib" class="lista">Maio(2004)</button>
+                <button id="junb" class="lista">Junho(2004)</button>
+                <button id="julb" class="lista">Julho(2004)</button>
+                <button id="agob" class="lista">Agosto(2004)</button>
+                <button id="setb" class="lista">Setembro(2004)</button>
+                <button id="outb" class="lista">Outubro(2004)</button>
+                <button id="novb" class="lista">Novembro(2004)</button>
+                <button id="dezb" class="lista">Dezembro(2004)</button>
+              </div>
+          </div>
+          <button id="six_monthsb" class="butao">6M</button>
+          <button id="one_yearb" class="butao">1A</button>
+          <div id="chart" style="padding-top: 50px;"></div>
+          <div class="dropdown">
+            <button class="meses">Mês</button>
+            <div class="mes">
+              <button id="janm" class="lista">Janeiro(2005)</button>
+              <button id="fevm" class="lista">Fevereiro(2004)</button>
+              <button id="fev5m" class="lista">Fevereiro(2005)</button>
+              <button id="marm" class="lista">Março(2004)</button>
+              <button id="abrm" class="lista">Abril(2004)</button>
+              <button id="maim" class="lista">Maio(2004)</button>
+              <button id="junm" class="lista">Junho(2004)</button>
+              <button id="julm" class="lista">Julho(2004)</button>
+              <button id="agom" class="lista">Agosto(2004)</button>
+              <button id="setm" class="lista">Setembro(2004)</button>
+              <button id="outm" class="lista">Outubro(2004)</button>
+              <button id="novm" class="lista">Novembro(2004)</button>
+              <button id="dezm" class="lista">Dezembro(2004)</button>
+            </div>
         </div>
-        
+        <button id="six_monthsm" class="butao">6M</button>
+        <button id="one_yearm" class="butao">1A</button>
+            <h2 style="padding-top: 100px;" id="SerieTemp">Série temporal</h2>
+            <div id="chart-timeline" style="padding-top: 50px;"></div>
+              <div class="dropdown">
+                <button class="meses">Mês</button>
+                <div class="mes">
+                  <button id="janv" class="lista">Janeiro(2005)</button>
+                  <button id="fevv" class="lista">Fevereiro(2004)</button>
+                  <button id="fev5v" class="lista">Fevereiro(2005)</button>
+                  <button id="marv" class="lista">Março(2004)</button>
+                  <button id="abrv" class="lista">Abril(2004)</button>
+                  <button id="maiv" class="lista">Maio(2004)</button>
+                  <button id="junv" class="lista">Junho(2004)</button>
+                  <button id="julv" class="lista">Julho(2004)</button>
+                  <button id="agov" class="lista">Agosto(2004)</button>
+                  <button id="setv" class="lista">Setembro(2004)</button>
+                  <button id="outv" class="lista">Outubro(2004)</button>
+                  <button id="novv" class="lista">Novembro(2004)</button>
+                  <button id="dezv" class="lista">Dezembro(2004)</button>
+                </div>
+            </div>
+            <button id="six_monthsv" class="butao">6M</button>
+            <button id="one_yearv" class="butao">1A</button>
+            <div class="gVento" style="padding-top: 100px;"></div>
+            <div id="chart-vento" style="padding-top: 50px;"></div>
+            <div class="dropdown">
+              <button class="meses">Mês</button>
+                <div class="mes">
+                  <button id="jans" class="lista">Janeiro(2005)</button>
+                  <button id="fevs" class="lista">Fevereiro(2004)</button>
+                  <button id="fev5s" class="lista">Fevereiro(2005)</button>
+                  <button id="mars" class="lista">Março(2004)</button>
+                  <button id="abrs" class="lista">Abril(2004)</button>
+                  <button id="mais" class="lista">Maio(2004)</button>
+                  <button id="juns" class="lista">Junho(2004)</button>
+                  <button id="juls" class="lista">Julho(2004)</button>
+                  <button id="agos" class="lista">Agosto(2004)</button>
+                  <button id="sets" class="lista">Setembro(2004)</button>
+                  <button id="outs" class="lista">Outubro(2004)</button>
+                  <button id="novs" class="lista">Novembro(2004)</button>
+                  <button id="dezs" class="lista">Dezembro(2004)</button>
+                </div>
+            </div>
+            <button id="six_monthss" class="butao">6M</button>
+            <button id="one_years" class="butao">1A</button>
+                   
+          </section>        
+        </main>
 
         <!--========== MAIN JS ==========-->
         <script src="src/javascript/script.js"></script>
-        <script>
-
-            var options = {
-                  series: [{
-                    name: "Quantidade de CDAs",
-                    data: [
-                    0,1,2,3,4,5,6,7,8,9,1,1,2,3,4,5,6,3,3,3,3,2,2,2,7,7,8,9,6,3,5,8,2
-                    ]
-                }],
-                  chart: {
-                  height: 350,
-                  
-                  
-                  type: 'line',
-                  zoom: {
-                    enabled: false
-                  }
-                },
-                dataLabels: {
-                  enabled: false
-                },
-                stroke: {
-                  curve: 'straight'
-                },
-                title: {
-                  text: 'Irradiação solar',
-                  align: 'center'
-                },
-                grid: {
-                  row: {
-                    colors: ['#f3f3f3', 'transparent'], 
-                    opacity: 0.5
-                  },
-                },
-                xaxis:{
-                  categories:[1,2,3,4,5,6,7,8,9,10,11,12]
-                },
-              yaxis: {
-                  title: {
-                    text: 'W/hm^2'
-                  }}
-                };
-          
-          
-          
-          
-          // Create the chart
-                var chart = new ApexCharts(document.querySelector("#chart"), options);
-                chart.render();
-
-              </script>
-
-    </body>
-</html>
+        
+      </body>
+  </html>
