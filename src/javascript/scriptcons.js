@@ -2675,7 +2675,6 @@ new Date('03 Feb 2005').getTime()
       }
       ,
       y: {
-        
         formatter: function (val) {
           return Math.abs(val)
         }
@@ -3067,7 +3066,7 @@ new Date('03 Feb 2005').getTime()
       },
       
       labels: {
-        format: 'dd MMM yyyy'
+        format: 'MMM \'yy'
       }
     },
     };
@@ -7137,6 +7136,9 @@ var optionsDe= {
     size: 0
   },
   xaxis: {
+    title: {
+      text: 'Dia',
+    },
     type: 'datetime'
   },
   yaxis: {

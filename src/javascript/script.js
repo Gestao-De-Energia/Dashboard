@@ -5210,7 +5210,7 @@ activeEl.target.classList.add('active')
     },
     yaxis: {
       stepSize:10,
-     
+      decimalsInFloat: 3,
     },
     tooltip: {
       shared: false,
@@ -5219,7 +5219,6 @@ activeEl.target.classList.add('active')
       }
       ,
       y: {
-        
         formatter: function (val) {
           return Math.abs(val)
         }
@@ -5603,11 +5602,11 @@ activeEl.target.classList.add('active')
 1107427065000
       ],
       title: {
-        text: 'tempo'
+        text: 'Dia'
       },
       
       labels: {
-        format: 'dd MMM yyyy'
+        format: 'MMM \'yy'
       }
     },
     };
