@@ -151,34 +151,36 @@
                       
             </div>
             <h2 style="padding-top: 100px;" id="Energia">Energia </h2>
-            <div id="chart-EneF" style="padding-top: 50px"></div>
-            <div class="dropdown">
-              <button class="meses">Mês</button>
-              <div class="mes">
-                <button id="jan1" class="lista">Janeiro(2005)</button>
-                <button id="fev1" class="lista">Fevereiro(2004)</button>
-                <button id="fev51" class="lista">Fevereiro(2005)</button>
-                <button id="mar1" class="lista">Março(2004)</button>
-                <button id="abr1" class="lista">Abril(2004)</button>
-                <button id="mai1" class="lista">Maio(2004)</button>
-                <button id="jun1" class="lista">Junho(2004)</button>
-                <button id="jul1" class="lista">Julho(2004)</button>
-                <button id="ago1" class="lista">Agosto(2004)</button>
-                <button id="set1" class="lista">Setembro(2004)</button>
-                <button id="out1" class="lista">Outubro(2004)</button>
-                <button id="nov1" class="lista">Novembro(2004)</button>
-                <button id="dez1" class="lista">Dezembro(2004)</button>
+            <div id="chartFotovoltaica"  style="padding-top: 50px"></div>
+              <div class="dropdown">
+                <button class="meses">Mês</button>
+                <div class="mes">
+                  <button id="jan1" class="lista">Janeiro(2005)</button>
+                  <button id="fev1" class="lista">Fevereiro(2004)</button>
+                  <button id="fev51" class="lista">Fevereiro(2005)</button>
+                  <button id="mar1" class="lista">Março(2004)</button>
+                  <button id="abr1" class="lista">Abril(2004)</button>
+                  <button id="mai1" class="lista">Maio(2004)</button>
+                  <button id="jun1" class="lista">Junho(2004)</button>
+                  <button id="jul1" class="lista">Julho(2004)</button>
+                  <button id="ago1" class="lista">Agosto(2004)</button>
+                  <button id="set1" class="lista">Setembro(2004)</button>
+                  <button id="out1" class="lista">Outubro(2004)</button>
+                  <button id="nov1" class="lista">Novembro(2004)</button>
+                  <button id="dez1" class="lista">Dezembro(2004)</button>
+                </div>
               </div>
-            </div>
-            <div class="dropdown">
-              <button id="six_months1" class="meses">6M</button>
-              <div class="mes">
-                <button id="sem1" class="lista">1 Semestre</button>
-                <button id="sem2" class="lista">2 Semestre</button>
+              <div class="dropdown">
+                <button id="six_months1" class="meses">6M</button>
+                <div class="mes">
+                  <button id="sem1" class="lista">1 Semestre</button>
+                  <button id="sem2" class="lista">2 Semestre</button>
+                </div>
               </div>
-            </div>
-            <button id="one_year1" class="butao">1A</button>
-            <div id="chart-EneE" style="padding-top: 50px;"></div>
+              <button id="one_year1" class="butao">1A</button>
+                <!--<button id="comentar-btn" class="butao">Comentar</button>
+                <input id="comentario" class="textarea" maxlength="300" style="display:none" placeholder="Digite seu comentário (até 300 caracteres)"></input>   -> tentei com a tag textarea, mas laga muuuito... verei em breve formas de implementar o comentário -->
+            <div id="chartEolica"></div>
             <div class="dropdown">
               <button class="meses">Mês</button>
               <div class="mes">
@@ -205,7 +207,7 @@
               </div>
             </div>
             <button id="one_year" class="butao">1A</button>
-            <div id="chartD" style="padding-top: 50px"></div>
+            <div id="chartEnergiaXDemanda"></div>
             <div class="dropdown">
               <button class="meses">Mês</button>
               <div class="mes">
@@ -232,7 +234,7 @@
               </div>
             </div>
             <button id="one_yeard" class="butao">1A</button>
-            <div id="chartDe" style="padding-top: 50px"></div>
+            <div id="chartDesempenho"></div>
             <div class="dropdown">
               <button class="meses">Mês</button>
               <div class="mes">
@@ -259,7 +261,7 @@
               </div>
             </div>
             <button id="one_yearde" class="butao">1A</button>
-            <div id="chartN" style="padding-top: 50px"></div>
+            <div id="chartEnergiaXCompensacao"></div>
             <div class="dropdown">
               <button class="meses">Mês</button>
               <div class="mes">
@@ -287,7 +289,7 @@
             </div>
             <button id="one_yearda" class="butao">1A</button>
             <h2 style="padding-top: 100px;" id="Bateria">Bateria</h2>
-            <div id="chartB" style="padding-top: 50px;"></div>
+            <div id="chartBateria"  style="padding-top: 50px"></div>
             <div class="dropdown">
               <button class="meses">Mês</button>
               <div class="mes">
@@ -314,9 +316,9 @@
             </div>
           </div>
           <button id="one_yearb" class="butao">1A</button>
-          <div id="chart" style="padding-top: 50px;"></div>
+          <div id="chart"></div>
             <h2 style="padding-top: 100px;" id="SerieTemp">Série temporal</h2>
-            <div id="chart-timeline" style="padding-top: 50px;"></div>
+            <div id="chartSTSolar" style="padding-top: 50px;"></div> <!-- padding para separar o titulo da seçao do titulo do grafico -->
               <div class="dropdown">
                 <button class="meses">Mês</button>
                 <div class="mes">
@@ -343,8 +345,8 @@
               </div>
             </div>
             <button id="one_yearv" class="butao">1A</button>
-            <div class="gVento" style="padding-top: 100px;"></div>
-            <div id="chart-vento" style="padding-top: 50px;"></div>
+            <div class="gVento"></div>
+            <div id="chartSTVento"></div>
             <div class="dropdown">
               <button class="meses">Mês</button>
                 <div class="mes">
@@ -374,9 +376,7 @@
                    
           </section>        
         </main>
-
-        <!--========== MAIN JS ==========-->
-        <script src="src/javascript/script.js"></script>
-        
+        <!--========== buMAIN JS ==========-->
+        <script src="src/javascript/script.js" type="module"></script> 
       </body>
   </html>
