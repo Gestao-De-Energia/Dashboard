@@ -454,7 +454,7 @@ img {
 
   .dropdown{
     display: inline-block;
-
+    height: 144px; /* para nao sumir as opções quando quero selecionar alguma de baixo */
   }
 
   .dropdown button,.butao{
