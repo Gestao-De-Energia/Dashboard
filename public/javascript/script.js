@@ -9,6 +9,58 @@
             comentarioTextarea.style.display = 'none';
         }
     });*/
+
+function calcularIndice(dataInicial, dataAlvo) {
+  // Converter as strings de data em objetos Date
+  const inicio = new Date(dataInicial);
+  const alvo = new Date(dataAlvo);
+  
+  // Calcular a diferença entre as duas datas em milissegundos
+  const diffEmMilissegundos = alvo - inicio;
+  
+  // Converter milissegundos em dias (1 dia = 24h * 60min * 60s * 1000ms)
+  const diffEmDias = diffEmMilissegundos / (24 * 60 * 60 * 1000);
+  
+  // Retornar o índice da data
+  return Math.floor(diffEmDias);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  var selectedDate = null;
+
+  // Inicializar flatpickr no botão
+  flatpickr("#select_date", {
+    minDate: "2004-02-01", // Data mínima
+    maxDate: "2005-02-03", // Data máxima
+    position: "above", // Display calendario sobre o botao
+    disable: [
+      function(date) {
+        return !(date.getDate() % 31); // Desabilitar dias 31
+      }
+    ],
+    onChange: function(selectedDates) {
+      selectedDate = selectedDates[0]; // Armazenar a data selecionada
+      document.getElementById('comment_section').style.display = 'flex'; // Mostrar a caixa de comentário
+    }
+  });
+
+  // Adicionar o evento de teclado para adicionar a anotação (está travando na hora de clicar na caixa de texto para escrever)
+  document.addEventListener('keydown', function(event) {
+    
+    if (event.key === 'Enter') {
+      // Pegar o que está na caixa de texto
+      var comment = document.getElementById('comment_input').value;
+      // Adicionar anotação ao gráfico
+      addAnnotationToChartFotovoltaica(selectedDate, comment);
+
+      // Esconder a caixa de comentário
+      document.getElementById('comment_section').style.display = 'none';
+      document.getElementById('comment_input').value = ''; // Limpar o texto
+    }
+    
+  });
+});
+
 /*==================== LINK ACTIVE ====================*/
 const linkColor = document.querySelectorAll('.nav__link')
 
@@ -802,8 +854,26 @@ var optionsFotovoltaica = {
 
 // Grafico de Energia Fotovoltaica (rendering)
 var chartFotovoltaica = new ApexCharts(document.querySelector("#chartFotovoltaica"), optionsFotovoltaica);
-
 chartFotovoltaica.render();
+
+  // Função para adicionar um comentário ao gráfico
+  function addAnnotationToChartFotovoltaica(xDate, comment) {
+    chartFotovoltaica.addPointAnnotation({
+      x: new Date(xDate).getTime(),  // A data selecionada
+      y: optionsFotovoltaica.series[0].data[calcularIndice("1 Feb 2004", xDate)], // Valor no eixo Y
+      label: {
+        text: comment,  // O comentário do usuário
+        style: {
+          background: '#ff4560',
+          color: '#fff'
+        }
+      },
+      marker: {
+        size: 6,
+        fillColor: '#ff4560'
+      }
+    });
+  }
 
 var resetCssClasses = function(activeEl) {
   var els = document.querySelectorAll('button')
@@ -1627,15 +1697,6 @@ var chartEolica = new ApexCharts(document.querySelector("#chartEolica"), options
 chartEolica.render();
 
 //Botões
-var resetCssClasses = function(activeEl) {
-  var els = document.querySelectorAll('button')
-
-  Array.prototype.forEach.call(els, function(el) {
-    el.classList.remove('active')
-  })
-
-  activeEl.target.classList.add('active')
-}
 
 const periodsEolica = [
   { id: '#fev', start: '01 Feb 2004', end: '29 Feb 2004' },
@@ -2853,15 +2914,7 @@ var optionsEnergiaXDemanda = {
 var chartEnergiaXDemanda = new ApexCharts(document.querySelector("#chartEnergiaXDemanda"), optionsEnergiaXDemanda);
 chartEnergiaXDemanda.render();
  // Criando funções para selecionar os meses para os botões
-var resetCssClasses = function(activeEl) {
-  var els = document.querySelectorAll('button')
 
-  Array.prototype.forEach.call(els, function(el) {
-    el.classList.remove('active')
-  })
-
-  activeEl.target.classList.add('active')
-}
 
 const periodsEnergiaXDemanda = [
   { id: '#fevd', start: '01 Feb 2004', end: '29 Feb 2004' },
