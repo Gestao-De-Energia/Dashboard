@@ -6,9 +6,17 @@
 
         <!--========== BOX ICONS ==========-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        
         <!--========== CSS ==========-->
         <link rel="stylesheet" href="css/styles.css">
+        
+        <!--========== Charts ==========-->
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        
+        <!--========== Calendario ==========-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        
         <!--========= Título página ==========-->
         <title>Dashboard Energético</title>
     </head>
@@ -178,8 +186,12 @@
                 </div>
               </div>
               <button id="one_year1" class="butao">1A</button>
-                <!--<button id="comentar-btn" class="butao">Comentar</button>
-                <input id="comentario" class="textarea" maxlength="300" style="display:none" placeholder="Digite seu comentário (até 300 caracteres)"></input>   -> tentei com a tag textarea, mas laga muuuito... verei em breve formas de implementar o comentário -->
+              <div class="dropdown" style="display: ruby;">
+                <button id="select_date" class="meses">Comentário por data</button>
+                <div id="comment_section" style="display: none; margin-top: 10px;">
+                  <input type="text" id="comment_input" placeholder="Escreva seu comentário..." style="width: 100%; padding: 10px;">
+                </div>
+              </div>
             <div id="chartEolica"></div>
             <div class="dropdown">
               <button class="meses">Mês</button>
