@@ -323,6 +323,136 @@ img {
   background-image: linear-gradient(to right, #5BFBC2, #2B536A);
 }
 
+/* ========== BOTÕES ========== */
+
+.btn_container{
+  display: flex;
+  gap: 5px;
+}
+
+
+/* ========== BOTÃO DE COMENTÁRIO =========== */
+
+#comment_section_fotovoltaica,
+#comment_section_eolica,
+#comment_section_energiaxdemanda,
+#comment_section_desempenho,
+#comment_section_energiaxcompensacao,
+#comment_section_bateria,
+#comment_section_stsolar,
+#comment_section_stvento{
+  display: none;
+  margin-top: 10px;
+}
+
+#comment_input_fotovoltaica,
+#comment_input_eolica,
+#comment_input_energiaxdemanda,
+#comment_input_desempenho,
+#comment_input_energiaxcompensacao,
+#comment_input_bateria,
+#comment_input_stsolar,
+#comment_input_stvento{
+  width: 100%;
+  padding: 10px;
+}
+
+.date_comment{
+  display: ruby;
+}
+
+.general_comment_container{ /* Tudo relativo aos comentários gerais */
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+#general_comment_section_fotovoltaica,
+#general_comment_section_eolica,
+#general_comment_section_energiaxdemanda,
+#general_comment_section_desempenho,
+#general_comment_section_energiaxcompensacao,
+#general_comment_section_bateria,
+#general_comment_section_stsolar,
+#general_comment_section_stvento
+{
+  display: none; 
+  position: relative;
+  width: 400px; 
+  height: 200px; 
+  background-color: #f0f0f0; 
+  padding: 10px; 
+  overflow-y: auto; 
+  flex-direction: column; 
+  align-items: center;
+}
+
+
+#add_comment_section_fotovoltaica,
+#add_comment_section_eolica,
+#add_comment_section_energiaxdemanda,
+#add_comment_section_desempenho,
+#add_comment_section_energiaxcompensacao,
+#add_comment_section_bateria,
+#add_comment_section_stsolar,
+#add_comment_section_stvento
+{
+  display: none; 
+  position: relative; 
+  right: 0; 
+  top: 0; 
+  width: 300px;
+}
+
+#add_comment_button_fotovoltaica,
+#add_comment_button_eolica,
+#add_comment_button_energiaxdemanda,
+#add_comment_button_desempenho,
+#add_comment_button_energiaxcompensacao,
+#add_comment_button_bateria,
+#add_comment_button_stsolar,
+#add_comment_button_stvento{
+  display: none; 
+  width: 100%; 
+  height: 40px; 
+  margin-bottom: 10px;
+}
+
+#general_comment_input_fotovoltaica,
+#general_comment_input_eolica,
+#general_comment_input_energiaxdemanda,
+#general_comment_input_desempenho,
+#general_comment_input_energiaxcompensacao,
+#general_comment_input_bateria,
+#general_comment_input_stsolar,
+#general_comment_input_stvento{
+  width: 100%; 
+  padding: 10px; 
+  margin-bottom: 10px;
+}
+
+#submit_general_comment_fotovoltaica,
+#submit_general_comment_eolica,
+#submit_general_comment_energiaxdemanda,
+#submit_general_comment_desempenho,
+#submit_general_comment_energiaxcompensacao,
+#submit_general_comment_bateria,
+#submit_general_comment_stsolar,
+#submit_general_comment_stvento
+{
+  width: 100%;
+}
+
+.delete_button:hover{
+  background-color: rgb(224, 20, 20);
+  color: #fff;
+  transition: background-color .3s, color .3s, border 0s, border-radius 0s, padding 0s;
+  border: 1px solid #776161;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+
 /* ========== MEDIA QUERIES ==========*/
 /* For small devices reduce search*/
 @media screen and (max-width: 320px) {
@@ -442,14 +572,15 @@ img {
     margin-right: 30px;
   }
 
-  .butao-cons{
+  .botao-cons{
     justify-content: center;
     align-items: center;
   }
 
-  .button:hover{
+  button:hover, .meses:hover{
     background-color: rgba(123, 123, 187, 0.336); 
     transition: .3s;
+    border: 0px;
   }
 
   .dropdown{
@@ -457,10 +588,11 @@ img {
     height: 144px; /* para nao sumir as opções quando quero selecionar alguma de baixo */
   }
 
-  .dropdown button,.butao{
+  .dropdown button,.botao{
       background-color: rgb(255, 255, 255);
       color:var(--first-color);
       width:150px;
+      height: 36px;
       padding:10px 15px;
       cursor:pointer;
       border:none;
@@ -491,7 +623,7 @@ img {
     background-color: #ad8be057;
   }
 
-  .butao:focus,.meses:focus{
+  .botao:active,.meses:active{
     background-color:  #ad8be057;
   }
 
