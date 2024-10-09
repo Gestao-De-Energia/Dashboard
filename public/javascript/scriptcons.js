@@ -1,14 +1,3 @@
-/*==================== COMENTÁRIO ====================*/
-/*const comentarBtn = document.getElementById('comentar-btn');
-    const comentarioTextarea = document.getElementById('comentario');
-
-    comentarBtn.addEventListener('click', () => {
-        if (comentarioTextarea.style.display === 'none') {
-            comentarioTextarea.style.display = 'initial';
-        } else {
-            comentarioTextarea.style.display = 'none';
-        }
-    });*/
 /*==================== LINK ACTIVE ====================*/
 const linkColor = document.querySelectorAll('.nav__link')
 
