@@ -7,6 +7,7 @@
     box-sizing: border-box;
     font-family:'Poppins',sans-serif;
 }
+
 body{
     height: 100vh;
     display:flex;
@@ -14,6 +15,7 @@ body{
     justify-content: center;
     background-color: #6923D0;
 }
+
 .container{
     position:relative;
     max-width:430px;
@@ -22,10 +24,12 @@ body{
     box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     border-radius: 15px;
 }
+
 .container .active .login{
     margin-left: -50%;
     border-radius: 15px;
 }
+
 .container .forms{
     display: flex;
     align-items: center;
@@ -37,18 +41,20 @@ body{
 .container .active .forms{
     height: 599px;
 }
+
 .container .form{
     width: 50%;
     padding: 30px;
     background-color: #fff;
     transition: margin-left 0.18s ease;
 }
+
 .container .form .title{
     position: relative;
     font-size: 27px;
     font-weight: 600;
-
 }
+
 .form .title::before{
     content: " ";
     position: absolute;
@@ -59,76 +65,91 @@ body{
     background-color: #6923D0 ;
     border-radius: 25px;
 }
+
 .form .input-field{
     height: 50px;
     position: relative;
     width: 100%;
-  margin-top:30px ;  
+    margin-top:30px ;  
 }
+
 .input-field input{
-height: 100%;
-width: 100%;
-padding:0 35px;
-border: none;
-outline: none;
-border-bottom:2px solid #ccc ;
-border-top: 2px solid transparent;
-font-size: 16px;
-transition: all 0.2s ease;
+    height: 100%;
+    width: 100%;
+    padding:0 35px;
+    border: none;
+    outline: none;
+    border-bottom:2px solid #ccc ;
+    border-top: 2px solid transparent;
+    font-size: 16px;
+    transition: all 0.2s ease;
 }
+
 .input-field input:is(:focus, :valid){
     border-bottom-color: #6923D0;
 }
+
 .input-field i{
     position: absolute;
     top:50%;
     transform: translateY(-50%);
     color:#999;
     font-size: 23px;
-    }
- .input-field input:is(:focus, :valid) ~ i{
-        color: #6923D0;
-    }
+}
+
+.input-field input:is(:focus, :valid) ~ i{
+    color: #6923D0;
+}
+
 .input-field i.icon{
-     left:0;
-        }
+    left:0;
+}
+
 .input-field i.showHidePw{
-right:0;
+    right:0;
   cursor:´pointer;
   padding: 10px;
-}    
+}
+
 .form .checkbox-text{
-   margin-top: 20px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }   
+
 .checkbox-text .checkbox-content{
     display: flex;
     align-items: center;
 }
+
 .checkbox-content{
     margin: 0 8px -2px 4px;
     accent-color: #6923D0;
 }
-.form a:hover {
+
+.form a:hover{
     text-decoration: underline;
 }
+
 .form .text{
     color:#333;
     font-size: 14px;
-
 }
+
 .form a{
     color:#6923D0;
     text-decoration: none;
 }
+
 .form a:hover{
     text-decoration: underline;
 }
-.form  .button{
+
+.form .button{
     margin-top: 35px;
 }
+
 .form .button input{
     border:none;
     color: #fff;
@@ -139,13 +160,13 @@ right:0;
     cursor: pointer;
     background-color: #6923D0;
     transition: all 0.3s ease;
-
 }
 
 .button input:hover{
     background-color: #6923D0;
 }
+
 .form .log-signup{
-     margin-top: 30px;
-     text-align: center;
+    margin-top: 30px;
+    text-align: center;
 }
