@@ -13,7 +13,7 @@ Pasta referente aos dados, no formato csv, que são necessários para plotar os 
 ### SRC
 Pasta que contém subpastas para o arquivo de estilização css e o arquivo javascript para iteração dos gráficos.
 ### Arquivos HTML
-* O arquivo html home.html é referente a home do dashboard onde pode -se fazer a escolha de perfil de usuário visualizador do dashboard.
+* O arquivo html home.html é referente a home do dashboard onde pode-se fazer a escolha de perfil de usuário visualizador do dashboard.
 * O arquivo html cons.hmtl é referente ao perfil consumidor que disponibiliza os gráficos e as métricas vistas por este usuário
 * O arquivo html pesq.html é referente ao perfil pesquisador que disponibiliza os gráficos e as métricas vistas por este perfil.
 
