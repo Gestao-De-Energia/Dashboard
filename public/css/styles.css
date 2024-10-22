@@ -331,7 +331,7 @@ img {
 }
 
 
-/* ========== BOTÃO DE COMENTÁRIO =========== */
+/* ========== COMENTÁRIO POR DATA =========== */
 
 #comment_section_fotovoltaica,
 #comment_section_eolica,
@@ -361,96 +361,70 @@ img {
   display: ruby;
 }
 
-.general_comment_container{ /* Tudo relativo aos comentários gerais */
+/* ========== COMENTÁRIO GERAL =========== */
+
+/* Containers principais das seções */
+#gc_container_fotovoltaica,
+#gc_container_eolica,
+#gc_container_energiaxdemanda,
+#gc_container_desempenho,
+#gc_container_energiaxcompensacao,
+#gc_container_bateria,
+#gc_container_stsolar,
+#gc_container_stvento {
   display: flex;
   flex-direction: row;
-  gap: 5px;
-}
-
-#general_comment_section_fotovoltaica,
-#general_comment_section_eolica,
-#general_comment_section_energiaxdemanda,
-#general_comment_section_desempenho,
-#general_comment_section_energiaxcompensacao,
-#general_comment_section_bateria,
-#general_comment_section_stsolar,
-#general_comment_section_stvento
-{
-  display: none; 
-  position: relative;
-  width: 400px; 
-  height: 200px; 
-  background-color: #f0f0f0; 
-  padding: 10px; 
-  overflow-y: auto; 
-  flex-direction: column; 
-  align-items: center;
-}
-
-
-#add_comment_section_fotovoltaica,
-#add_comment_section_eolica,
-#add_comment_section_energiaxdemanda,
-#add_comment_section_desempenho,
-#add_comment_section_energiaxcompensacao,
-#add_comment_section_bateria,
-#add_comment_section_stsolar,
-#add_comment_section_stvento
-{
-  display: none; 
-  position: relative; 
-  right: 0; 
-  top: 0; 
-  width: 300px;
-}
-
-#add_comment_button_fotovoltaica,
-#add_comment_button_eolica,
-#add_comment_button_energiaxdemanda,
-#add_comment_button_desempenho,
-#add_comment_button_energiaxcompensacao,
-#add_comment_button_bateria,
-#add_comment_button_stsolar,
-#add_comment_button_stvento{
-  display: none; 
-  width: 100%; 
-  height: 40px; 
-  margin-bottom: 10px;
-}
-
-#general_comment_input_fotovoltaica,
-#general_comment_input_eolica,
-#general_comment_input_energiaxdemanda,
-#general_comment_input_desempenho,
-#general_comment_input_energiaxcompensacao,
-#general_comment_input_bateria,
-#general_comment_input_stsolar,
-#general_comment_input_stvento{
-  width: 100%; 
-  padding: 10px; 
-  margin-bottom: 10px;
-}
-
-#submit_general_comment_fotovoltaica,
-#submit_general_comment_eolica,
-#submit_general_comment_energiaxdemanda,
-#submit_general_comment_desempenho,
-#submit_general_comment_energiaxcompensacao,
-#submit_general_comment_bateria,
-#submit_general_comment_stsolar,
-#submit_general_comment_stvento
-{
+  gap: 6px;
   width: 100%;
 }
 
-.delete_button:hover{
-  background-color: rgb(224, 20, 20);
-  color: #fff;
-  transition: background-color .3s, color .3s, border 0s, border-radius 0s, padding 0s;
-  border: 1px solid #776161;
-  border-radius: 4px;
-  padding: 2px 5px;
+#gc_window_fotovoltaica,
+#gc_window_eolica,
+#gc_window_energiaxdemanda,
+#gc_window_desempenho,
+#gc_window_energiaxcompensacao,
+#gc_window_bateria,
+#gc_window_stsolar,
+#gc_window_stvento {
+  display: none; /* invisível inicialmente */
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #CECECE;
+  width: 100%;
+  min-height: 200px;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  gap: 10px;
 }
+
+.gc_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+#gc_input_fotovoltaica,
+#gc_input_eolica,
+#gc_input_energiaxdemanda,
+#gc_input_desempenho,
+#gc_input_energiaxcompensacao,
+#gc_input_bateria,
+#gc_input_stsolar,
+#gc_input_stvento {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  border: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
 
 
 /* ========== MEDIA QUERIES ==========*/
