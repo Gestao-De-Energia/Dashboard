@@ -16,8 +16,27 @@
     <!--========== HEADER ==========-->
         <header class="header">
           <div class="header__container">
-            <img src="assets/img/perfil.jpg" alt="" class="header__img">
-            <a href="#" class="header__logo"></a>
+             <div class="action">
+          <div class="profile" onclick="menuToggle();">
+           <img src="perfil.png" alt="">
+          </div>
+          <div class="menu">
+            <h3> Maria <br><span>Consumidor</span>
+            </h3>
+            <ul>
+              <li>
+                <i class="fa-solid fa-user"></i>Meu perfil
+              </li>
+              <li>
+                  <i class="fa-solid fa-pen-to-square"></i>Editar perfil
+                </li>
+                <li>
+                  <i class="fa-solid fa-right-from-bracket"></i>Logout
+                
+              </li>
+            </ul>
+          </div>
+        </div>
           </div>
         </header>
 
@@ -275,7 +294,13 @@
 
         <!--========== MAIN JS ==========-->
         <script src="javascript/scriptcons.js"></script>
+        <script>
+          function menuToggle(){
+          const toggleMenu = document.querySelector('.menu')
+        toggleMenu.classList.toggle('active')
         
+        
+        </script>
       </body>
   </html>
 
