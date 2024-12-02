@@ -5666,7 +5666,7 @@ title: {
   }
   };
 //gráfico  desempenho (rendering)
-chartDesempenho = new ApexCharts(document.querySelector("#chartDesempenho"), optionsDesempenho);
+var chartDesempenho = new ApexCharts(document.querySelector("#chartDesempenho"), optionsDesempenho);
 chartDesempenho.render();
 
 const periodsDesempenho = [
@@ -6844,7 +6844,7 @@ var optionsEnergiaXCompensacao= {
 };
 
 // gráfico produção de energia x compensação (rendering)
-chartEnergiaXCompensacao = new ApexCharts(document.querySelector("#chartEnergiaXCompensacao"), optionsEnergiaXCompensacao);
+var chartEnergiaXCompensacao = new ApexCharts(document.querySelector("#chartEnergiaXCompensacao"), optionsEnergiaXCompensacao);
 chartEnergiaXCompensacao.render();
 
 const periodsEnergiaXCompensacao = [
