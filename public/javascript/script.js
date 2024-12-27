@@ -6069,7 +6069,7 @@ var optionsEnergiaXCompensacao= {
   },
       {
           name: "Net metering",
-          type: "line",
+          type: "column",
           color:'#36ADE8',
           data: [
             0.0,
