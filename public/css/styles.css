@@ -333,26 +333,12 @@ img {
 
 /* ========== COMENTÁRIO POR DATA =========== */
 
-#comment_section_fotovoltaica,
-#comment_section_eolica,
-#comment_section_energiaxdemanda,
-#comment_section_desempenho,
-#comment_section_energiaxcompensacao,
-#comment_section_bateria,
-#comment_section_stsolar,
-#comment_section_stvento{
+.comment_section {
   display: none;
   margin-top: 10px;
 }
 
-#comment_input_fotovoltaica,
-#comment_input_eolica,
-#comment_input_energiaxdemanda,
-#comment_input_desempenho,
-#comment_input_energiaxcompensacao,
-#comment_input_bateria,
-#comment_input_stsolar,
-#comment_input_stvento{
+.comment_input {
   width: 100%;
   padding: 10px;
 }
@@ -364,28 +350,14 @@ img {
 /* ========== COMENTÁRIO GERAL =========== */
 
 /* Containers principais das seções */
-#gc_container_fotovoltaica,
-#gc_container_eolica,
-#gc_container_energiaxdemanda,
-#gc_container_desempenho,
-#gc_container_energiaxcompensacao,
-#gc_container_bateria,
-#gc_container_stsolar,
-#gc_container_stvento {
+.gc_container {
   display: flex;
   flex-direction: row;
   gap: 6px;
   width: 100%;
 }
 
-#gc_window_fotovoltaica,
-#gc_window_eolica,
-#gc_window_energiaxdemanda,
-#gc_window_desempenho,
-#gc_window_energiaxcompensacao,
-#gc_window_bateria,
-#gc_window_stsolar,
-#gc_window_stvento {
+.gc_window {
   display: none; /* invisível inicialmente */
   flex-direction: row;
   justify-content: flex-start;
@@ -406,14 +378,7 @@ img {
   align-items: flex-start;
 }
 
-#gc_input_fotovoltaica,
-#gc_input_eolica,
-#gc_input_energiaxdemanda,
-#gc_input_desempenho,
-#gc_input_energiaxcompensacao,
-#gc_input_bateria,
-#gc_input_stsolar,
-#gc_input_stvento {
+.gc_input {
   width: 100%;
   min-height: 100px;
   resize: vertical;
@@ -435,183 +400,192 @@ img {
   }
 }
 
-@media screen and (min-width: 768px) {
-  body {
-    padding: 1rem 3rem 0 6rem;
-  }
 
-  .header {
-    padding: 0 3rem 0 6rem;
-  }
-  
-  .header__container {
-    height: calc(var(--header-height) + .5rem);
-  }
-
-  .header__search {
-    width: 300px;
-    padding: .55rem .75rem;
-  }
-
-  .header__toggle {
-    display: none;
-  }
-
-  .header__logo {
-    display: block;
-  }
-
-  .header__img {
-    width: 40px;
-    height: 40px;
-    order: 1;
-  }
-
-  .nav {
-    left: 0;
-    padding: 1.2rem 1.5rem 0;
-    width: 68px; /* Reduced navbar */
-  }
-
-  .nav__items {
-    row-gap: 1.7rem;
-  }
-
-  .nav__icon {
-    font-size: 1.3rem;
-  }
-
-  /* Element opacity */
-  .nav__logo-name, 
-  .nav__name, 
-  .nav__subtitle, 
-  .nav__dropdown-icon {
-    opacity: 0;
-    transition: .3s;
-  }
-  
-  
-  /* Navbar expanded */
-  .nav:hover {
-    width: var(--nav-width);
-  }
-
-  .nav:hover+main {
-    margin-left: 10rem;
-  }
-
-  /* Visible elements */
-  .nav:hover .nav__logo-name {
-    opacity: 1;
-  }
-
-  .nav:hover .nav__subtitle {
-    opacity: 1;
-  }
-
-  .nav:hover .nav__name {
-    opacity: 1;
-  }
-
-  .nav:hover .nav__dropdown-icon {
-    opacity: 1;
-  }
-
-  .modo,.titulo{
-    flex-direction: row;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 20px;
-    font-size: 36px;
-  }
-
-  .texto{
-    font-family:'Poppins';
-    font-weight: bold;
-    color:#2e2d2e;
-    font-size: 20px;
-    bottom: 0;
-    right: 0;
-    
-  }
-
-  .button{
-    width:300px;
-    height: 300px;
-    border-radius: 15px;
-    background-color: #a47ae9ad; 
-    border: none; 
-    cursor: pointer; 
-    margin-right: 30px;
-  }
-
-  .botao-cons{
-    justify-content: center;
-    align-items: center;
-  }
-
-  button:hover, .meses:hover{
-    background-color: rgba(123, 123, 187, 0.336); 
-    transition: .3s;
-    border: 0px;
-  }
-
-  .dropdown{
-    display: inline-block;
-    height: 144px; /* para nao sumir as opções quando quero selecionar alguma de baixo */
-  }
-
-  .dropdown button,.botao{
-      background-color: rgb(255, 255, 255);
-      color:var(--first-color);
-      width:150px;
-      height: 36px;
-      padding:10px 15px;
-      cursor:pointer;
-      border:none;
-  }
-
-  .dropdown .lista{
-      display:block;
-      color:var(--first-color);
-      text-decoration: none;
-      padding: 10px 15px;
-  }
-  
-  .dropdown .mes{
-    display:none;
-    position:absolute;
-    min-width: 100px;
-    box-shadow: 2px 2px 5px hsl(0,0%,0.8);
-    height:100px;
-    overflow:hidden;
-    overflow-y:scroll;
-  }
-  
-  .dropdown:hover .mes{
-    display:block;
-  }
-
-  .lista:hover {
-    background-color: #ad8be057;
-  }
-
-  .botao:active,.meses:active{
-    background-color:  #ad8be057;
-  }
-
-  #comment_section {
-    margin-top: 10px;
-  }
-
-  #comment_input {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-  }
-
+body {
+  padding: 1rem 3rem 0 6rem;
 }
+
+.header {
+  padding: 0 3rem 0 6rem;
+}
+
+.header__container {
+  height: calc(var(--header-height) + .5rem);
+}
+
+.header__search {
+  width: 300px;
+  padding: .55rem .75rem;
+}
+
+.header__toggle {
+  display: none;
+}
+
+.header__logo {
+  display: block;
+}
+
+.header__img {
+  width: 40px;
+  height: 40px;
+  order: 1;
+}
+
+.nav {
+  left: 0;
+  padding: 1.2rem 1.5rem 0;
+  width: 68px; /* Reduced navbar */
+}
+
+.nav__items {
+  row-gap: 1.7rem;
+}
+
+.nav__icon {
+  font-size: 1.3rem;
+}
+
+/* Element opacity */
+.nav__logo-name, 
+.nav__name, 
+.nav__subtitle, 
+.nav__dropdown-icon {
+  opacity: 0;
+  transition: .3s;
+}
+
+
+/* Navbar expanded */
+.nav:hover {
+  width: var(--nav-width);
+}
+
+.nav:hover+main {
+  margin-left: 10rem;
+}
+
+/* Visible elements */
+.nav:hover .nav__logo-name {
+  opacity: 1;
+}
+
+.nav:hover .nav__subtitle {
+  opacity: 1;
+}
+
+.nav:hover .nav__name {
+  opacity: 1;
+}
+
+.nav:hover .nav__dropdown-icon {
+  opacity: 1;
+}
+
+.modo,.titulo{
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  font-size: 36px;
+}
+
+.chart {
+  min-width: 1000px;
+}
+
+.texto{
+  font-family:'Poppins';
+  font-weight: bold;
+  color:#2e2d2e;
+  font-size: 20px;
+  bottom: 0;
+  right: 0;
+  
+}
+
+.button{
+  width:300px;
+  height: 300px;
+  border-radius: 15px;
+  background-color: #a47ae9ad; 
+  border: none; 
+  cursor: pointer; 
+  margin-right: 30px;
+}
+
+.botao-cons{
+  justify-content: center;
+  align-items: center;
+}
+
+button:hover, .meses:hover{
+  background-color: rgba(123, 123, 187, 0.336); 
+  transition: .3s;
+  border: 0px;
+}
+
+.dropdown{
+  display: inline-block;
+  height: 144px; /* para nao sumir as opções quando quero selecionar alguma de baixo */
+}
+
+.dropdown button,
+.botao{
+    background-color: rgb(255, 255, 255);
+    color:var(--first-color);
+    width: 150px;
+    height: 36px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border: none;
+}
+
+.dropdown .lista {
+    display:block;
+    color:var(--first-color);
+    text-decoration: none;
+    padding: 10px 15px;
+}
+
+.dropdown .mes {
+  display:none;
+  position:absolute;
+  min-width: 100px;
+  box-shadow: 2px 2px 5px hsl(0,0%,0.8);
+  height:100px;
+  overflow:hidden;
+  overflow-y:scroll;
+}
+
+.dropdown:hover .mes {
+  display:block;
+}
+
+.botao-1ano {
+  width: 150px;
+}
+
+.lista:hover {
+  background-color: #ad8be057;
+}
+
+.botao:active,.meses:active{
+  background-color:  #ad8be057;
+}
+
+#comment_section {
+  margin-top: 10px;
+}
+
+#comment_input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+}
+
+
 
 @media (max-width: 1150px) {
   .dashboard-metrica>div .valor{

@@ -1,8 +1,8 @@
-const container=document.querySelector(".container"),
-pwShowHide= document.querySelectorAll(".showHidePw"),
-pwFields = document.querySelectorAll(".password"),
-signUp = document.querySelector(".signup-link"),
-login = document.querySelector(".login-link");
+const container = document.querySelector(".container");
+const pwShowHide = document.querySelectorAll(".showHidePw");
+const pwFields = document.querySelectorAll(".password");
+const signUp = document.querySelector(".signup-link");
+const login = document.querySelector(".login-link");
 
 pwShowHide.forEach((eyeIcon) => {
     eyeIcon.addEventListener("click", () => {
@@ -22,10 +22,9 @@ pwShowHide.forEach((eyeIcon) => {
     });
 });
 
-
-signUp.addEventListener("click",( )=>{
+signUp.addEventListener("click", () => {
     container.classList.add("active");
 });
-login.addEventListener("click",( )=>{
+login.addEventListener("click", () => {
     container.classList.remove("active");
 });
