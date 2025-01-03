@@ -9,6 +9,12 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+        {
+          "source": "**",
+          "destination": "./public/pages/conta/login.html"
+        }
     ]
   },
   "storage": {
