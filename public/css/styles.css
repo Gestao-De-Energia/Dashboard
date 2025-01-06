@@ -337,6 +337,10 @@ img {
   gap: 5px;
 }
 
+.run_btn_container {
+  margin-top: 20px;
+}
+
 .run_btn {
   width: 200px;
   height: 60px;
