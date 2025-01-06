@@ -377,7 +377,6 @@ fetch('../../../dados/dados.json')
     };
 
 
-
     // Grafico de Energia Fotovoltaica (rendering)
     var chartEolica = new ApexCharts(document.querySelector("#chartEolica"), optionsEolica);
     chartEolica.render();
@@ -497,7 +496,6 @@ fetch('../../../dados/dados.json')
     var chartEnergiaXDemanda = new ApexCharts(document.querySelector("#chartEnergiaXDemanda"), optionsEnergiaXDemanda);
     chartEnergiaXDemanda.render();
     // Criando funções para selecionar os meses para os botões
-
 
     const periodsEnergiaXDemanda = [
       { id: '#fevd', start: '01 Feb 2004', end: '29 Feb 2004' },
@@ -817,7 +815,6 @@ fetch('../../../dados/dados.json')
         width: 1,
         colors: ["#fff"]
       },
-
       grid: {
         xaxis: {
           lines: {
@@ -833,8 +830,7 @@ fetch('../../../dados/dados.json')
         shared: false,
         x: {
           format: 'dd MMM yyyy'
-        }
-        ,
+        },
         y: {
           formatter: function (val) {
             return Math.abs(val)
@@ -861,13 +857,11 @@ fetch('../../../dados/dados.json')
         title: {
           text: 'Dia'
         },
-
         labels: {
           format: 'MMM \'yy'
         }
       },
     };
-
 
     // Criando gráfico de carga e descarga da bateria
     var chartBateria = new ApexCharts(document.querySelector("#chartBateria"), optionsBateria);
