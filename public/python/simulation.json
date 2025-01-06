@@ -1,0 +1,7 @@
+{
+    "renewable_factor": 0.6965078077166803,
+    "price_electricity": 0.6069342122102053,
+    "loss_load_probability": 0.07615740740740741,
+    "houses": 4,
+    "num_wind_turbines": 8
+}
