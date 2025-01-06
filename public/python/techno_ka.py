@@ -7,7 +7,6 @@ from auxiliar import *
 
 from statistics import mean
 import numpy as np
-import os
 
 def techno_ka(houses,p_npv,ad,nwt):
         
@@ -16,8 +15,7 @@ def techno_ka(houses,p_npv,ad,nwt):
     #http://www.soda-pro.com/web-services/radiation/helioclim-3-archives-for-free
 
     # g = read_file('C:/UNI/PROYECTO/python/datos/solreal.txt')#vector fila con datos obtenidos de solreal
-    solreal_path = os.path.abspath("./solreal.txt")
-    g = np.genfromtxt(solreal_path) #vector fila con datos obtenidos de solreal
+    g = np.genfromtxt('solreal.txt') #vector fila con datos obtenidos de solreal
 
     #average annual average temperature (12 months)
     #tamb=[0.8 4.2 8.95 13.07 17 17.2 17.05 20.1 17.22 9.4 5 3.9]#ambient temperature-hararate KARLSRUHE (1 ano)
@@ -48,11 +46,9 @@ def techno_ka(houses,p_npv,ad,nwt):
 
     #Realdata from Silvia
     # loadind = read_file('C:/UNI/PROYECTO/python/datos/loadind.txt')
-    loadind_path = os.path.abspath("./loadind.txt")
-    loadind = np.genfromtxt(loadind_path)
+    loadind = np.genfromtxt('loadind.txt')
     # loadres = read_file('C:/UNI/PROYECTO/python/datos/loadres.txt')
-    loadres_path = os.path.abspath("./loadres.txt")
-    loadres = np.genfromtxt(loadres_path)
+    loadres = np.genfromtxt('loadres.txt')
 
     factor = 5.1 #5.3(loadres)    #3.5(loadin)
 
@@ -70,8 +66,7 @@ def techno_ka(houses,p_npv,ad,nwt):
 ########inputs##############inputs####################inputs##
     shape_w = 1###----------> out of wind xls, from http://www.renewable-energy-concepts.com/fileadmin/user_upload/bilder/windkarte-deutschland-10m.pdf
     # v1 = read_file('C:/UNI/PROYECTO/python/datos/wind_data.txt')
-    wind_data_path = os.path.abspath("./wind_data.txt")
-    v1 = np.genfromtxt(wind_data_path)
+    v1 = np.genfromtxt('wind_data.txt')
     v1 = v1 * shape_w
     h2 = 18  ###-------------------------------------------------------------->changed
     h0 = 27.3 ###------------------------------------------------------------->changed
