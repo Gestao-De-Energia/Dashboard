@@ -221,7 +221,7 @@ linkColor.forEach(l => l.addEventListener('click', colorLink))
 
 /*==================== Gráficos ====================*/
 // Gráfico Energia Fotovoltaica
-fetch('dados/demanda.json')
+fetch('Dashboard/dados/demanda.json')
         .then(response => response.json())
         .then(data => {
   var optionsFotovoltaica = {
