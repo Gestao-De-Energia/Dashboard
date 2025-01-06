@@ -8,8 +8,8 @@ app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas as rotas
 
 # Caminhos dos arquivos
-PYTHON_SCRIPT = os.path.abspath("./CDEEPSO.py")
-SIMULATION_JSON = os.path.abspath("./simulation.json")
+PYTHON_SCRIPT = os.path.abspath("./public/python/CDEEPSO.py")
+SIMULATION_JSON = os.path.abspath("./public/python/simulation.json")
 
 @app.route('/run_simulation', methods=['POST'])
 def run_simulation():
