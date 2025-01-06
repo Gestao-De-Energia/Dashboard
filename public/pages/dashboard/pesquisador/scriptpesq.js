@@ -9,7 +9,7 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
       metricas.forEach((el) => el.style.display = "none");
       gifs.forEach((gif) => gif.style.display = "inline");
 
-      let response = await fetch("https://dashboard-5lrl.onrender.com/run_simulation", { method: "POST" });
+      let response = await fetch("http://localhost:5000/run_simulation", { method: "POST" });
 
       let data = await response.json();
 
@@ -27,6 +27,8 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
 
 // Recuperar valores ao recarregar a página
 window.addEventListener("load", () => {
+  if(!localStorage) return;
+  
   let savedData = JSON.parse(localStorage.getItem("simulationData"));
   let metricas = document.querySelectorAll(".metrica-texto .valor");
   if (savedData) {
