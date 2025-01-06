@@ -258,11 +258,11 @@ img {
 }
 
 .dashboard-metrica{
-  display:grid;
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 120px 120px;
-  row-gap:20px ;
-  column-gap:20px ;
+  row-gap: 20px ;
+  column-gap: 20px ;
 }
 
 .left{
@@ -277,13 +277,20 @@ img {
   height: 70px;
 }
 
+.metrica-texto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .dashboard-metrica>div{
   background-image: linear-gradient(to right, #FBA85B, #C24E4E);
   border-radius: 30px;
   margin-top: 1rem;
-  box-shadow:2px 2px 5px hsl(0,0%,0.8);
+  box-shadow: 2px 2px 5px hsl(0,0%,0.8);
   transition: all .3s ease;
-  color:white;
+  color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -325,11 +332,27 @@ img {
 
 /* ========== BOTÕES ========== */
 
-.btn_container{
+.btn_container {
   display: flex;
   gap: 5px;
 }
 
+.run_btn {
+  width: 200px;
+  height: 60px;
+  border-radius: 30px;
+  border: 0px;
+  cursor: pointer;
+  background-color: #0D6EFD;
+}
+
+.run_btn:hover{
+  background-color: #0B5ED7;
+}
+
+.run_btn_text {
+  color: white;
+}
 
 /* ========== COMENTÁRIO POR DATA =========== */
 

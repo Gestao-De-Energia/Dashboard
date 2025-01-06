@@ -1,3 +1,47 @@
+/*==================== RODANDO SIMULAÇÃO ====================*/
+
+document.querySelector(".run_btn").addEventListener("click", async function () {
+  let metricas = document.querySelectorAll(".metrica-texto .valor");
+  let gifs = document.querySelectorAll(".loadingGif");
+
+  try {
+      // Esconder os valores e exibir os GIFs de carregamento
+      metricas.forEach((el) => el.style.display = "none");
+      gifs.forEach((gif) => gif.style.display = "inline");
+
+      let response = await fetch("http://localhost:5000/run_simulation", { method: "POST" });
+
+      if (!response.ok) throw new Error("Erro ao rodar a simulação");
+
+      let data = await response.json();
+
+      // Salvar localmente para evitar reset
+      localStorage.setItem("simulationData", JSON.stringify(data));
+
+  } catch (error) {
+      console.error("Erro ao rodar a simulação:", error);
+      metricas.forEach((el) => el.innerText = "Erro");
+  } finally {
+      gifs.forEach((gif) => gif.style.display = "none");
+      metricas.forEach((el) => el.style.display = "inline");
+  }
+});
+
+// Recuperar valores ao recarregar a página
+window.addEventListener("load", () => {
+  let savedData = JSON.parse(localStorage.getItem("simulationData"));
+  let metricas = document.querySelectorAll(".metrica-texto .valor");
+  if (savedData) {
+      metricas[0].innerText = (savedData.renewable_factor * 100).toFixed(2).replace(".", ",") + "%";
+      metricas[1].innerText = (savedData.loss_load_probability * 100).toFixed(2).replace(".", ",") + "%";
+      metricas[2].innerText = "R$" + savedData.price_electricity.toFixed(3).replace(".", ",");
+      metricas[3].innerText = savedData.houses;
+      metricas[4].innerText = savedData.num_wind_turbines;
+  }
+});
+
+
+
 /*==================== COMENTÁRIO POR DATA ====================*/
 
 // adicionar um comentário para um ponto específico
