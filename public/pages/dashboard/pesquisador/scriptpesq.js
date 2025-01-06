@@ -221,7 +221,7 @@ linkColor.forEach(l => l.addEventListener('click', colorLink))
 
 /*==================== Gráficos ====================*/
 // Gráfico Energia Fotovoltaica
-fetch('../../../../dados/demanda.json')
+fetch('../../../dados/demanda.json')
       .then(response => response.json())
       .then(data => {
 var optionsFotovoltaica = {
@@ -319,7 +319,7 @@ console.error('Error loading JSON data:', error);
 });
 
 // Definindo as opções para o gráfico de Energia eólica
-fetch('../../../../dados/demanda.json')
+fetch('../../../dados/demanda.json')
       .then(response => response.json())
       .then(data => {
 var optionsEolica = {
@@ -414,7 +414,7 @@ console.error('Error loading JSON data:', error);
 
 
 // Gráfico energia x demanda
-fetch('../../../../dados/demanda.json')
+fetch('../../../dados/demanda.json')
       .then(response => response.json())
       .then(data => {
 var optionsEnergiaXDemanda = {
@@ -527,7 +527,7 @@ console.error('Error loading JSON data:', error);
 
 //gráfico  desempenho
 // Gráfico energia x demanda
-fetch('../../../../dados/demanda.json')
+fetch('../../../dados/demanda.json')
       .then(response => response.json())
       .then(data => {
 var optionsDesempenho = {
@@ -675,7 +675,7 @@ console.error('Error loading JSON data:', error);
 });
 
 //gráfico produção de energia x compensação
-fetch('../../../../dados/demanda.json')
+fetch('../../../dados/demanda.json')
       .then(response => response.json())
       .then(data => {
 var optionsEnergiaXCompensacao = {
@@ -779,7 +779,7 @@ console.error('Error loading JSON data:', error);
 
 
 //grafico da carga e descarga da bateria
-fetch('../../../../dados/demanda.json')
+fetch('../../../dados/demanda.json')
       .then(response => response.json())
       .then(data => {
 var optionsBateria = {
@@ -903,7 +903,7 @@ console.error('Error loading JSON data:', error);
 
 
 // Definindo os valores do gráfico de irradiação solar
-fetch('../../../../dados/demanda.json')
+fetch('../../../dados/demanda.json')
       .then(response => response.json())
       .then(data => {
 var optionsSTSolar = {
@@ -1019,7 +1019,7 @@ console.error('Error loading JSON data:', error);
 
 
 // Criação de opções e estilização para o gráfico de série temporal do vento  
-fetch('../../../../dados/demanda.json')
+fetch('../../../dados/demanda.json')
       .then(response => response.json())
       .then(data => {  
 var optionsSTVento = {
