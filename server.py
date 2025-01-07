@@ -7,11 +7,8 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Caminhos dos arquivos
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Garante que a função rode no diretório correto
-PYTHON_SCRIPT = os.path.join(BASE_DIR, "CDEEPSO.py")
-SIMULATION_JSON = os.path.join(BASE_DIR, "simulation.json")
-
+PYTHON_SCRIPT = os.path.abspath("./CDEEPSO.py")
+SIMULATION_JSON = os.path.abspath("./simulation.json")
 
 @app.route('/run_simulation', methods=['POST'])
 def run_simulation():
@@ -28,6 +25,5 @@ def run_simulation():
     except subprocess.CalledProcessError as e:
         return jsonify({"error": f"Erro ao executar a simulação: {str(e)}"}), 500
 
-# Função que o Firebase Functions usa como entrada
-def flask_app(request):
-    return app(request)
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000, debug=True)
