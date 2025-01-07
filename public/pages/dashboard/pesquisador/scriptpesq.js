@@ -37,6 +37,9 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
       console.error("Erro ao rodar a simulação:", error);
       metricas.forEach((el) => el.innerText = "Erro");
   } finally {
+      clearInterval(interval);
+      
+      runButtonText.innerHTML = "Rodar simulação";
       runButton.disabled = false;
       runButton.style.opacity = "1";
       runButton.style.cursor = "pointer";
