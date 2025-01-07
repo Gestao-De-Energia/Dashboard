@@ -3,8 +3,25 @@
 document.querySelector(".run_btn").addEventListener("click", async function () {
   let metricas = document.querySelectorAll(".metrica-texto .valor");
   let gifs = document.querySelectorAll(".loadingGif");
+  let runButton = document.querySelector(".run_btn");
+  let runButtonText = document.querySelector(".run_btn_text");
+
+  let texts = ["Rodando simulação.", "Rodando simulação..", "Rodando simulação..."];
+  let textIndex = 0;
+  let interval;
 
   try {
+      // Indicando que estou rodando o script: desabilito o botão
+      runButton.disabled = true;
+      runButton.style.opacity = "0.5";
+      runButton.style.cursor = "not-allowed";
+
+      // Animação no texto do botão
+      interval = setInterval(() => {
+          runButtonText.innerHTML = texts[textIndex];
+          textIndex = (textIndex + 1) % texts.length;
+      }, 500); // Alterna a cada 500ms
+      
       // Esconder os valores e exibir os GIFs de carregamento
       metricas.forEach((el) => el.style.display = "none");
       gifs.forEach((gif) => gif.style.display = "inline");
