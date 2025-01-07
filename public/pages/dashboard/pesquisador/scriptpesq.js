@@ -13,6 +13,12 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
 
       let data = await response.json();
 
+      metricas[0].innerText = (data.renewable_factor * 100).toFixed(2).replace(".", ",") + "%";
+      metricas[1].innerText = (data.loss_load_probability * 100).toFixed(2).replace(".", ",") + "%";
+      metricas[2].innerText = "R$" + data.price_electricity.toFixed(3).replace(".", ",");
+      metricas[3].innerText = data.houses;
+      metricas[4].innerText = data.num_wind_turbines;
+
       // Salvar localmente para evitar reset
       localStorage.setItem("simulationData", JSON.stringify(data));
 
