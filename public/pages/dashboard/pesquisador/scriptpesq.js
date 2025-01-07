@@ -30,6 +30,9 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
 
       let data = await response.json();
 
+      clearInterval(interval);
+      runButtonText.innerHTML = "Rodar simulação";
+
       metricas[0].innerText = (data.renewable_factor * 100).toFixed(2).replace(".", ",") + "%";
       metricas[1].innerText = (data.loss_load_probability * 100).toFixed(2).replace(".", ",") + "%";
       metricas[2].innerText = "R$" + data.price_electricity.toFixed(3).replace(".", ",");
