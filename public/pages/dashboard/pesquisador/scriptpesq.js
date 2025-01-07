@@ -43,6 +43,10 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
       console.error("Erro ao rodar a simulação:", error);
       metricas.forEach((el) => el.innerText = "Erro");
   } finally {
+      runButton.disabled = false;
+      runButton.style.opacity = "1";
+      runButton.style.cursor = "pointer";
+
       gifs.forEach((gif) => gif.style.display = "none");
       metricas.forEach((el) => el.style.display = "inline");
   }
