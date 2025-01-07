@@ -29,23 +29,23 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
       let response = await fetch("https://dashboard-5lrl.onrender.com/run_simulation", { method: "POST" });
 
       let data = await response.json();
-
-      clearInterval(interval);
-      runButtonText.innerHTML = "Rodar simulação";
-
+      
       metricas[0].innerText = (data.renewable_factor * 100).toFixed(2).replace(".", ",") + "%";
       metricas[1].innerText = (data.loss_load_probability * 100).toFixed(2).replace(".", ",") + "%";
       metricas[2].innerText = "R$" + data.price_electricity.toFixed(3).replace(".", ",");
       metricas[3].innerText = data.houses;
       metricas[4].innerText = data.num_wind_turbines;
-
+      
       // Salvar localmente para evitar reset
       localStorage.setItem("simulationData", JSON.stringify(data));
-
-  } catch (error) {
+      
+    } catch (error) {
       console.error("Erro ao rodar a simulação:", error);
       metricas.forEach((el) => el.innerText = "Erro");
-  } finally {
+    } finally {
+      clearInterval(interval);
+      
+      runButtonText.innerHTML = "Rodar simulação";
       runButton.disabled = false;
       runButton.style.opacity = "1";
       runButton.style.cursor = "pointer";
