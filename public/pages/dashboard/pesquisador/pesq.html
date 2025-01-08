@@ -165,6 +165,36 @@
         <button class="run_btn">
           <h3 class="run_btn_text">Rodar simulação</h3>
         </button>
+      
+        <div class="config_buttons" style="display: none;">
+          <!-- Dropdown para número de iterações -->
+          <div class="dropdown_sim">
+            <button class="config_button" id="iterations_button">Iterações: 10 ▼</button>
+            <div class="dropdown_content" id="iterations_dropdown">
+              <button class="dropdown_item" data-value="5">5</button>
+              <button class="dropdown_item" data-value="10">10</button>
+              <button class="dropdown_item" data-value="15">15</button>
+              <button class="dropdown_item" data-value="20">20</button>
+            </div>
+          </div>
+      
+          <!-- Dropdown para período -->
+          <div class="dropdown_sim">
+            <button class="config_button" id="period_button">Período: 12 meses ▼</button>
+            <div class="dropdown_content" id="period_dropdown">
+              <button class="dropdown_item" data-value="1 semana">1 semana</button>
+              <button class="dropdown_item" data-value="2 semanas">2 semanas</button>
+              <button class="dropdown_item" data-value="1 mês">1 mês</button>
+              <button class="dropdown_item" data-value="3 meses">3 meses</button>
+              <button class="dropdown_item" data-value="6 meses">6 meses</button>
+              <button class="dropdown_item" data-value="9 meses">9 meses</button>
+              <button class="dropdown_item" data-value="12 meses">12 meses</button>
+            </div>
+          </div>
+      
+          <!-- Botão de confirmar -->
+          <button class="confirm_button" id="confirm_button">Confirmar</button>
+        </div>
       </div>
       <!-- SEÇÃO ENERGIA -->
       <h2 style="padding-top: 80px;" id="Energia">Energia</h2>

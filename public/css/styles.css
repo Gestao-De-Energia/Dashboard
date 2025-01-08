@@ -338,7 +338,11 @@ img {
 }
 
 .run_btn_container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
   margin-top: 20px;
+  gap: 10px;
 }
 
 .run_btn {
@@ -356,6 +360,64 @@ img {
 
 .run_btn_text {
   color: white;
+}
+
+.config_buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.config_button, .confirm_button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.config_button:hover {
+  background-color: #ddd;
+  border: 1px solid #ccc;
+}
+
+.confirm_button {
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+}
+
+.confirm_button:hover {
+  background-color: #218838;
+  border: 1px solid #ccc;
+}
+
+.dropdown_sim {
+  position: relative;
+}
+
+.dropdown_content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  width: 100%;
+  z-index: 10;
+}
+
+.dropdown_item {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  text-align: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.dropdown_item:hover {
+  background-color: #f0f0f0;
 }
 
 /* ========== COMENTÁRIO POR DATA =========== */
