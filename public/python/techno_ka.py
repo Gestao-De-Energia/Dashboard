@@ -68,7 +68,7 @@ def techno_ka(houses,p_npv,ad,nwt,steps):
     # loadind = read_file('C:/UNI/PROYECTO/python/datos/loadind.txt')
     loadind = np.genfromtxt('loadind.txt')[:steps]
     # loadres = read_file('C:/UNI/PROYECTO/python/datos/loadres.txt')
-    loadres = np.genfromtxt('loadres.txt')[:steps]
+    loadres = np.genfromtxt('loadres.txt')[:steps+2]
 
     factor = 5.1 #5.3(loadres)    #3.5(loadin)
 
@@ -210,7 +210,7 @@ def techno_ka(houses,p_npv,ad,nwt,steps):
     LPSP=k/steps
     reliability=sum(aa)/sum(Pl)
 
-    price_electricity = economic_fast(gridc,Pl,Fg,cwh,p_npv,nwt, Edch, steps)
+    price_electricity = economic_fast(gridc,Pl,Fg,cwh,p_npv,nwt, Edch)
     ali=[Pp[:168], Pw[:168], Eb[:168], gridc[:168], Pl[:168], Edump[:168]]
     ali2=[Pp[:steps], Pw[:steps], Eb[:steps], Edch[:steps], Ech[:steps], gridc[:steps], Pl[:steps], Edump[:steps]]
     ali = np.array(ali).T
