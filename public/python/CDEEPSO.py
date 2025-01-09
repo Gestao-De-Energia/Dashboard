@@ -5,6 +5,7 @@ from math import sqrt, inf
 import numpy as np
 from time import time
 import json
+import sys
 
 
 init_t = time()
@@ -14,6 +15,14 @@ C=0.65#price of electricity
 W=0.14#loss of load probability#
 K=0.9#renewable energy factor#
 nvars=1#only one system
+
+# argumentos da requisição
+if len(sys.argv) >= 3:
+    iterations = int(sys.argv[1])  # número de iterações
+    steps = int(sys.argv[2])       # quantidade de passos (período)
+else:
+    iterations = 10 
+    steps = 8640
 
 LB=[10, 1, 1, 1] # Lower bound of problem
 UB=[150, 3, 30, 8] # Upper bound of problem
@@ -70,7 +79,7 @@ for i in range(NPOP):
         houses=round(particle[i].position[2])
         nwt=round(particle[i].position[3])
         #-----------------------
-        [LPSP,price_electricity,renewable_factor,b,ali, ali2] = techno_ka(houses,p_npv,ad,nwt)
+        [LPSP,price_electricity,renewable_factor,b,ali, ali2] = techno_ka(houses,p_npv,ad,nwt,steps)
         ff = ff+1
         ww = LPSP
         kkk= renewable_factor
@@ -81,9 +90,9 @@ for i in range(NPOP):
     if particle[i].best.cost<globalbest.cost:
         globalbest=particle[i].best
         
-Fminn=np.zeros(max_it) #EN MATLAB ES UNA COLUMNA
+Fminn=np.zeros(iterations) #EN MATLAB ES UNA COLUMNA
 ## algorithm main loop
-for u in range(max_it):
+for u in range(iterations):
     vv=0
     for i in range(NPOP):
         cc=1#a value for cost
@@ -109,11 +118,11 @@ for u in range(max_it):
             houses = round(particle[i].position[2])
             nwt = round(particle[i].position[3])
            
-            [LPSP,price_electricity,renewable_factor,b,ali, ali2] = techno_ka(houses,p_npv,ad,nwt)
+            [LPSP,price_electricity,renewable_factor,b,ali, ali2] = techno_ka(houses,p_npv,ad,nwt,steps)
             bb=bb+1
 
         #-----------------------
-        [LPSP,price_electricity,renewable_factor,b,ali, ali2] = techno_ka(houses,p_npv,ad,nwt)
+        [LPSP,price_electricity,renewable_factor,b,ali, ali2] = techno_ka(houses,p_npv,ad,nwt,steps)
         particle[i].cost = price_electricity
         rnwfct = renewable_factor 
         vv = vv+1
@@ -134,7 +143,7 @@ for u in range(max_it):
     print(str.format("Iteration {0}, Best cost = {1}",u,Fminn[u]))
     print(str.format("Best solution p_npv = {0}, ad = {1}, houses = {2}, nwt = {3}", p_npv, ad, houses, nwt))
 
-[LPSP,price_electricity,renewable_factor,b,ali, ali2] = techno_ka(houses,p_npv,ad,nwt)
+[LPSP,price_electricity,renewable_factor,b,ali, ali2] = techno_ka(houses,p_npv,ad,nwt,steps)
 print(str.format("LOLP {0}, $/KWh = {1}, %RES = {2}", LPSP, price_electricity, renewable_factor))
 
 simulation_data = {
