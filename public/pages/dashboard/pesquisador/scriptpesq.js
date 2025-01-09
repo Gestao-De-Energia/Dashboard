@@ -37,10 +37,8 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
         // Atualiza a variável global com o valor selecionado
         if (buttonId === "iterations_button") {
           selectedIteration = parseInt(newValue);
-          console.log(selectedIteration);
         } else {
           selectedPeriod = periodMapping[newValue];
-          console.log(selectedPeriod);
         }
       });
     });
@@ -89,7 +87,16 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
       metricas.forEach((el) => el.style.display = "none");
       gifs.forEach((gif) => gif.style.display = "inline");
 
-      let response = await fetch("http://localhost:5000/run_simulation", { method: "POST" });
+      let response = await fetch("http://localhost:5000/run_simulation", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            iterations: selectedIteration,
+            period: selectedPeriod
+        })
+    });
 
       let data = await response.json();
 
@@ -98,6 +105,7 @@ document.querySelector(".run_btn").addEventListener("click", async function () {
 
     } catch (error) {
       console.error("Erro ao rodar a simulação:", error);
+      localStorage.clear();
       metricas.forEach((el) => el.innerText = "Erro");
     } finally {
       clearInterval(interval);
@@ -127,7 +135,6 @@ window.addEventListener("load", () => {
     metricas[4].innerText = savedData.num_wind_turbines;
   }
 });
-
 
 
 /*==================== COMENTÁRIO POR DATA ====================*/
