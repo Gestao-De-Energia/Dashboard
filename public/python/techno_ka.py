@@ -8,20 +8,40 @@ from auxiliar import *
 from statistics import mean
 import numpy as np
 
-def techno_ka(houses,p_npv,ad,nwt):
+def techno_ka(houses,p_npv,ad,nwt,steps):
         
     ## load inputs
     #radiation(kW/m^2) KARLSRUHE
     #http://www.soda-pro.com/web-services/radiation/helioclim-3-archives-for-free
 
     # g = read_file('C:/UNI/PROYECTO/python/datos/solreal.txt')#vector fila con datos obtenidos de solreal
-    g = np.genfromtxt('solreal.txt') #vector fila con datos obtenidos de solreal
+    g = np.genfromtxt('solreal.txt')[:steps] #vector fila con datos obtenidos de solreal
 
     #average annual average temperature (12 months)
     #tamb=[0.8 4.2 8.95 13.07 17 17.2 17.05 20.1 17.22 9.4 5 3.9]#ambient temperature-hararate KARLSRUHE (1 ano)
     #tamb=[4.7 5.9 9.1 12 16.4 22.4 25.7 25.3 20.7 14.9 8.6 5.4]#alcala de henares
     tamb = np.array([12, 13, 15, 16, 19, 22, 24, 24, 23, 20, 16, 13])#cadiz
-    tamb = np.repeat(tamb, 720)
+
+    if steps <= 168:  # 1 semana
+        tamb = tamb[:1] 
+        tamb = np.repeat(tamb, 168)
+    elif steps <= 336:  # 2 semanas
+        tamb = tamb[:1]
+        tamb = np.repeat(tamb, 336)
+    elif steps <= 720:  # 1 mês
+        tamb = tamb[:1]
+        tamb = np.repeat(tamb, 720)
+    elif steps <= 2160:  # 3 meses
+        tamb = tamb[:3]
+        tamb = np.repeat(tamb, 720)
+    elif steps <= 4320:  # 6 meses
+        tamb = tamb[:6]
+        tamb = np.repeat(tamb, 720)
+    elif steps <= 6480:  # 9 meses
+        tamb = tamb[:9]
+        tamb = np.repeat(tamb, 720)
+    else:  # 12 meses
+        tamb = np.repeat(tamb, 720)
 
     
     #############################################################
@@ -46,9 +66,9 @@ def techno_ka(houses,p_npv,ad,nwt):
 
     #Realdata from Silvia
     # loadind = read_file('C:/UNI/PROYECTO/python/datos/loadind.txt')
-    loadind = np.genfromtxt('loadind.txt')
+    loadind = np.genfromtxt('loadind.txt')[:steps]
     # loadres = read_file('C:/UNI/PROYECTO/python/datos/loadres.txt')
-    loadres = np.genfromtxt('loadres.txt')
+    loadres = np.genfromtxt('loadres.txt')[:steps]
 
     factor = 5.1 #5.3(loadres)    #3.5(loadin)
 
@@ -66,7 +86,7 @@ def techno_ka(houses,p_npv,ad,nwt):
 ########inputs##############inputs####################inputs##
     shape_w = 1###----------> out of wind xls, from http://www.renewable-energy-concepts.com/fileadmin/user_upload/bilder/windkarte-deutschland-10m.pdf
     # v1 = read_file('C:/UNI/PROYECTO/python/datos/wind_data.txt')
-    v1 = np.genfromtxt('wind_data.txt')
+    v1 = np.genfromtxt('wind_data.txt')[:steps]
     v1 = v1 * shape_w
     h2 = 18  ###-------------------------------------------------------------->changed
     h0 = 27.3 ###------------------------------------------------------------->changed
@@ -92,17 +112,17 @@ def techno_ka(houses,p_npv,ad,nwt):
 # #Price based on in old aproach using RunDieselGeneraor.m
     Fg = Bg * Pg + Ag * Png
 ## MAIN PROGRAM
-    contribution = np.zeros((5, 8640)) #pv,wind, battery, diesel contribution in each hour
+    contribution = np.zeros((5, steps)) #pv,wind, battery, diesel contribution in each hour
 
     Ebmax = bcap * (1 + 1 - dod) #40kWh#battery capacity 40 kWh-----------> normally never fully charged
     Ebmin = bcap * (1 - dod) #40kWh
     SOCb = 0.2 #state of charge of the battery>>20#
-    Eb = np.zeros(8640)
-    time1 = np.zeros(8640)
-    gridc = np.zeros(8640)
-    Edump = np.zeros(8640)
-    Edch = np.zeros(8640)
-    Ech = np.zeros(8640)
+    Eb = np.zeros(steps)
+    time1 = np.zeros(steps)
+    gridc = np.zeros(steps)
+    Edump = np.zeros(steps)
+    Edch = np.zeros(steps)
+    Ech = np.zeros(steps)
     Eb[0] = SOCb * Ebmax #state of charge for starting time
 #^^^^^^^^^^^^^^START^^^^^^^^^^^^^^^^^^^^^^^^
     #hourly load data for one year
@@ -112,17 +132,17 @@ def techno_ka(houses,p_npv,ad,nwt):
     Pp = p_pvout_hourly.copy() #output power(kw)_hourly
     Pp[Pp > p_npv] = p_npv
 
-    Pw = np.zeros(8640)
+    Pw = np.zeros(steps)
     Pp_mean=mean(Pp)
 # wind power calculation
-    pwtg = np.zeros(8640)
+    pwtg = np.zeros(steps)
     pwtg[(vci <= v2) & (v2 <= vr)] = \
         (pr / (vr**3 - vci**3)) * (v2[(vci <= v2) & (v2 <= vr)])**3 - \
             (vci**3 / (vr**3 - vci**3)) * pr
     pwtg[~((vci <= v2) & (v2 <= vr)) & (vr <= v2) & (v2<=vco)] = pr
     Pw[:-1] = pwtg[:-1] * uw * nwt
 
-    # for t in range(8639):###### COMPROBAR SI ESTÁ BIEN EL ÍNDICE Y ESO
+    # for t in range(steps-1):###### COMPROBAR SI ESTÁ BIEN EL ÍNDICE Y ESO
     #     if v2[t]<vci: #v2>>hourly_wind_speed
     #         pwtg.append (0)
     #     elif (vci<=v2[t]) and (v2[t]<=vr):
@@ -135,7 +155,7 @@ def techno_ka(houses,p_npv,ad,nwt):
 
     Pw_mean=mean(Pw)
 
-    for t in range(1,8639):
+    for t in range(1,steps-1):
 #^^^^^^^^^^^^^^READ INPUTS^^^^^^^^^^^^^^^^^^
 
 #^^^^^^^^^^^^^^COMPARISON^^^^^^^^^^^^^^^^^^^
@@ -182,17 +202,17 @@ def techno_ka(houses,p_npv,ad,nwt):
     aa=[]
     aa = Pl[:-2] - Pp[:-1] - Pw[:-1] + Eb[:-1]
     k = np.sum(Pl[:-2] > (Pp[:-1] + Pw[:-1] + (Eb[:-1] - Ebmin) + gridc[:-1]))
-    # for t in range(8639):
+    # for t in range(steps-1):
     #     aa.append (Pl[t]-Pp[t]-Pw[t]+Eb[t])
     #     if Pl[t]>(Pp[t]+Pw[t]+(Eb[t]-Ebmin)+gridc[t]):
     #         k=k+1
 
-    LPSP=k/8640
+    LPSP=k/steps
     reliability=sum(aa)/sum(Pl)
 
-    price_electricity = economic_fast(gridc,Pl,Fg,cwh,p_npv,nwt, Edch)
+    price_electricity = economic_fast(gridc,Pl,Fg,cwh,p_npv,nwt, Edch, steps)
     ali=[Pp[:168], Pw[:168], Eb[:168], gridc[:168], Pl[:168], Edump[:168]]
-    ali2=[Pp[:8640], Pw[:8640], Eb[:8640], Edch[:8640], Ech[:8640], gridc[:8640], Pl[:8640], Edump[:8640]]
+    ali2=[Pp[:steps], Pw[:steps], Eb[:steps], Edch[:steps], Ech[:steps], gridc[:steps], Pl[:steps], Edump[:steps]]
     ali = np.array(ali).T
     ali2 = np.array(ali2).T
     
