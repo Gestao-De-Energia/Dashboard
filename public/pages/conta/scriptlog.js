@@ -21,10 +21,22 @@ pwShowHide.forEach((eyeIcon) => {
         });
     });
 });
-
-signUp.addEventListener("click", () => {
-    container.classList.add("active");
-});
 login.addEventListener("click", () => {
     container.classList.remove("active");
+});
+document.getElementById("submitBtn").addEventListener("click", function() {
+    // Verificar quais checkboxes estão marcadas
+    const checkboxPesquisador = document.getElementById("logCheckPesquisador");
+    const checkboxConsumidor = document.getElementById("logCheckConsumidor");
+
+    // Lógica de redirecionamento
+    if (checkboxPesquisador.checked && checkboxConsumidor.checked) {
+        window.location.href = "cadastroConsPesq.html"; // Redireciona para a página que lida com ambos
+    } else if (checkboxPesquisador.checked) {
+        window.location.href = "cadastroacPesq.html"; // Redireciona para a página de pesquisador
+    } else if (checkboxConsumidor.checked) {
+        window.location.href = "cadastroacCons.html"; // Redireciona para a página de consumidor
+    } else {
+        alert("Selecione pelo menos uma opção!"); // Caso nenhum checkbox esteja marcado
+    }
 });
