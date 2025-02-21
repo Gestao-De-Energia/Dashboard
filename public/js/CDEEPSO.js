@@ -1,0 +1,156 @@
+const fs = require('fs');
+const { techno_ka } = require('./techno_ka');
+const { emptyparticle, best, globalbest } = require('./structure');
+
+const init_t = Date.now() / 1000;
+
+// Problem definition
+const C = 0.65; // price of electricity
+const W = 0.14; // loss of load probability
+const K = 0.9;  // renewable energy factor
+const nvars = 1; // only one system
+
+// argumentos da requisição
+const args = process.argv.slice(2);
+const iterations = args.length >= 2 ? parseInt(args[0]) : 10; // número de iterações
+const steps = args.length >= 2 ? parseInt(args[1]) : 8640; // quantidade de passos (período)
+
+const LB = [10, 1, 1, 1];  // Lower bound
+const UB = [150, 3, 30, 8]; // Upper bound
+
+const max_it = 10;
+const NPOP = 10;
+let velmax = [];
+
+for (let d = 0; d < 4; d++) {
+    if (LB[d] > -1e20 && UB[d] < 1e20) {
+        velmax[d] = (UB[d] - LB[d]) / NPOP;
+    } else {
+        velmax[d] = Infinity;
+    }
+}
+
+// Algorithm initial parameters
+const phi1 = 2.05;
+const phi2 = 2.05;
+const phi = phi1 + phi2;
+const chi = 2 / (phi - 2 + Math.sqrt(Math.pow(phi, 2) - 4 * phi));
+
+const w1 = chi;               // Inertia weight
+const c1 = chi * phi1;        // Personal learning coefficient
+const c2 = chi * phi2;        // Global learning coefficient
+
+// Initialization
+let particle = [];
+
+for (let i = 0; i < NPOP; i++) {
+    particle.push(new emptyparticle([], [], [], new best([], [])));
+}
+
+let globalbest = new globalbest(Infinity, []);
+
+for (let i = 0; i < NPOP; i++) {
+    let cc = 1;
+    let ww = 0.3;
+    let kkk = 2;
+    let ff = 0;
+
+    while (ww >= W || kkk >= K) {
+        particle[i].position = LB.map((lb, index) => lb + Math.random() * (UB[index] - lb));
+        particle[i].velocity = Array(4).fill(0).map(() => Math.random());
+
+        let p_npv = particle[i].position[0];
+        let ad = particle[i].position[1];
+        let houses = Math.round(particle[i].position[2]);
+        let nwt = Math.round(particle[i].position[3]);
+
+        let [LPSP, price_electricity, renewable_factor, b, ali, ali2] = techno_ka(houses, p_npv, ad, nwt, steps);
+        ff += 1;
+        ww = LPSP;
+        kkk = renewable_factor;
+    }
+
+    particle[i].cost = price_electricity;
+    particle[i].best.position = particle[i].position;
+    particle[i].best.cost = particle[i].cost;
+
+    if (particle[i].best.cost < globalbest.cost) {
+        globalbest = particle[i].best;
+    }
+}
+
+// Algorithm main loop
+let Fminn = Array(iterations).fill(0);
+
+for (let u = 0; u < iterations; u++) {
+    let vv = 0;
+    for (let i = 0; i < NPOP; i++) {
+        let cc = 1;
+        let LPSP = 0.3;
+        let renewable_factor = 2;
+        let bb = 0;
+
+        while (LPSP >= W || renewable_factor >= K) {
+            for (let y = 0; y < 4; y++) {
+                let mut = Math.random();
+                particle[i].velocity[y] = (
+                    (w1 * mut) * particle[i].velocity[y] +
+                    (c1 * mut) * Math.random() * (particle[i].best.position[y] - particle[i].position[y]) +
+                    (c2 * mut) * Math.random() * (globalbest.position[y] - particle[i].position[y])
+                );
+
+                particle[i].position[y] = particle[i].position[y] + particle[i].velocity[y];
+                particle[i].position[y] = Math.max(LB[y], Math.min(UB[y], particle[i].position[y]));    
+            }
+
+            let oo = 0;
+            let p_npv = Math.round(particle[i].position[0]);
+            let ad = Math.round(particle[i].position[1]);
+            let houses = Math.round(particle[i].position[2]);
+            let nwt = Math.round(particle[i].position[3]);
+
+            [LPSP, price_electricity, renewable_factor, b, ali, ali2] = techno_ka(houses, p_npv, ad, nwt, steps);
+            bb += 1;
+        }
+
+        [LPSP, price_electricity, renewable_factor, b, ali, ali2] = techno_ka(houses, p_npv, ad, nwt, steps);
+        particle[i].cost = price_electricity;
+        rnwfct = renewable_factor;
+        vv += 1;
+
+        if (particle[i].cost < particle[i].best.cost) {
+            particle[i].best.cost = particle[i].cost;
+            particle[i].best.position = particle[i].position;
+
+            if (particle[i].best.cost < globalbest.cost) {
+                globalbest = particle[i].best;
+                rnwfct_best = rnwfct;
+            }
+        }
+    }
+
+    Fminn[u] = globalbest.cost;
+    let Xmin = globalbest.position;
+    let p_npv = Math.round(globalbest.position[0]);
+    let ad = Math.round(globalbest.position[1]);
+    let houses = Math.round(globalbest.position[2]);
+    let nwt = Math.round(globalbest.position[3]);
+
+    console.log(`Iteration ${u}, Best cost = ${Fminn[u]}`);
+    console.log(`Best solution p_npv = ${p_npv}, ad = ${ad}, houses = ${houses}, nwt = ${nwt}`);
+}
+
+let [LPSP, price_electricity, renewable_factor, b, ali, ali2] = techno_ka(houses, p_npv, ad, nwt, steps);
+console.log(`LOLP ${LPSP}, $/KWh = ${price_electricity}, %RES = ${renewable_factor}`);
+
+let simulationData = {
+    "renewable_factor": renewable_factor,
+    "price_electricity": price_electricity,
+    "loss_load_probability": LPSP,
+    "houses": houses,
+    "num_wind_turbines": nwt
+};
+
+fs.writeFileSync("simulation.json", JSON.stringify(simulationData, null, 4));
+
+console.log(`Total time ${((Date.now() / 1000) - init_t).toFixed(2)} seconds`);
