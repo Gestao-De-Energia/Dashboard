@@ -28,65 +28,72 @@
 <body>
   <!--========== HEADER ==========-->
   <header class="header">
-    <div class="header__container">
-      <img src="assets/img/perfil.jpg" alt="" class="header__img">
-      <a href="#" class="header__logo"></a>
-    </div>
+      <div class="header-profile">
+        <div class="user-container">
+            <img id="profile-img" alt="Perfil" class="header-img">
+            <div class="dropdown-menu">
+              <!--<a href="#" id="edit-profile">Editar perfil</a>-->
+              <a href="#" id="logout">Desconectar-se</a>
+            </div>
+            <p class="user-name"></p>
+        </div>
+      </div>
   </header>
+  
 
   <!--========== NAV ==========-->
   <div class="nav" id="navbar">
-    <nav class="nav__container">
+    <nav class="nav-container">
       <div>
-        <a href="#" class="nav__link nav__logo">
-          <i class='bx bxs-disc nav__icon'></i>
-          <span class="nav__logo-name">Dashboard</span>
+        <a href="#" class="nav-link nav-logo">
+          <i class='bx bxs-disc nav-icon'></i>
+          <span class="nav-logo-name">Dashboard</span>
         </a>
-        <div class="nav__list">
-          <div class="nav__items">
-            <a href="home.html" class="nav__link active">
+        <div class="nav-list">
+          <div class="nav-items">
+            <a href="home.html" class="nav-link active">
               <i class='fa-solid fa-house'></i>
-              <span class="nav__name">Home</span>
+              <span class="nav-name">Home</span>
             </a>
-            <div class="nav__dropdown">
-              <a href="#Energia" class="nav__link">
+            <div class="nav-dropdown">
+              <a href="#Energia" class="nav-link">
                 <i class='fa-solid fa-bolt'></i>
-                <span class="nav__name">Energia</span>
+                <span class="nav-name">Energia</span>
                 <i class='fas fa-caret-down'></i>
               </a>
-              <div class="nav__dropdown-collapse">
-                <div class="nav__dropdown-content">
-                  <a href="#chart-EneF" class="nav__dropdown-item">Produção de Energia Fotovoltáica</a>
-                  <a href="#chart-EneE" class="nav__dropdown-item">Produção de Energia Eólica</a>
-                  <a href="#chartD" class="nav__dropdown-item">Produção x Demanda</a>
-                  <a href="#chartDe" class="nav__dropdown-item">Desempenho</a>
-                  <a href="#chartN" class="nav__dropdown-item">Produção x Compensação</a>
+              <div class="nav-dropdown-collapse">
+                <div class="nav-dropdown-content">
+                  <a href="#chart-EneF" class="nav-dropdown-item">Produção de Energia Fotovoltáica</a>
+                  <a href="#chart-EneE" class="nav-dropdown-item">Produção de Energia Eólica</a>
+                  <a href="#chartD" class="nav-dropdown-item">Produção x Demanda</a>
+                  <a href="#chartDe" class="nav-dropdown-item">Desempenho</a>
+                  <a href="#chartN" class="nav-dropdown-item">Produção x Compensação</a>
                 </div>
               </div>
             </div>
-            <div class="nav__dropdown">
-              <a href="#Bateria" class="nav__link">
+            <div class="nav-dropdown">
+              <a href="#Bateria" class="nav-link">
                 <i class='fa-solid fa-car-battery'></i>
-                <span class="nav__name">Bateria</span>
+                <span class="nav-name">Bateria</span>
                 <i class='fas fa-caret-down'></i>
               </a>
-              <div class="nav__dropdown-collapse">
-                <div class="nav__dropdown-content">
-                  <a href="#chartB" class="nav__dropdown-item">Quantidade de carga e descarga</a>
-                  <a href="#chart" class="nav__dropdown-item">Comportamento da bateria</a>
+              <div class="nav-dropdown-collapse">
+                <div class="nav-dropdown-content">
+                  <a href="#chartB" class="nav-dropdown-item">Quantidade de carga e descarga</a>
+                  <a href="#chart" class="nav-dropdown-item">Comportamento da bateria</a>
                 </div>
               </div>
             </div>
-            <div class="nav__dropdown">
-              <a href="#SerieTemp" class="nav__link">
+            <div class="nav-dropdown">
+              <a href="#SerieTemp" class="nav-link">
                 <i class='fa-solid fa-chart-simple'></i>
-                <span class="nav__name">Série Temporal</span>
+                <span class="nav-name">Série Temporal</span>
                 <i class='fas fa-caret-down'></i>
               </a>
-              <div class="nav__dropdown-collapse">
-                <div class="nav__dropdown-content">
-                  <a href="#chart-timeline" class="nav__dropdown-item">Irradiação solar anual</a>
-                  <a href="#chart-vento" class="nav__dropdown-item">Vento anual</a>
+              <div class="nav-dropdown-collapse">
+                <div class="nav-dropdown-content">
+                  <a href="#chart-timeline" class="nav-dropdown-item">Irradiação solar anual</a>
+                  <a href="#chart-vento" class="nav-dropdown-item">Vento anual</a>
                 </div>
               </div>
             </div>
@@ -615,8 +622,6 @@
   </main>
   <!--========== MAIN JS ==========-->
   <script type="module" src="./scriptpesq.js"></script>
-  <script type="module" src="../../../javascript/firestore.js"></script>
-  <script type="module" src="../../../javascript/firebase.js"></script>
 </body>
 
 </html>

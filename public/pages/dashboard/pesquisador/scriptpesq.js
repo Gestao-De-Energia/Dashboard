@@ -1,3 +1,39 @@
+import { getUser } from "../../../../db/getters.js";
+import { auth } from "../../../../db/firebase.js";
+import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const profileImg = document.getElementById("profile-img");
+    const userNameElement = document.querySelector(".user-name");
+    const logoutButton = document.getElementById("logout");
+
+    // Autenticação
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userData = await getUser(user.uid);
+
+            if (userData) {
+                userNameElement.textContent = userData.nome;
+                profileImg.src = userData.photoURL || "../../../assets/perfil.png";
+            }
+        } else {
+            userNameElement.textContent = "Convidado";
+            profileImg.src = "../../../assets/perfil.png";
+        }
+    });
+
+    // Logout
+    logoutButton.addEventListener("click", async () => {
+        try {
+            window.location.href = "../../../index.html";
+            await signOut(auth);
+        } catch (error) {
+            console.error("Erro ao deslogar:", error);
+        }
+    });
+});
+
+
 /*==================== RODANDO SIMULAÇÃO ====================*/
 
 document.querySelector(".run_btn").addEventListener("click", async function () {
@@ -349,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /*==================== LINK ACTIVE ====================*/
-const linkColor = document.querySelectorAll('.nav__link')
+const linkColor = document.querySelectorAll('.nav-link')
 
 function colorLink() {
   linkColor.forEach(l => l.classList.remove('active'))
