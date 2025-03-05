@@ -1,6 +1,7 @@
 import { getUser } from "../../../../db/getters.js";
 import { auth } from "../../../../db/firebase.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import CDEEPSO from "../../../js/CDEEPSO.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const profileImg = document.getElementById("profile-img");
@@ -36,126 +37,137 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 /*==================== RODANDO SIMULAÇÃO ====================*/
 
-document.querySelector(".run_btn").addEventListener("click", async function () {
-
-  const configButtons = document.querySelector(".config_buttons");
-  const confirmButton = document.getElementById("confirm_button");
-
-  let selectedIteration = 10;
-  let selectedPeriod = 8640; // 12 meses (8640 horas)
-
-  const periodMapping = {
-    "1 semana": 168,
-    "2 semanas": 336,
-    "1 mês": 720,
-    "3 meses": 2160,
-    "6 meses": 4320,
-    "9 meses": 6480,
-    "12 meses": 8640
-  };
-
-  configButtons.style.display = configButtons.style.display === "flex" ? "none" : "flex";
-
-  function setupDropdown(buttonId, dropdownId) {
-    const button = document.getElementById(buttonId);
-    const dropdown = document.getElementById(dropdownId);
-
-    button.addEventListener("click", function () {
-      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-    });
-
-    dropdown.querySelectorAll(".dropdown_item").forEach(item => {
-      item.addEventListener("click", function () {
-        const newValue = item.dataset.value;
-        button.innerText = button.innerText.split(":")[0] + ": " + newValue + " ▼";
-        dropdown.style.display = "none";
-
-        // Atualiza a variável global com o valor selecionado
-        if (buttonId === "iterations_button") {
-          selectedIteration = parseInt(newValue);
-        } else {
-          selectedPeriod = periodMapping[newValue];
-        }
-      });
-    });
-
-    // Fecha dropdown se clicar fora
-    document.addEventListener("click", function (e) {
-      if (!button.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.style.display = "none";
+document.addEventListener("DOMContentLoaded", function () {
+    const runButton = document.querySelector(".run_btn");
+    const runButtonText = document.querySelector(".run_btn_text");
+    const configButtons = document.querySelector(".config_buttons");
+    const confirmButton = document.getElementById("confirm_button");
+  
+    let selectedIteration = 10;
+    let selectedPeriod = 8640; // 12 meses (8640 horas)
+  
+    const periodMapping = {
+      "1 semana": 168,
+      "2 semanas": 336,
+      "1 mês": 720,
+      "3 meses": 2160,
+      "6 meses": 4320,
+      "9 meses": 6480,
+      "12 meses": 8640
+    };
+  
+    function setupDropdown(buttonId, dropdownId) {
+      const button = document.getElementById(buttonId);
+      const dropdown = document.getElementById(dropdownId);
+  
+      function toggleDropdown(event) {
+        event.stopPropagation();
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
       }
-    });
-  }
-
-  setupDropdown("iterations_button", "iterations_dropdown");
-  setupDropdown("period_button", "period_dropdown");
-
-  confirmButton.addEventListener("click", function () {
-    configButtons.style.display = "none";
-
-    runSimulation();
-  });
-
-  async function runSimulation() {
-
-    let metricas = document.querySelectorAll(".metrica-texto .valor");
-    let gifs = document.querySelectorAll(".loadingGif");
-    let runButton = document.querySelector(".run_btn");
-    let runButtonText = document.querySelector(".run_btn_text");
-
-    let texts = ["Rodando simulação.", "Rodando simulação..", "Rodando simulação..."];
-    let textIndex = 0;
-    let interval;
-
-    try {
-      // Indicando que estou rodando o script: desabilito o botão
-      runButton.disabled = true;
-      runButton.style.opacity = "0.5";
-      runButton.style.cursor = "not-allowed";
-
-      // Animação no texto do botão
-      interval = setInterval(() => {
-        runButtonText.innerHTML = texts[textIndex];
-        textIndex = (textIndex + 1) % texts.length;
-      }, 500); // Alterna a cada 500ms
-
-      // Esconder os valores e exibir os GIFs de carregamento
-      metricas.forEach((el) => el.style.display = "none");
-      gifs.forEach((gif) => gif.style.display = "inline");
-
-      let response = await fetch("http://localhost:5000/run_simulation", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            iterations: selectedIteration,
-            period: selectedPeriod
-        })
-    });
-
-      let data = await response.json();
-
-      // Salvar localmente para evitar reset
-      localStorage.setItem("simulationData", JSON.stringify(data));
-
-    } catch (error) {
-      console.error("Erro ao rodar a simulação:", error);
-      localStorage.clear();
-      metricas.forEach((el) => el.innerText = "Erro");
-    } finally {
-      clearInterval(interval);
-
-      runButtonText.innerHTML = "Rodar simulação";
-      runButton.disabled = false;
-      runButton.style.opacity = "1";
-      runButton.style.cursor = "pointer";
-
-      gifs.forEach((gif) => gif.style.display = "none");
-      metricas.forEach((el) => el.style.display = "inline");
+  
+      function closeDropdown(event) {
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+          dropdown.style.display = "none";
+        }
+      }
+  
+      // Remove event listeners antes de adicionar novos
+      button.removeEventListener("click", toggleDropdown);
+      document.removeEventListener("click", closeDropdown);
+  
+      // Adiciona os eventos corretamente
+      button.addEventListener("click", toggleDropdown);
+      document.addEventListener("click", closeDropdown);
+  
+      dropdown.querySelectorAll(".dropdown_item").forEach(item => {
+        item.addEventListener("click", function () {
+          const newValue = item.dataset.value;
+          button.innerText = button.innerText.split(":")[0] + ": " + newValue + " ▼";
+          dropdown.style.display = "none";
+  
+          // Atualiza a variável global com o valor selecionado
+          if (buttonId === "iterations_button") {
+            selectedIteration = parseInt(newValue);
+          } else {
+            selectedPeriod = periodMapping[newValue];
+          }
+        });
+      });
     }
-  }
+  
+    // Configura os dropdowns apenas uma vez
+    setupDropdown("iterations_button", "iterations_dropdown");
+    setupDropdown("period_button", "period_dropdown");
+  
+    runButton.addEventListener("click", function () {
+      configButtons.style.display = configButtons.style.display === "flex" ? "none" : "flex";
+    });
+  
+    confirmButton.addEventListener("click", function () {
+      configButtons.style.display = "none";
+      runSimulation();
+    });
+  
+    async function runSimulation() {
+      let metricas = document.querySelectorAll(".metrica-texto .valor");
+      let gifs = document.querySelectorAll(".loadingGif");
+  
+      let texts = ["Rodando simulação.", "Rodando simulação..", "Rodando simulação..."];
+      let textIndex = 0;
+      let interval;
+  
+      try {
+        // Desabilita botão durante a simulação
+        runButton.disabled = true;
+        runButton.style.opacity = "0.5";
+        runButton.style.cursor = "not-allowed";
+  
+        // Animação do botão
+        interval = setInterval(() => {
+          runButtonText.innerHTML = texts[textIndex];
+          textIndex = (textIndex + 1) % texts.length;
+        }, 500);
+  
+        // Esconde os valores e mostra GIFs de carregamento
+        metricas.forEach((el) => el.style.display = "none");
+        gifs.forEach((gif) => gif.style.display = "inline");
+  
+        await CDEEPSO(selectedIteration, selectedPeriod);
+  
+      } catch (error) {
+        console.error("Erro ao rodar a simulação:", error);
+        localStorage.clear();
+        metricas.forEach((el) => el.innerText = "Erro");
+      } finally {
+        clearInterval(interval);
+  
+        runButtonText.innerHTML = "Rodar simulação";
+        runButton.disabled = false;
+        runButton.style.opacity = "1";
+        runButton.style.cursor = "pointer";
+  
+        gifs.forEach((gif) => gif.style.display = "none");
+  
+        let simulationData = JSON.parse(localStorage.getItem("simulationData"));
+  
+        if (simulationData) {
+          let valores = [
+            (simulationData.renewable_factor * 100).toFixed(2).replace(".", ",") + "%",
+            (simulationData.loss_load_probability * 100).toFixed(2).replace(".", ",") + "%",
+            "R$" + simulationData.price_electricity.toFixed(3).replace(".", ","),
+            simulationData.houses,
+            simulationData.num_wind_turbines
+          ];
+  
+          metricas.forEach((el, index) => {
+            el.style.display = "inline";
+            el.innerText = valores[index];
+          });
+        }
+      }
+    }
 });
+  
 
 // Recuperar valores ao recarregar a página
 window.addEventListener("load", () => {
