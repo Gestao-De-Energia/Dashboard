@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function stopLoadingAnimation() {
             clearInterval(intervalId);
+            loginButton.textContent = "Login";
         }
 
         try {
@@ -99,11 +100,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 loginWarning.textContent = "Erro: Perfil do usuário não definido.";
             }
         } catch (error) {
+            stopLoadingAnimation();
             console.error("Erro ao autenticar:", error);
             loginWarning.style.display = "flex";
             loginWarning.textContent = "Erro no email ou senha.";
-        } finally {
-            stopLoadingAnimation();
         }
     };
 
