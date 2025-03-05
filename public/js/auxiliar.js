@@ -37,11 +37,15 @@ export function find(x, tol = 1e-6) {
     return x.filter(element => element > tol || element < -tol);
 }
 
-const fs = require('fs');
-export function read_file(path) {
+export async function read_file(path) {
     try {
-        const data = fs.readFileSync(path, 'utf8');
-        return data.split("\n").map(x => parseFloat(x)); 
+        const response = await fetch(path);
+        if(!response.ok){
+            throw new Error(`Erro ao carregar o arquivo: ${response.statusText}`);
+        }
+
+        const text = await response.text();
+        return text.split("\n").map(x => parseFloat(x.trim())); 
     } catch (error) {
         console.error("Error reading file:", error);
         return []; 
