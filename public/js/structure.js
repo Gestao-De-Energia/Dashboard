@@ -1,11 +1,11 @@
-class best {
+export class best {
     constructor(position, cost) {
         this.position = position;
         this.cost = cost;
     }
 }
 
-class empty_particle {
+export class emptyparticle {
     constructor(position, velocity, cost, best) {
         this.position = position;
         this.velocity = velocity;
@@ -14,7 +14,7 @@ class empty_particle {
     }
 }
 
-class globalbest {
+export class globalbest {
     constructor(cost, position) {
         this.cost = cost;
         this.position = position;
