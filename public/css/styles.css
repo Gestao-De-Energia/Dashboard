@@ -522,6 +522,13 @@ img {
   font-size: 16px;
 }
 
+.gc_buttons_and_warning {
+    width: 150px;
+}
+
+.gc_warning {
+    color: green;
+}
 
 
 /* ========== MEDIA QUERIES ==========*/
