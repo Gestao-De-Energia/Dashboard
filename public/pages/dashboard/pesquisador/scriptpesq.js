@@ -1,7 +1,8 @@
-import { getUser } from "../../../../db/getters.js";
+import { getAllUserGeneralComments, getUser } from "../../../../db/getters.js";
 import { auth } from "../../../../db/firebase.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import CDEEPSO from "../../../js/CDEEPSO.js";
+import { deleteGeneralUserComment, saveGeneralUserComment, saveUserCommentByDate } from "../../../../db/setters.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const profileImg = document.getElementById("profile-img");
@@ -184,136 +185,148 @@ window.addEventListener("load", () => {
   }
 });
 
-
 /*==================== COMENTÁRIO POR DATA ====================*/
 
 // adicionar um comentário para um ponto específico
 function addAnnotationToChart(xDate, comment, chart, options) {
-  const time = new Date(xDate).getTime();
-
-  // encontrar o índice do timestamp mais próximo no array de categorias
-  const closestIndex = options.xaxis.categories.reduce((prevIndex, currTimestamp, index) => {
-    return Math.abs(currTimestamp - time) < Math.abs(options.xaxis.categories[prevIndex] - time) ? index : prevIndex;
-  }, 0);
-
-  // adicionar anotação no ponto exato do gráfico correspondente
-  chart.addPointAnnotation({
-    x: options.xaxis.categories[closestIndex],  // timestamp exato do gráfico
-    y: options.series[0].data[closestIndex],  // valor correspondente no eixo Y
-    label: {
-      text: comment,
-      style: {
-        background: '#ff4560',
-        color: '#fff'
-      }
-    },
-    marker: {
-      size: 6,
-      fillColor: '#ff4560'
-    }
-  });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  function setupCommentSection(buttonId, commentSectionId, commentInputId, chart, options) {
-    var selectedDate = null;
-
-    // Inicializar flatpickr no botão específico
-    flatpickr(buttonId, {
-      minDate: "2004-02-01", // Data mínima
-      maxDate: "2005-02-03", // Data máxima
-      position: "above", // Exibir calendário sobre o botão
-      disable: [
-        function (date) {
-          return !(date.getDate() % 31); // Desabilitar dias 31
+    const time = new Date(xDate).getTime();
+  
+    // encontrar o índice do timestamp mais próximo no array de categorias
+    const closestIndex = options.xaxis.categories.reduce((prevIndex, currTimestamp, index) => {
+      return Math.abs(currTimestamp - time) < Math.abs(options.xaxis.categories[prevIndex] - time) ? index : prevIndex;
+    }, 0);
+  
+    // adicionar anotação no ponto exato do gráfico correspondente
+    chart.addPointAnnotation({
+      x: options.xaxis.categories[closestIndex], // timestamp exato do gráfico
+      y: options.series[0].data[closestIndex], // valor correspondente no eixo Y
+      label: {
+        text: comment,
+        style: {
+          background: '#ff4560',
+          color: '#fff'
         }
-      ],
-      onChange: function (selectedDates) {
-        selectedDate = selectedDates[0]; // Armazenar a data selecionada
-        document.querySelector(commentSectionId).style.display = 'flex'; // Mostrar a caixa de comentário
+      },
+      marker: {
+        size: 6,
+        fillColor: '#ff4560'
       }
     });
-
-    // Adicionar o evento de teclado para adicionar a anotação
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter' && selectedDate) {
-        // Pegar o que está na caixa de texto
-        var comment = document.querySelector(commentInputId).value;
-
-        // Adicionar anotação ao gráfico
-        addAnnotationToChart(selectedDate, comment, chart, options);
-
-        // Esconder a caixa de comentário e limpar o texto
-        document.querySelector(commentSectionId).style.display = 'none';
-        document.querySelector(commentInputId).value = '';
+}
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    function setupCommentSection(buttonId, commentSectionId, commentInputId, chart, options) {
+      var selectedDate = null;
+  
+      // inicializar flatpickr no botão específico
+      flatpickr(buttonId, {
+        minDate: "2004-02-01", // data mínima
+        maxDate: "2005-02-03", // data máxima
+        position: "above", // exibir calendário sobre o botão
+        disable: [
+          function (date) {
+            return !(date.getDate() % 31); // desabilitar dias 31
+          }
+        ],
+        onChange: function (selectedDates) {
+            selectedDate = selectedDates[0]; // armazenar a data selecionada
+            const commentSection = document.querySelector(commentSectionId);
+            const commentInput = document.querySelector(commentInputId);
+    
+            commentSection.style.display = 'flex'; // mostrar a caixa de comentário
+            commentInput.focus();
+        }
+      });
+  
+      const commentInput = document.querySelector(commentInputId);
+  
+      async function handleKeyDown(event) {
+        if (event.key === 'Enter' && selectedDate) {
+          event.preventDefault();
+  
+          var comment = commentInput.value.trim();
+  
+          if (comment !== "") {
+            // adicionar no gráfico
+            addAnnotationToChart(selectedDate, comment, chart, options);
+  
+            // salvar o comentário no firestore
+            await saveUserCommentByDate(chart, comment, selectedDate);
+  
+            document.querySelector(commentSectionId).style.display = 'none';
+            commentInput.value = '';
+          }
+        }
       }
-    });
-  }
-
-  const commentSections = [
-    {
-      selectId: '#select_date_fotovoltaica',
-      commentSectionId: '#comment_section_fotovoltaica',
-      commentInputId: '#comment_input_fotovoltaica',
-      chart: chartFotovoltaica,
-      options: optionsFotovoltaica
-    },
-    {
-      selectId: '#select_date_eolica',
-      commentSectionId: '#comment_section_eolica',
-      commentInputId: '#comment_input_eolica',
-      chart: chartEolica,
-      options: optionsEolica
-    },
-    {
-      selectId: '#select_date_energiaxdemanda',
-      commentSectionId: '#comment_section_energiaxdemanda',
-      commentInputId: '#comment_input_energiaxdemanda',
-      chart: chartEnergiaXDemanda,
-      options: optionsEnergiaXDemanda
-    },
-    {
-      selectId: '#select_date_desempenho',
-      commentSectionId: '#comment_section_desempenho',
-      commentInputId: '#comment_input_desempenho',
-      chart: chartDesempenho,
-      options: optionsDesempenho
-    },
-    {
-      selectId: '#select_date_energiaxcompensacao',
-      commentSectionId: '#comment_section_energiaxcompensacao',
-      commentInputId: '#comment_input_energiaxcompensacao',
-      chart: chartEnergiaXCompensacao,
-      options: optionsEnergiaXCompensacao
-    },
-    {
-      selectId: '#select_date_bateria',
-      commentSectionId: '#comment_section_bateria',
-      commentInputId: '#comment_input_bateria',
-      chart: chartBateria,
-      options: optionsBateria
-    },
-    {
-      selectId: '#select_date_stsolar',
-      commentSectionId: '#comment_section_stsolar',
-      commentInputId: '#comment_input_stsolar',
-      chart: chartSTSolar,
-      options: optionsSTSolar
-    },
-    {
-      selectId: '#select_date_stvento',
-      commentSectionId: '#comment_section_stvento',
-      commentInputId: '#comment_input_stvento',
-      chart: chartSTVento,
-      options: optionsSTVento
+  
+      commentInput.addEventListener('keydown', handleKeyDown);
     }
-  ];
-
-  commentSections.forEach(({ selectId, commentSectionId, commentInputId, chart, options }) => {
-    setupCommentSection(selectId, commentSectionId, commentInputId, chart, options);
+  
+    const commentSections = [
+      {
+        selectId: '#select_date_fotovoltaica',
+        commentSectionId: '#comment_section_fotovoltaica',
+        commentInputId: '#comment_input_fotovoltaica',
+        chart: chartFotovoltaica,
+        options: optionsFotovoltaica,
+      },
+      {
+        selectId: '#select_date_eolica',
+        commentSectionId: '#comment_section_eolica',
+        commentInputId: '#comment_input_eolica',
+        chart: chartEolica,
+        options: optionsEolica
+      },
+      {
+        selectId: '#select_date_energiaxdemanda',
+        commentSectionId: '#comment_section_energiaxdemanda',
+        commentInputId: '#comment_input_energiaxdemanda',
+        chart: chartEnergiaXDemanda,
+        options: optionsEnergiaXDemanda
+      },
+      {
+        selectId: '#select_date_desempenho',
+        commentSectionId: '#comment_section_desempenho',
+        commentInputId: '#comment_input_desempenho',
+        chart: chartDesempenho,
+        options: optionsDesempenho
+      },
+      {
+        selectId: '#select_date_energiaxcompensacao',
+        commentSectionId: '#comment_section_energiaxcompensacao',
+        commentInputId: '#comment_input_energiaxcompensacao',
+        chart: chartEnergiaXCompensacao,
+        options: optionsEnergiaXCompensacao
+      },
+      {
+        selectId: '#select_date_bateria',
+        commentSectionId: '#comment_section_bateria',
+        commentInputId: '#comment_input_bateria',
+        chart: chartBateria,
+        options: optionsBateria
+      },
+      {
+        selectId: '#select_date_stsolar',
+        commentSectionId: '#comment_section_stsolar',
+        commentInputId: '#comment_input_stsolar',
+        chart: chartSTSolar,
+        options: optionsSTSolar
+      },
+      {
+        selectId: '#select_date_stvento',
+        commentSectionId: '#comment_section_stvento',
+        commentInputId: '#comment_input_stvento',
+        chart: chartSTVento,
+        options: optionsSTVento
+      }
+    ];
+  
+    commentSections.forEach(({ selectId, commentSectionId, commentInputId, chart, options }) => {
+      setupCommentSection(selectId, commentSectionId, commentInputId, chart, options);
+    });
+  
   });
-
-});
+  
 
 /*==================== COMENTÁRIO GERAL ====================*/
 document.addEventListener("DOMContentLoaded", function () {
@@ -325,7 +338,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const editButton = document.getElementById(`edit_gc_${section}`);
     const deleteButton = document.getElementById(`delete_gc_${section}`);
     const saveButton = document.getElementById(`save_gc_${section}`);
+    const warningText = document.querySelector(`#gc_warning_${section}`);
     let savedComment = "";
+
+    function showWarning(message) {
+        warningText.textContent = message;
+        warningText.style.opacity = "1";
+        warningText.style.transition = "opacity 0.5s";
+        
+        setTimeout(() => {
+          warningText.style.opacity = "0";
+        }, 3000);
+      }
 
     // ajustar a altura da janela com base na altura do textarea
     function adjustWindowHeight() {
@@ -355,23 +379,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Evento no botão de deletar: alerta de confirmação e deletar o texto
-    deleteButton.addEventListener("click", function () {
-      if (savedComment) {
-        const confirmDelete = confirm("Tem certeza que deseja deletar o texto?");
-        if (confirmDelete) {
-          textarea.value = "";
-          savedComment = "";
-          adjustWindowHeight(); // Ajusta a altura da janela após deletar
+    deleteButton.addEventListener("click", async function () {
+        if (savedComment) {
+          const confirmDelete = confirm("Tem certeza que deseja deletar o texto?");
+          if (confirmDelete) {
+            textarea.value = "";
+            savedComment = "";
+            adjustWindowHeight(); // Ajusta a altura da janela após deletar
+  
+            // Chama a função para remover do Firestore
+            await deleteGeneralUserComment(section);
+            showWarning("Texto deletado com sucesso.");
+          }
         }
-      }
-    });
+      });
 
     // Evento no botão de salvar: remove o foco do textarea
-    saveButton.addEventListener("click", function () {
-      savedComment = textarea.value;
-      textarea.blur(); // Remove o foco da caixa de texto
-      alert("Texto salvo com sucesso!");
-    });
+    saveButton.addEventListener("click", async function () {
+        savedComment = textarea.value.trim();
+        if (!savedComment) return;
+  
+        await saveGeneralUserComment(section, savedComment);
+        textarea.blur();
+        showWarning("Texto salvo com sucesso.");
+      });
 
     // Ajustar a altura da janela dinamicamente ao digitar ou redimensionar
     textarea.addEventListener("input", adjustWindowHeight);
@@ -396,6 +427,91 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+/*==================== CARREGANDO COMENTÁRIOS AO LOGAR ====================*/
+
+document.addEventListener("DOMContentLoaded", async () => {
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userComments = await getAllUserGeneralComments();
+            loadCommentsIntoDashboard(userComments);
+        }
+    });
+});
+
+function loadCommentsIntoDashboard(userComments) {
+    const sections = [
+        {   
+            section: "fotovoltaica", 
+            commentSectionId: "#comment_section_fotovoltaica", 
+            commentInputId: "#comment_input_fotovoltaica", 
+            chart: chartFotovoltaica, 
+            options: optionsFotovoltaica 
+        },
+        {   
+            section: "eolica", 
+            commentSectionId: "#comment_section_eolica", 
+            commentInputId: "#comment_input_eolica", 
+            chart: chartEolica, options: optionsEolica
+        },
+        {   
+            section: "energiaxdemanda", 
+            commentSectionId: "#comment_section_energiaxdemanda", 
+            commentInputId: "#comment_input_energiaxdemanda", 
+            chart: chartEnergiaXDemanda, 
+            options: optionsEnergiaXDemanda 
+        },
+        { 
+            section: "desempenho", 
+            commentSectionId: "#comment_section_desempenho", 
+            commentInputId: "#comment_input_desempenho", 
+            chart: chartDesempenho, 
+            options: optionsDesempenho 
+        },
+        { 
+            section: "energiaxcompensacao", 
+            commentSectionId: "#comment_section_energiaxcompensacao", 
+            commentInputId: "#comment_input_energiaxcompensacao", 
+            chart: chartEnergiaXCompensacao, 
+            options: optionsEnergiaXCompensacao },
+        { 
+            section: "bateria", 
+            commentSectionId: "#comment_section_bateria", 
+            commentInputId: "#comment_input_bateria", 
+            chart: chartBateria, 
+            options: optionsBateria },
+        { 
+            section: "stsolar", 
+            commentSectionId: "#comment_section_stsolar", 
+            commentInputId: "#comment_input_stsolar", 
+            chart: chartSTSolar, 
+            options: optionsSTSolar },
+        { 
+            section: "stvento", 
+            commentSectionId: "#comment_section_stvento", 
+            commentInputId: "#comment_input_stvento", 
+            chart: chartSTVento, 
+            options: optionsSTVento 
+        }
+    ];
+
+    sections.forEach(({ section, commentSectionId, commentInputId, chart, options }) => {
+        const comments = userComments[`dataCommentsByDate${section}`] || []; // comentarios por data
+        const textarea = document.getElementById(`gc_input_${section}`); // area do comentario geral
+
+        // percorre os comentários e adiciona ao gráfico
+        comments.forEach(([comment, date]) => {
+            addAnnotationToChart(date, comment, chart, options);
+        });
+
+        // carregar comentário geral
+        const generalComment = userComments[`generalComment${section}`] || "";
+        if (generalComment) {
+            textarea.value = generalComment;
+        }
+    });
+}
+
+
 /*==================== LINK ACTIVE ====================*/
 const linkColor = document.querySelectorAll('.nav-link')
 
@@ -408,7 +524,7 @@ linkColor.forEach(l => l.addEventListener('click', colorLink))
 
 /*==================== Gráficos ====================*/
 // Gráfico Energia Fotovoltaica
-let optionsFotovoltaica;
+var optionsFotovoltaica;
 
 fetch('../../../dados/dados.json')
   .then(response => response.json())
@@ -507,7 +623,7 @@ fetch('../../../dados/dados.json')
   });
 
 // Definindo as opções para o gráfico de Energia eólica
-let optionsEolica;
+var optionsEolica;
 
 fetch('../../../dados/dados.json')
   .then(response => response.json())
@@ -603,7 +719,7 @@ fetch('../../../dados/dados.json')
 
 
 // Gráfico energia x demanda
-let optionsEnergiaXDemanda;
+var optionsEnergiaXDemanda;
 
 fetch('../../../dados/dados.json')
   .then(response => response.json())
@@ -717,7 +833,7 @@ fetch('../../../dados/dados.json')
 
 //gráfico  desempenho
 // Gráfico energia x demanda
-let optionsDesempenho;
+var optionsDesempenho;
 
 fetch('../../../dados/dados.json')
   .then(response => response.json())
@@ -863,7 +979,7 @@ fetch('../../../dados/dados.json')
   });
 
 //gráfico produção de energia x compensação
-let optionsEnergiaXCompensacao;
+var optionsEnergiaXCompensacao;
 
 fetch('../../../dados/dados.json')
   .then(response => response.json())
@@ -965,7 +1081,7 @@ fetch('../../../dados/dados.json')
 
 
 //grafico da carga e descarga da bateria
-let optionsBateria;
+var optionsBateria;
 
 fetch('../../../dados/dados.json')
   .then(response => response.json())
@@ -1087,7 +1203,7 @@ fetch('../../../dados/dados.json')
 
 
 // Definindo os valores do gráfico de irradiação solar
-let optionsSTSolar;
+var optionsSTSolar;
 
 fetch('../../../dados/dados.json')
   .then(response => response.json())
@@ -1199,7 +1315,7 @@ fetch('../../../dados/dados.json')
 
 
 // Criação de opções e estilização para o gráfico de série temporal do vento  
-let optionsSTVento;
+var optionsSTVento;
 
 fetch('../../../dados/dados.json')
   .then(response => response.json())
