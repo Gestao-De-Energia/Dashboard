@@ -1,4 +1,4 @@
-import { db } from "./firebase.js";
+import { db, auth } from "./firebase.js";
 import { doc, getDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 export async function getUser(userId){
@@ -27,5 +27,26 @@ export async function checkIfEmailExists(email) {
     } catch (error) {
         console.error("Erro ao verificar email no Firestore:", error);
         return false;
+    }
+}
+
+export async function getAllUserGeneralComments() {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return {};
+        }
+
+        const userRef = doc(db, "users", currentUser.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+            return userDoc.data(); // retorna todos os dados do usuário, incluindo os comentários
+        }
+
+        return {};
+    } catch (error) {
+        console.error("Erro ao buscar comentários do usuário: ", error);
+        return {};
     }
 }
