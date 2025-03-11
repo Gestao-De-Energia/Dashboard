@@ -155,10 +155,10 @@ document.addEventListener("DOMContentLoaded", function () {
           let valores = [
             (simulationData.renewable_factor * 100).toFixed(2).replace(".", ",") + "%",
             (simulationData.loss_load_probability * 100).toFixed(2).replace(".", ",") + "%",
-            "R$" + simulationData.price_electricity.toFixed(3).replace(".", ","),
+            "R$" + simulationData.price_electricity.toFixed(3).replace(".", ",") + "/kWh",
             simulationData.houses,
             simulationData.num_wind_turbines,
-            simulationData.max_generation + " Kw/h"
+            simulationData.max_generation + " kWh"
           ];
   
           metricas.forEach((el, index) => {
@@ -180,10 +180,10 @@ window.addEventListener("load", () => {
   if (savedData) {
     metricas[0].innerText = (savedData.renewable_factor * 100).toFixed(2).replace(".", ",") + "%";
     metricas[1].innerText = (savedData.loss_load_probability * 100).toFixed(2).replace(".", ",") + "%";
-    metricas[2].innerText = "R$" + savedData.price_electricity.toFixed(3).replace(".", ",");
+    metricas[2].innerText = "$" + savedData.price_electricity.toFixed(3).replace(".", ",") + "/kWh";
     metricas[3].innerText = savedData.houses;
     metricas[4].innerText = savedData.num_wind_turbines;
-    metricas[5].innerText = savedData.max_generation + " Kw/h";
+    metricas[5].innerText = savedData.max_generation + " kWh";
   }
 });
 
