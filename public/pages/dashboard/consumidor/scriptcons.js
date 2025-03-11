@@ -1,5 +1,5 @@
 /*==================== LINK ACTIVE ====================*/
-const linkColor = document.querySelectorAll('.nav__link')
+const linkColor = document.querySelectorAll('.nav-link')
 
 function colorLink(){
     linkColor.forEach(l => l.classList.remove('active'))
