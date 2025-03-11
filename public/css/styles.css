@@ -467,7 +467,8 @@ img {
 
 .comment_section {
   display: none;
-  margin-top: 10px;
+  min-width: 200px;
+  height: 36px;
 }
 
 .comment_input {
@@ -475,8 +476,37 @@ img {
   padding: 10px;
 }
 
-.date_comment{
-  display: ruby;
+.date_comment {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-date-comment {
+  font-size: 13px;
+}
+
+.btn-delete-date-comment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.delete_date_comment {
+  /*display: flex;*/
+  display: none;
+  gap: 5px;
+}
+
+.btn-confirm-delete {
+  display: none;
+  background-color: rgb(71, 187, 71);
+  color: white;
+  min-width: 100px;
+  height: 36px;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
 }
 
 /* ========== COMENTÁRIO GERAL =========== */
@@ -674,7 +704,7 @@ button:hover, .meses:hover{
 .botao{
     background-color: rgb(255, 255, 255);
     color:var(--first-color);
-    width: 150px;
+    min-width: 150px;
     height: 36px;
     padding: 10px 15px;
     cursor: pointer;
