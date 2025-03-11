@@ -4,6 +4,8 @@ import { emptyparticle, best, globalbest } from './structure.js';
 export default async function CDEEPSO(iterations, steps){
     const init_t = Date.now() / 1000;
 
+    let runningStatus = document.getElementById("running_sim_status"); // apenas para avisar em qual iteração está
+
     // Problem definition
     const C = 0.65; // price of electricity
     const W = 0.14; // loss of load probability
@@ -76,9 +78,10 @@ export default async function CDEEPSO(iterations, steps){
 
     // Algorithm main loop
     let Fminn = Array(iterations).fill(0);
-
+    
     for (let u = 0; u < iterations; u++) {
         let vv = 0;
+        runningStatus.innerHTML = `Rodando simulação ${u+1}/${iterations}`;
         for (let i = 0; i < NPOP; i++) {
             let cc = 1;
             let LPSP = 0.3;
@@ -131,10 +134,11 @@ export default async function CDEEPSO(iterations, steps){
         houses = Math.round(global_best.position[2]);
         nwt = Math.round(global_best.position[3]);
 
-        console.log(`Iteration ${u}, Best cost = ${Fminn[u]}`);
-        console.log(`Best solution p_npv = ${p_npv}, ad = ${ad}, houses = ${houses}, nwt = ${nwt}`);
+        //console.log(`Iteration ${u}, Best cost = ${Fminn[u]}`);
+        //console.log(`Best solution p_npv = ${p_npv}, ad = ${ad}, houses = ${houses}, nwt = ${nwt}`);
     }
 
+    runningStatus.innerHTML = ""; // apagando
     [LPSP, price_electricity, renewable_factor, b, ali, ali2] = await techno_ka(houses, p_npv, ad, nwt, steps);
     console.log(`LOLP ${LPSP}, $/KWh = ${price_electricity}, %RES = ${renewable_factor}`);
 
