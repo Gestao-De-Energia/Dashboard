@@ -140,7 +140,7 @@ export default async function CDEEPSO(iterations, steps){
 
     runningStatus.innerHTML = ""; // apagando
     [LPSP, price_electricity, renewable_factor, b, ali, ali2] = await techno_ka(houses, p_npv, ad, nwt, steps);
-    console.log(`LOLP ${LPSP}, $/KWh = ${price_electricity}, %RES = ${renewable_factor}`);
+    //console.log(`LOLP ${LPSP}, $/KWh = ${price_electricity}, %RES = ${renewable_factor}`);
 
     let simulationData = {
         "renewable_factor": renewable_factor,
@@ -154,5 +154,5 @@ export default async function CDEEPSO(iterations, steps){
     // Salvando os dados gerados localmente
     localStorage.setItem("simulationData", JSON.stringify(simulationData));
 
-    console.log(`Total time ${((Date.now() / 1000) - init_t).toFixed(2)} seconds`);
+    //console.log(`Total time ${((Date.now() / 1000) - init_t).toFixed(2)} seconds`);
 }
