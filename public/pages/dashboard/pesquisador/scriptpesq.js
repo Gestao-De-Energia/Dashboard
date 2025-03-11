@@ -157,7 +157,8 @@ document.addEventListener("DOMContentLoaded", function () {
             (simulationData.loss_load_probability * 100).toFixed(2).replace(".", ",") + "%",
             "R$" + simulationData.price_electricity.toFixed(3).replace(".", ","),
             simulationData.houses,
-            simulationData.num_wind_turbines
+            simulationData.num_wind_turbines,
+            simulationData.max_generation + " Kw/h"
           ];
   
           metricas.forEach((el, index) => {
@@ -182,6 +183,7 @@ window.addEventListener("load", () => {
     metricas[2].innerText = "R$" + savedData.price_electricity.toFixed(3).replace(".", ",");
     metricas[3].innerText = savedData.houses;
     metricas[4].innerText = savedData.num_wind_turbines;
+    metricas[5].innerText = savedData.max_generation + " Kw/h";
   }
 });
 
@@ -254,8 +256,6 @@ function addAnnotationToChart(xDate, comment, chart, options) {
             // salvar o comentário no firestore
             await saveUserCommentByDate(commentSectionId, comment, selectedDate);
 
-            document.getElementById(`delete_date_container_${name}`).style.display = 'flex';
-            document.getElementById(`delete_date_${name}`).style.display = 'flex';
             document.querySelector(commentSectionId).style.display = 'none';
             commentInput.value = '';
           }

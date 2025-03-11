@@ -143,7 +143,8 @@ export default async function CDEEPSO(iterations, steps){
         "price_electricity": price_electricity,
         "loss_load_probability": LPSP,
         "houses": houses,
-        "num_wind_turbines": nwt
+        "num_wind_turbines": nwt,
+        "max_generation": p_npv
     };
 
     // Salvando os dados gerados localmente
