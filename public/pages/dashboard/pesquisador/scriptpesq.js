@@ -574,7 +574,7 @@ async function loadData() {
         },
         yaxis: {
           title: {
-            text: 'Energia(Kw)'
+            text: 'Energia (kWh)'
           },
           decimalsInFloat: 3,
         },
@@ -626,7 +626,7 @@ async function loadData() {
         },
         yaxis: {
           title: {
-            text: 'Energia(Kw)'
+            text: 'Energia (kWh)'
           },
           decimalsInFloat: 3,
         },
@@ -679,7 +679,7 @@ async function loadData() {
         },
         yaxis: {
           title: {
-            text: "Energia (Kw)"
+            text: "Energia (kWh)"
           },
           decimalsInFloat: 3,
           labels: {
@@ -779,7 +779,7 @@ async function loadData() {
         },
         yaxis: {
           title: {
-            text: 'Energia(Kw)',
+            text: 'Energia (kWh)',
           },
           decimalsInFloat: 3,
         },
@@ -850,7 +850,7 @@ async function loadData() {
         yaxis: [
           {
             title: {
-              text: "Energia(Kw)"
+              text: "Energia (kWh)"
             },
             decimalsInFloat: 3,
           }
@@ -950,6 +950,14 @@ async function loadData() {
             format: 'MMM \'yy'
           }
         },
+        yaxis: [
+            {
+              title: {
+                text: "Energia (kWh)"
+              },
+              decimalsInFloat: 3,
+            }
+          ],
       };
 
       /* OPTIONS ST SOLAR */
