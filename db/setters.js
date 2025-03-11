@@ -1,5 +1,5 @@
 import { db, auth } from "./firebase.js";
-import { doc, updateDoc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js';
+import { doc, updateDoc, setDoc, getDoc, arrayRemove, arrayUnion, deleteField } from 'https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js';
 
 export async function addUser(user) {
     try {
@@ -26,7 +26,7 @@ export async function updateUser(userId, updatedUser){
     }
 }
 
-export async function saveUserCommentByDate(graphName, comment, date) {
+export async function saveUserCommentByDate(commentSectionId, comment, date) {
     try {
         const currentUser = auth.currentUser;
         if (!currentUser) {
@@ -36,26 +36,92 @@ export async function saveUserCommentByDate(graphName, comment, date) {
         const userRef = doc(db, "users", currentUser.uid);
         const userDoc = await getDoc(userRef);
 
-        let userData = {};
-        if (userDoc.exists()) {
-            userData = userDoc.data();
+        if (!userDoc.exists()) {
+            return;
         }
 
-        const fieldName = `dataCommentsByDate${graphName}`;
+        let userData = userDoc.data();
+        let fieldKey = "";
 
-        let existingComments = userData[fieldName] || [];
+        switch(commentSectionId) {
+            case "#comment_section_fotovoltaica":
+                fieldKey = "commentByDateFotovoltaica";
+                break;
+            case "#comment_section_eolica":
+                fieldKey = "commentByDateEolica";
+                break;
+            case "#comment_section_energiaxdemanda":
+                fieldKey = "commentByDateEnergiaXDemanda";
+                break;
+            case "#comment_section_desempenho":
+                fieldKey = "commentByDateDesempenho";
+                break;
+            case "#comment_section_energiaxcompensacao":
+                fieldKey = "commentByDateEnergiaXCompensacao";
+                break;
+            case "#comment_section_bateria":
+                fieldKey = "commentByDateBateria";
+                break;
+            case "#comment_section_stsolar":
+                fieldKey = "commentByDateSTSolar";
+                break;
+            case "#comment_section_stvento":
+                fieldKey = "commentByDateSTVento";
+                break;
+            default:
+                fieldKey = "commentByDateUndefinedChart";
+        }
 
-        existingComments.push([comment, date]);
+        let existingComments = userData[fieldKey] || [];
+        
+        // encontrar se já existe um comentário nessa data
+        const existingComment = existingComments.find(commentObj => commentObj.date === date);
 
-        // Atualiza o Firestore com o novo comentário
-        await updateDoc(userRef, {
-            [fieldName]: existingComments
-        });
+        let updateData = {};
 
-        console.log(`Comentário salvo para ${graphName}: "${comment}" (${date})`);
+        if (existingComment) {
+            // remove o comentário antigo da mesma data
+            await updateDoc(userRef, {
+                [fieldKey]: arrayRemove(existingComment)
+            });
+        }
+
+        // adiciona o novo comentário
+        updateData[fieldKey] = arrayUnion({ comment, date });
+
+        await updateDoc(userRef, updateData);
 
     } catch (error) {
         console.error("Erro ao salvar comentário: ", error);
+    }
+}
+
+export async function deleteUserCommentByDate(sectionKey, date) {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
+        }
+
+        const userRef = doc(db, "users", currentUser.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (!userDoc.exists()) {
+            return;
+        }
+
+        let userData = userDoc.data();
+        let comments = userData[sectionKey] || [];
+
+        const commentToRemove = comments.find(commentObj => new Date(commentObj.date).toISOString().split("T")[0] === date);
+
+        if (commentToRemove) {
+            await updateDoc(userRef, {
+                [sectionKey]: arrayRemove(commentToRemove)
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao deletar comentário:", error);
     }
 }
 
@@ -100,7 +166,7 @@ export async function deleteGeneralUserComment(graphName) {
 
         // atualiza o Firestore removendo o comentário (deixa o campo vazio)
         await updateDoc(userRef, {
-            [fieldName]: ""
+            [fieldName]: deleteField()
         });
 
         console.log(`Comentário geral deletado para ${graphName}`);

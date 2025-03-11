@@ -30,6 +30,48 @@ export async function checkIfEmailExists(email) {
     }
 }
 
+export async function getAllUserCommentsByDate() {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return {};
+        }
+
+        const userRef = doc(db, "users", currentUser.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (!userDoc.exists()) {
+            return {};
+        }
+
+        const userData = userDoc.data();
+
+        const commentFields = {
+            commentByDateFotovoltaica: "fotovoltaica",
+            commentByDateEolica: "eolica",
+            commentByDateEnergiaXDemanda: "energiaxdemanda",
+            commentByDateDesempenho: "desempenho",
+            commentByDateEnergiaXCompensacao: "energiaxcompensacao",
+            commentByDateBateria: "bateria",
+            commentByDateSTSolar: "stsolar",
+            commentByDateSTVento: "stvento"
+        };
+
+        let commentsByChart = [];
+
+        for (const [field, chartName] of Object.entries(commentFields)) {
+            if (userData[field]) {
+                commentsByChart[chartName] = userData[field];
+            }
+        }
+
+        return commentsByChart;
+    } catch (error) {
+        console.error("Erro ao buscar comentários por data:", error);
+        return {};
+    }
+}
+
 export async function getAllUserGeneralComments() {
     try {
         const currentUser = auth.currentUser;
