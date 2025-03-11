@@ -102,8 +102,8 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error("Erro ao autenticar:", error);
             loginWarning.style.display = "flex";
-            loginWarning.textContent = "Erro no email ou senha.";
             stopLoadingAnimation();
+            loginWarning.textContent = "Erro no email ou senha.";
         }
     };
 
