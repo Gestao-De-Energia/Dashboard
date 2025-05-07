@@ -2,7 +2,7 @@ import { getAllUserCommentsByDate, getAllUserGeneralComments, getUser } from "..
 import { auth } from "../../../db/firebase.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import CDEEPSO from "../../../js/CDEEPSO.js";
-import { deleteGeneralUserComment, deleteUserCommentByDate, saveGeneralUserComment, saveUserCommentByDate } from "../../../../db/setters.js";
+import { deleteGeneralUserComment, deleteUserCommentByDate, saveGeneralUserComment, saveUserCommentByDate } from "../../../db/setters.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const profileImg = document.getElementById("profile-img");
