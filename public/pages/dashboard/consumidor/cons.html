@@ -88,20 +88,23 @@
         <main>
           <section>
             <div class="dashboard-metrica">
-              <div class="metrica1">
-                <div class="left">
-                  <img src="../../../assets/icons/mediaFatorRenovavel.png" alt="Ícone" class="icone-metrica">
-                  <div class="metrica-texto">
-                    <h3 class="valor">69%</h3>
-                    <h3 class="legenda">Média Fator Renovável</h3>
+              <div class="metricas-cima">
+                <div class="metrica1">
+                  <div class="left">
+                    <img src="../../../assets/icons/mediaFatorRenovavel.png" alt="Ícone" class="icone-metrica">
+                    <div class="metrica-texto">
+                      <h3 class="valor">-</h3>
+                      <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                      <h3 class="legenda">Média Fator Renovável</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="metrica2" styles="background-image: linear-gradient(to right, #E5FB5B, #59A03F);">
-                <div class="left">
-                  <img src="../../../assets/icons/perdaCarga.png" alt="Ícone" class="icone-metrica">
-                  <div class="metrica-texto">
-                    <h3 class="valor">7.45%</h3>
+                <div class="metrica2">
+                  <div class="left">
+                    <img src="../../../assets/icons/perdaCarga.png" alt="Ícone" class="icone-metrica">
+                    <div class="metrica-texto">
+                      <h3 class="valor">-</h3>
+                      <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
                     <h3 class="legenda">Perda de carga no grid</h3>
                   </div>
                 </div>
@@ -110,16 +113,20 @@
                 <div class="left">
                   <img src="../../../assets/icons/custoEnergia.png" alt="Ícone" class="icone-metrica">
                   <div class="metrica-texto">
-                    <h3 class="valor">R$0,662</h3>
+                    <h3 class="valor">-</h3>
+                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
                     <h3 class="legenda">Custo de energia elétrica</h3>
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="metricas-baixo">
               <div class="metrica4">
                 <div class="left">
                   <img src="../../../assets/icons/numeroCasas.png" alt="Ícone" class="icone-metrica">
                   <div class="metrica-texto">
-                    <h3 class="valor">19</h3>
+                    <h3 class="valor">-</h3>
+                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
                     <h3 class="legenda">Número de Casas</h3>
                   </div>
                 </div>
@@ -128,8 +135,9 @@
                 <div class="left">
                   <img src="../../../assets/icons/turbinasEolicas.png" alt="Ícone" class="icone-metrica">
                   <div class="metrica-texto">
-                    <h3 class="valor">4</h3>
-                    <h3 class="legenda">Turbina eólicas</h3>
+                    <h3 class="valor">-</h3>
+                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                    <h3 class="legenda">Turbinas eólicas</h3>
                   </div>
                 </div>
               </div>
@@ -137,11 +145,49 @@
                 <div class="left">
                   <img src="../../../assets/icons/geracaoMaxima.png" alt="Ícone" class="icone-metrica">
                   <div class="metrica-texto">
-                    <h3 class="valor">38,16 Kw/h</h3>
+                    <h3 class="valor">-</h3>
+                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
                     <h3 class="legenda">Geração Máxima dos panéis</h3>
                   </div>
                 </div>
-              </div>     
+              </div>
+            </div>
+          </div>
+          <!-- BOTÃO RODAR SIMULAÇÃO -->
+            <div class="run_btn_container">
+              <button class="run_btn">
+                <h3 class="run_btn_text">Rodar simulação</h3>
+              </button>
+              <p id="running_sim_status"></p>
+              <div class="config_buttons" style="display: none;">
+                <!-- Dropdown para número de iterações -->
+                <div class="dropdown_sim">
+                  <button class="config_button" id="iterations_button">Iterações: 10 ▼</button>
+                  <div class="dropdown_content" id="iterations_dropdown">
+                    <button class="dropdown_item" data-value="5">5</button>
+                    <button class="dropdown_item" data-value="10">10</button>
+                    <button class="dropdown_item" data-value="15">15</button>
+                    <button class="dropdown_item" data-value="20">20</button>
+                  </div>
+                </div>
+            
+                <!-- Dropdown para período -->
+                <div class="dropdown_sim">
+                  <button class="config_button" id="period_button">Período: 12 meses ▼</button>
+                  <div class="dropdown_content" id="period_dropdown">
+                    <button class="dropdown_item" data-value="1 semana">1 semana</button>
+                    <button class="dropdown_item" data-value="2 semanas">2 semanas</button>
+                    <button class="dropdown_item" data-value="1 mês">1 mês</button>
+                    <button class="dropdown_item" data-value="3 meses">3 meses</button>
+                    <button class="dropdown_item" data-value="6 meses">6 meses</button>
+                    <button class="dropdown_item" data-value="9 meses">9 meses</button>
+                    <button class="dropdown_item" data-value="12 meses">12 meses</button>
+                  </div>
+                </div>
+            
+                <!-- Botão de confirmar -->
+                <button class="confirm_button" id="confirm_button">Confirmar</button>
+              </div>
             </div>
             <h2 style="padding-top: 100px;" id="Energia">Energia </h2>
             <div id="chartFotovoltaica" style="padding-top: 50px"></div>
