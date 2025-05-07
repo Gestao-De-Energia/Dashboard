@@ -88,11 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             
             if (userData.pesquisador && userData.consumidor) {
-                window.location.href = "/public/pages/home/home.html";
+                window.location.href = "/pages/home/home.html";
             } else if (userData.pesquisador) {
-                window.location.href = "/public/pages/dashboard/pesquisador/pesq.html";
+                window.location.href = "/pages/dashboard/pesquisador/pesq.html";
             } else if (userData.consumidor) {
-                window.location.href = "/public/pages/dashboard/consumidor/cons.html";
+                window.location.href = "/pages/dashboard/consumidor/cons.html";
             } else {
                 loginWarning.style.display = "flex";
                 loginWarning.textContent = "Erro: Perfil do usuário não definido.";
