@@ -19,20 +19,23 @@
         <div class="forms">
             <div class="form signup" style="border-radius: 15px;">
                 <span class="title">Criar conta</span>
-                <form action="#">
+                <form id="signupForm">
                     <div class="input-field">
-                        <input type="text" placeholder="Nome">
+                        <input type="text" placeholder="Nome" id="nome" required>
                         <i class="fa-solid fa-user icon"></i>
                     </div>
+                    <p class="insert-warning" id="name-warning">Insira um nome.</p>
                     <div class="input-field">
-                        <input type="text" placeholder="Email">
+                        <input type="text" placeholder="Email" id="email" required>
                         <i class="fa-solid fa-envelope icon"></i>
                     </div>
+                    <p class="insert-warning" id="email-warning">Insira um email válido.</p>
                     <div class="input-field">
-                        <input type="password" class="password" placeholder="Senha">
+                        <input type="password" class="password" placeholder="Senha" id="senha" required>
                         <i class="fa-solid fa-lock icon"></i>
                         <i class="fa-solid fa-eye-slash showHidePw" id=""></i>
                     </div>
+                    <p class="insert-warning" id="password-warning">Insira uma senha.</p>
                     <div class="checkbox-text">
                         <div class="checkbox-content">
                             <input type="checkbox" id="logCheckPesquisador">
@@ -43,21 +46,21 @@
                             <label for="logCheckConsumidor" class="text">Consumidor</label>
                         </div>
                     </div>
+                    <p class="insert-warning" id="profile-warning">Marque pelo menos um tipo de perfil.</p>
                     <div class="input-field button">
-                        <a href="../home/home.html">
-                            <input type="button" value="Cadastre-se">
-                        </a>
+                        <input type="button" value="Cadastre-se" id="partialSubmitBtn">
                     </div>
                 </form>
                 <div class="login-signup">
                     <span class="text">
                         Já tem conta?
-                        <a href="index.html" class="text login-link">Entrar</a>
+                        <a href="../../index.html" class="text login-link">Entrar</a>
                     </span>
                 </div>
             </div>
         </div>
     </div>
-    <script src="./scriptlog.js"></script>
+    <script type="module" src="./scriptCadastro.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js"></script> <!-- atribuindo id ao user -->
+    <script type="module" src="../../../db/setters.js"></script>
 </body>
-</html>

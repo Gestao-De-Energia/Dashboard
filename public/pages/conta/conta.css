@@ -153,3 +153,12 @@
     margin-top: 30px;
     text-align: center;
 }
+
+.login {
+    border-radius: 15px;
+}
+
+.insert-warning{
+    color: red;
+    display: none; /* A princípio fica escondido, só aparece quando o usuário clica para cadastrar e o campo está incompleto */
+}
