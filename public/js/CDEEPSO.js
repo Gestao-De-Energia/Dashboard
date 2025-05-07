@@ -12,7 +12,7 @@ export default async function CDEEPSO(iterations, steps){
     const K = 0.9;  // renewable energy factor
     const nvars = 1; // only one system
 
-    const LB = [10, 1, 1, 1];  // Lower bound
+    const LB = [10, 1, 1, 1];  // Lower bound (p_npv, ad, houses, nwt)
     const UB = [150, 3, 30, 8]; // Upper bound
 
     const max_it = 10;
@@ -81,7 +81,7 @@ export default async function CDEEPSO(iterations, steps){
     
     for (let u = 0; u < iterations; u++) {
         let vv = 0;
-        runningStatus.innerHTML = `Rodando simulação ${u+1}/${iterations}`;
+        runningStatus.innerHTML = `Rodando iteração ${u+1}/${iterations}`;
         for (let i = 0; i < NPOP; i++) {
             let cc = 1;
             let LPSP = 0.3;
