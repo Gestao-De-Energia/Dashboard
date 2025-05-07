@@ -1117,6 +1117,15 @@ await loadData();
 var chartFotovoltaica = new ApexCharts(document.querySelector("#chartFotovoltaica"), optionsFotovoltaica);
 chartFotovoltaica.render();
 
+setupCommentSection(
+    '#select_date_fotovoltaica',
+    '#comment_section_fotovoltaica',
+    '#comment_input_fotovoltaica',
+    chartFotovoltaica,
+    optionsFotovoltaica,
+    "fotovoltaica"
+);
+
 var resetCssClasses = function (activeEl) {
   var els = document.querySelectorAll('button')
 
@@ -1159,6 +1168,15 @@ periodsFotovoltaica.forEach(period => {
 var chartEolica = new ApexCharts(document.querySelector("#chartEolica"), optionsEolica);
 chartEolica.render();
 
+setupCommentSection(
+    '#select_date_eolica',
+    '#comment_section_eolica',
+    '#comment_input_eolica',
+    chartEolica,
+    optionsEolica,
+    "eolica"
+);
+
 const periodsEolica = [
   { id: '#fev', start: '01 Feb 2004', end: '29 Feb 2004' },
   { id: '#fev5', start: '01 Feb 2005', end: '03 Feb 2005' },
@@ -1190,6 +1208,15 @@ periodsEolica.forEach(period => {
 /* ========== GRÁFICO ENERGIA X DEMANDA ======== */
 var chartEnergiaXDemanda = new ApexCharts(document.querySelector("#chartEnergiaXDemanda"), optionsEnergiaXDemanda);
 chartEnergiaXDemanda.render();
+
+setupCommentSection(
+    '#select_date_energiaxdemanda',
+    '#comment_section_energiaxdemanda',
+    '#comment_input_energiaxdemanda',
+    chartEnergiaXDemanda,
+    optionsEnergiaXDemanda,
+    "energiaxdemanda"
+);
 
 const periodsEnergiaXDemanda = [
     { id: '#fevd', start: '01 Feb 2004', end: '29 Feb 2004' },
@@ -1223,6 +1250,15 @@ periodsEnergiaXDemanda.forEach(period => {
 var chartDesempenho = new ApexCharts(document.querySelector("#chartDesempenho"), optionsDesempenho);
 chartDesempenho.render();
 
+setupCommentSection(
+    '#select_date_desempenho',
+    '#comment_section_desempenho',
+    '#comment_input_desempenho',
+    chartDesempenho,
+    optionsDesempenho,
+    "desempenho"
+);
+
 const periodsDesempenho = [
     { id: '#fevde', start: '01 Feb 2004', end: '29 Feb 2004' },
     { id: '#fev5de', start: '01 Feb 2005', end: '03 Feb 2005' },
@@ -1254,6 +1290,15 @@ periodsDesempenho.forEach(period => {
 /* ========== GRÁFICO ENERGIA X COMPENSAÇÃO ========== */
 var chartEnergiaXCompensacao = new ApexCharts(document.querySelector("#chartEnergiaXCompensacao"), optionsEnergiaXCompensacao);
 chartEnergiaXCompensacao.render();
+
+setupCommentSection(
+    '#select_date_energiaxcompensacao',
+    '#comment_section_energiaxcompensacao',
+    '#comment_input_energiaxcompensacao',
+    chartEnergiaXCompensacao,
+    optionsEnergiaXCompensacao,
+    "energiaxcompensacao"
+);
 
 const periodsEnergiaXCompensacao = [
     { id: '#fevda', start: '01 Feb 2004', end: '29 Feb 2004' },
@@ -1287,6 +1332,15 @@ periodsEnergiaXCompensacao.forEach(period => {
 var chartBateria = new ApexCharts(document.querySelector("#chartBateria"), optionsBateria);
 chartBateria.render();
 
+setupCommentSection(
+    '#select_date_bateria',
+    '#comment_section_bateria',
+    '#comment_input_bateria',
+    chartBateria,
+    optionsBateria,
+    "bateria"
+);
+
 const periodsBateria = [
     { id: '#fevb', start: '01 Feb 2004', end: '29 Feb 2004' },
     { id: '#fev5b', start: '01 Feb 2005', end: '03 Feb 2005' },
@@ -1319,6 +1373,15 @@ periodsBateria.forEach(period => {
 var chartSTSolar = new ApexCharts(document.querySelector("#chartSTSolar"), optionsSTSolar);
 chartSTSolar.render();
 
+setupCommentSection(
+    '#select_date_stsolar',
+    '#comment_section_stsolar',
+    '#comment_input_stsolar',
+    chartSTSolar,
+    optionsSTSolar,
+    "stsolar"
+);
+
 const periodsSTSolar = [
   { id: '#fevv', start: '01 Feb 2004', end: '29 Feb 2004' },
   { id: '#fev5v', start: '01 Feb 2005', end: '03 Feb 2005' },
@@ -1350,6 +1413,15 @@ periodsSTSolar.forEach(period => {
 /* ========== GRÁFICO ST VENTO ========== */
 var chartSTVento = new ApexCharts(document.querySelector("#chartSTVento"), optionsSTVento);
 chartSTVento.render();
+
+setupCommentSection(
+    '#select_date_stvento',
+    '#comment_section_stvento',
+    '#comment_input_stvento',
+    chartSTVento,
+    optionsSTVento,
+    "stvento"
+);
 
 const periodsSTVento = [
     { id: '#fevs', start: '01 Feb 2004', end: '29 Feb 2004' },
