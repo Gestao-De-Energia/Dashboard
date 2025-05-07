@@ -63,12 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            startLoadingAnimation("Verificando");
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             console.log("Usuário autenticado:", user);
 
-            stopLoadingAnimation();
             startLoadingAnimation("Entrando");
 
             const userData = await getUser(user.uid);
