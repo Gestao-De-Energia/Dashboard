@@ -13,30 +13,18 @@
     </head>
       <body>
     <!--========== HEADER ==========-->
-        <header class="header">
-          <div class="header-container">
-             <div class="action">
-          <div class="profile" onclick="menuToggle();">
-           <img src="assets/perfil.png" alt="">
-          </div>
-          <div class="menu">
-            <h3> Maria <br><span>Consumidor</span>
-            </h3>
-            <ul>
-              <li>
-                <i class="fa-solid fa-user"></i>Meu perfil
-              </li>
-              <li>
-                  <i class="fa-solid fa-pen-to-square"></i>Editar perfil
-                </li>
-                <li>
-                  <i class="fa-solid fa-right-from-bracket"></i>Logout
-              </li>
-            </ul>
+      <header class="header">
+        <div class="header-profile">
+          <div class="user-container">
+              <img id="profile-img" alt="Perfil" class="header-img">
+              <div class="dropdown-menu">
+                <!--<a href="#" id="edit-profile">Editar perfil</a>-->
+                <a href="#" id="logout">Desconectar-se</a>
+              </div>
+              <p class="user-name"></p>
           </div>
         </div>
-          </div>
-        </header>
+      </header>
 
         <!--========== NAV ==========-->
         <div class="nav" id="navbar">
