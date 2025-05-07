@@ -217,124 +217,128 @@ function addAnnotationToChart(xDate, comment, chart, options) {
 }
   
   document.addEventListener("DOMContentLoaded", async function () {
-    await loadData();
-    function setupCommentSection(buttonId, commentSectionId, commentInputId, chart, options, name) {
-      var selectedDate = null;
-  
-      // inicializar flatpickr no botão específico
-      flatpickr(buttonId, {
-        minDate: "2004-02-01", // data mínima
-        maxDate: "2005-02-03", // data máxima
-        position: "above", // exibir calendário sobre o botão
-        disable: [
-          function (date) {
-            return !(date.getDate() % 31); // desabilitar dias 31
-          }
-        ],
-        onChange: function (selectedDates) {
-            selectedDate = selectedDates[0].toISOString().split("T")[0]; // armazenar a data selecionada em formato YYYY-MM-DD
-            const commentSection = document.querySelector(commentSectionId);
-            const commentInput = document.querySelector(commentInputId);
+    try {
+        await loadData();
+        function setupCommentSection(buttonId, commentSectionId, commentInputId, chart, options, name) {
+        var selectedDate = null;
     
-            commentSection.style.display = 'flex'; // mostrar a caixa de comentário
-            commentInput.focus();
-        }
-      });
-  
-      const commentInput = document.querySelector(commentInputId);
-  
-      async function handleKeyDown(event) {
-        if (event.key === 'Enter' && selectedDate) {
-          event.preventDefault();
-  
-          var comment = commentInput.value.trim();
-  
-          if (comment !== "") {
-            // adicionar no gráfico
-            addAnnotationToChart(selectedDate, comment, chart, options);
-  
-            // salvar o comentário no firestore
-            await saveUserCommentByDate(commentSectionId, comment, selectedDate);
+        // inicializar flatpickr no botão específico
+        flatpickr(buttonId, {
+            minDate: "2004-02-01", // data mínima
+            maxDate: "2005-02-03", // data máxima
+            position: "above", // exibir calendário sobre o botão
+            disable: [
+            function (date) {
+                return !(date.getDate() % 31); // desabilitar dias 31
+            }
+            ],
+            onChange: function (selectedDates) {
+                selectedDate = selectedDates[0].toISOString().split("T")[0]; // armazenar a data selecionada em formato YYYY-MM-DD
+                const commentSection = document.querySelector(commentSectionId);
+                const commentInput = document.querySelector(commentInputId);
+        
+                commentSection.style.display = 'flex'; // mostrar a caixa de comentário
+                commentInput.focus();
+            }
+        });
+    
+        const commentInput = document.querySelector(commentInputId);
+    
+        async function handleKeyDown(event) {
+            if (event.key === 'Enter' && selectedDate) {
+            event.preventDefault();
+    
+            var comment = commentInput.value.trim();
+    
+            if (comment !== "") {
+                // adicionar no gráfico
+                addAnnotationToChart(selectedDate, comment, chart, options);
+    
+                // salvar o comentário no firestore
+                await saveUserCommentByDate(commentSectionId, comment, selectedDate);
 
-            document.querySelector(commentSectionId).style.display = 'none';
-            commentInput.value = '';
-          }
+                document.querySelector(commentSectionId).style.display = 'none';
+                commentInput.value = '';
+            }
+            }
         }
-      }
-  
-      commentInput.addEventListener('keydown', handleKeyDown);
+    
+        commentInput.addEventListener('keydown', handleKeyDown);
+        }
+    
+        const commentSections = [
+        {
+            selectId: '#select_date_fotovoltaica',
+            commentSectionId: '#comment_section_fotovoltaica',
+            commentInputId: '#comment_input_fotovoltaica',
+            chart: chartFotovoltaica,
+            options: optionsFotovoltaica,
+            name: "fotovoltaica"
+        },
+        {
+            selectId: '#select_date_eolica',
+            commentSectionId: '#comment_section_eolica',
+            commentInputId: '#comment_input_eolica',
+            chart: chartEolica,
+            options: optionsEolica,
+            name: "eolica"
+        },
+        {
+            selectId: '#select_date_energiaxdemanda',
+            commentSectionId: '#comment_section_energiaxdemanda',
+            commentInputId: '#comment_input_energiaxdemanda',
+            chart: chartEnergiaXDemanda,
+            options: optionsEnergiaXDemanda,
+            name: "energiaxdemanda"
+        },
+        {
+            selectId: '#select_date_desempenho',
+            commentSectionId: '#comment_section_desempenho',
+            commentInputId: '#comment_input_desempenho',
+            chart: chartDesempenho,
+            options: optionsDesempenho,
+            name: "desempenho"
+        },
+        {
+            selectId: '#select_date_energiaxcompensacao',
+            commentSectionId: '#comment_section_energiaxcompensacao',
+            commentInputId: '#comment_input_energiaxcompensacao',
+            chart: chartEnergiaXCompensacao,
+            options: optionsEnergiaXCompensacao,
+            name: "energiaxcompensacao"
+        },
+        {
+            selectId: '#select_date_bateria',
+            commentSectionId: '#comment_section_bateria',
+            commentInputId: '#comment_input_bateria',
+            chart: chartBateria,
+            options: optionsBateria,
+            name: "bateria"
+        },
+        {
+            selectId: '#select_date_stsolar',
+            commentSectionId: '#comment_section_stsolar',
+            commentInputId: '#comment_input_stsolar',
+            chart: chartSTSolar,
+            options: optionsSTSolar,
+            name: "stsolar"
+        },
+        {
+            selectId: '#select_date_stvento',
+            commentSectionId: '#comment_section_stvento',
+            commentInputId: '#comment_input_stvento',
+            chart: chartSTVento,
+            options: optionsSTVento,
+            name: "stvento"
+        }
+        ];
+    
+        commentSections.forEach(({ selectId, commentSectionId, commentInputId, chart, options, name }) => {
+        setupCommentSection(selectId, commentSectionId, commentInputId, chart, options, name);
+        });
+    } catch (error) {
+        console.error("Erro ao carregar dados:", error);
     }
-  
-    const commentSections = [
-      {
-        selectId: '#select_date_fotovoltaica',
-        commentSectionId: '#comment_section_fotovoltaica',
-        commentInputId: '#comment_input_fotovoltaica',
-        chart: chartFotovoltaica,
-        options: optionsFotovoltaica,
-        name: "fotovoltaica"
-      },
-      {
-        selectId: '#select_date_eolica',
-        commentSectionId: '#comment_section_eolica',
-        commentInputId: '#comment_input_eolica',
-        chart: chartEolica,
-        options: optionsEolica,
-        name: "eolica"
-      },
-      {
-        selectId: '#select_date_energiaxdemanda',
-        commentSectionId: '#comment_section_energiaxdemanda',
-        commentInputId: '#comment_input_energiaxdemanda',
-        chart: chartEnergiaXDemanda,
-        options: optionsEnergiaXDemanda,
-        name: "energiaxdemanda"
-      },
-      {
-        selectId: '#select_date_desempenho',
-        commentSectionId: '#comment_section_desempenho',
-        commentInputId: '#comment_input_desempenho',
-        chart: chartDesempenho,
-        options: optionsDesempenho,
-        name: "desempenho"
-      },
-      {
-        selectId: '#select_date_energiaxcompensacao',
-        commentSectionId: '#comment_section_energiaxcompensacao',
-        commentInputId: '#comment_input_energiaxcompensacao',
-        chart: chartEnergiaXCompensacao,
-        options: optionsEnergiaXCompensacao,
-        name: "energiaxcompensacao"
-      },
-      {
-        selectId: '#select_date_bateria',
-        commentSectionId: '#comment_section_bateria',
-        commentInputId: '#comment_input_bateria',
-        chart: chartBateria,
-        options: optionsBateria,
-        name: "bateria"
-      },
-      {
-        selectId: '#select_date_stsolar',
-        commentSectionId: '#comment_section_stsolar',
-        commentInputId: '#comment_input_stsolar',
-        chart: chartSTSolar,
-        options: optionsSTSolar,
-        name: "stsolar"
-      },
-      {
-        selectId: '#select_date_stvento',
-        commentSectionId: '#comment_section_stvento',
-        commentInputId: '#comment_input_stvento',
-        chart: chartSTVento,
-        options: optionsSTVento,
-        name: "stvento"
-      }
-    ];
-  
-    commentSections.forEach(({ selectId, commentSectionId, commentInputId, chart, options, name }) => {
-      setupCommentSection(selectId, commentSectionId, commentInputId, chart, options, name);
-    });
   
   });
 
