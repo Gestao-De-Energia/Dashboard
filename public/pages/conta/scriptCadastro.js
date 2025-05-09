@@ -85,6 +85,8 @@ async function handlePartialSignup(){
         return;
     }
 
+    partialUser = { nome, email, pesquisador, consumidor };
+
     sessionStorage.setItem("partialUser", JSON.stringify(partialUser));
     
     try {
