@@ -965,6 +965,8 @@ async function loadData() {
       };
 
       /* OPTIONS ST SOLAR */
+      const irradiacoes = data.irradiacao.map(item => item[1]);
+      const mediaIrradiacao = irradiacoes.reduce((sum, val) => sum + val, 0) / irradiacoes.length;
       optionsSTSolar = {
         title: {
           text: "Irradiação Solar Anual",
@@ -990,18 +992,35 @@ async function loadData() {
           }
         },
         annotations: {
-          yaxis: [{
-            y: 30,
-            borderColor: '#999',
-            label: {
-              show: true,
-              text: 'Support',
-              style: {
-                color: "#fff",
-                background: '#00E396'
-              }
+          yaxis: [
+            {
+                y: 30,
+                borderColor: '#999',
+                label: {
+                show: true,
+                text: 'Support',
+                style: {
+                    color: "#fff",
+                    background: '#00E396'
+                }
+                },
             },
-          }],
+            {
+                y: mediaIrradiacao,
+                borderColor: '#FF0000',
+                strokeDashArray: 5,
+                label: {
+                    show: true,
+                    text: 'Média',
+                    style: {
+                    color: "#fff",
+                    background: '#FF0000'
+                    },
+                    offsetX: 0,
+                    offsetY: -5
+                }
+            }
+        ],
         },
         dataLabels: {
           enabled: false
@@ -1036,6 +1055,8 @@ async function loadData() {
       };
 
       /* OPTIONS ST VENTO*/
+      const ventos = data.vento.map(item => item[1]);
+      const mediaVento = ventos.reduce((sum, val) => sum + val, 0) / ventos.length;
       optionsSTVento = {
         title: {
           text: "Vento Anual",
@@ -1063,18 +1084,35 @@ async function loadData() {
           }
         },
         annotations: {
-          yaxis: [{
-            y: 30,
-            borderColor: '#999',
-            label: {
-              show: true,
-              text: 'Support',
-              style: {
-                color: "#fff",
-                background: '#00E396'
-              }
+          yaxis: [
+            {
+                y: 30,
+                borderColor: '#999',
+                label: {
+                show: true,
+                text: 'Support',
+                style: {
+                    color: "#fff",
+                    background: '#00E396'
+                }
+                }
+            },
+            {
+                y: mediaVento,
+                borderColor: '#FF0000',
+                strokeDashArray: 5,
+                label: {
+                    show: true,
+                    text: 'Média',
+                    style: {
+                    color: "#fff",
+                    background: '#FF0000'
+                    },
+                    offsetX: 0,
+                    offsetY: -5
+                }
             }
-          }],
+          ],
         },
         dataLabels: {
           enabled: false
