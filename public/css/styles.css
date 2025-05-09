@@ -700,6 +700,13 @@ body {
   align-items: center;
 }
 
+.button.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
 button:hover, .meses:hover{
   background-color: rgba(123, 123, 187, 0.336); 
   transition: .3s;

@@ -107,6 +107,11 @@
     gap: 4px;
 }
 
+input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .checkbox-content{
     accent-color: #6923D0;
 }
