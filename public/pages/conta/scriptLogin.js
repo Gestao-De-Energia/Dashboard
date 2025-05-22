@@ -1,5 +1,5 @@
-import { auth } from "../../../db/firebase.js";
-import { getUser, checkIfEmailExists } from "../../../db/getters.js";
+import { auth } from "../../db/firebase.js";
+import { getUser, checkIfEmailExists } from "../../db/getters.js";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
 const pwShowHide = document.querySelectorAll(".showHidePw");
