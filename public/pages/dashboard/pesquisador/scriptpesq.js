@@ -220,50 +220,52 @@ function addAnnotationToChart(xDate, comment, chart, options) {
     try {
         await loadData();
         function setupCommentSection(buttonId, commentSectionId, commentInputId, chart, options, name) {
-        var selectedDate = null;
-    
-        // inicializar flatpickr no botão específico
-        flatpickr(buttonId, {
-            minDate: "2004-02-01", // data mínima
-            maxDate: "2005-02-03", // data máxima
-            position: "above", // exibir calendário sobre o botão
-            disable: [
-            function (date) {
-                return !(date.getDate() % 31); // desabilitar dias 31
-            }
-            ],
-            onChange: function (selectedDates) {
-                selectedDate = selectedDates[0].toISOString().split("T")[0]; // armazenar a data selecionada em formato YYYY-MM-DD
-                const commentSection = document.querySelector(commentSectionId);
-                const commentInput = document.querySelector(commentInputId);
+            var selectedDate = null;
         
-                commentSection.style.display = 'flex'; // mostrar a caixa de comentário
-                commentInput.focus();
-            }
-        });
-    
-        const commentInput = document.querySelector(commentInputId);
-    
-        async function handleKeyDown(event) {
-            if (event.key === 'Enter' && selectedDate) {
-            event.preventDefault();
-    
-            var comment = commentInput.value.trim();
-    
-            if (comment !== "") {
-                // adicionar no gráfico
-                addAnnotationToChart(selectedDate, comment, chart, options);
-    
-                // salvar o comentário no firestore
-                await saveUserCommentByDate(commentSectionId, comment, selectedDate);
+            // inicializar flatpickr no botão específico
+            flatpickr(buttonId, {
+                minDate: "2004-02-01", // data mínima
+                maxDate: "2005-02-03", // data máxima
+                position: "above", // exibir calendário sobre o botão
+                disable: [
+                function (date) {
+                    return !(date.getDate() % 31); // desabilitar dias 31
+                }
+                ],
+                onChange: function (selectedDates) {
+                    selectedDate = selectedDates[0].toISOString().split("T")[0]; // armazenar a data selecionada em formato YYYY-MM-DD
+                    const commentSection = document.querySelector(commentSectionId);
+                    const commentInput = document.querySelector(commentInputId);
+            
+                    commentSection.style.display = 'flex'; // mostrar a caixa de comentário
+                    commentInput.focus();
+                }
+            });
+        
+            const commentInput = document.querySelector(commentInputId);
+        
+            async function handleKeyDown(event) {
+                if (event.key === 'Enter' && selectedDate) {
+                    event.preventDefault();
+            
+                    var comment = commentInput.value.trim();
+            
+                    if (comment !== "") {
+                        // adicionar no gráfico
+                        addAnnotationToChart(selectedDate, comment, chart, options);
+            
+                        // salvar o comentário no firestore
+                        await saveUserCommentByDate(commentSectionId, comment, selectedDate);
 
-                document.querySelector(commentSectionId).style.display = 'none';
-                commentInput.value = '';
+                        document.getElementById(`delete_date_container_${name}`).style.display = 'flex';
+                        document.getElementById(`delete_date_${name}`).style.display = 'block';
+                        document.querySelector(commentSectionId).style.display = 'none';
+                        commentInput.value = '';
+                    }
+                }
             }
-            }
-        }
-    
-        commentInput.addEventListener('keydown', handleKeyDown);
+        
+            commentInput.addEventListener('keydown', handleKeyDown);
         }
     
         const commentSections = [
@@ -452,6 +454,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             loadDateCommentsIntoCharts(userCommentsByDate);
             loadGeneralCommentsIntoDashboard(userGeneralComments);
+            
+            const sections = ["fotovoltaica", "eolica", "energiaxdemanda", "desempenho", "energiaxcompensacao", "bateria", "stsolar", "stvento"];
+            const firebaseNames = ["commentByDateFotovoltaica", "commentByDateEolica", "commentByDateEnergiaXDemanda", "commentByDateDesempenho", "commentByDateEnergiaXCompensacao", "commentByDateBateria", "commentByDateSTSolar", "commentByDateSTVento"];
+
+            sections.forEach((section, index) => {
+                setupDeleteCommentForSection(section, userCommentsByDate, firebaseNames[index]);
+            });
         }
     });
 });
@@ -471,6 +480,21 @@ function loadDateCommentsIntoCharts(userComments) {
     sections.forEach(({ section, chart, options }) => {
         const comments = userComments[section] || []; // Obtém os comentários do Firestore
 
+            if (chart && typeof chart.clearAnnotations === 'function') {
+                chart.clearAnnotations();
+            }
+
+        const divId = `delete_date_container_${section}`;
+        const divElement = document.getElementById(divId);
+        if (divElement) {
+            if (comments.length > 0) {
+                divElement.style.display = 'flex';
+            } else {
+                chart.clearAnnotations();
+                divElement.style.display = 'none'; 
+            }
+        }
+
         comments.forEach(({ comment, date }) => {
             addAnnotationToChart(date, comment, chart, options);
         });
@@ -489,14 +513,8 @@ function loadGeneralCommentsIntoDashboard(userComments) {
         { section: "stvento", chart: chartSTVento, options: optionsSTVento }
     ];    
 
-    sections.forEach(({ section, chart, options }) => {
-        const comments = userComments[`dataCommentsByDate${section}`] || []; // comentarios por data
+    sections.forEach(({ section }) => {
         const textarea = document.getElementById(`gc_input_${section}`); // area do comentario geral
-
-        // percorre os comentários e adiciona ao gráfico
-        comments.forEach(([comment, date]) => {
-            addAnnotationToChart(date, comment, chart, options);
-        });
 
         // carregar comentário geral
         const generalComment = userComments[`generalComment${section}`] || "";
@@ -507,6 +525,95 @@ function loadGeneralCommentsIntoDashboard(userComments) {
 }
 
 /*==================== DELETANDO COMENTÁRIOS POR DATA ====================*/
+
+function setupDeleteCommentForSection(section, userComments, name) {
+  const deleteBtn = document.getElementById(`delete_date_${section}`);
+  const dateOptionsDiv = document.getElementById(`date_options_${section}`);
+  const confirmBtn = document.getElementById(`confirm_delete_${section}`);
+  let allComments = userComments;
+
+  let selectedDate = null; // data selecionada pelo usuário
+
+  deleteBtn.addEventListener('click', async () => {
+    // Pega as datas dos comentários dessa seção
+    const userComments = await getAllUserCommentsByDate();
+    allComments = userComments;
+    const comments = userComments[section] || [];
+    const dates = comments.map(c => c.date);
+
+    if (dates.length === 0) {
+      return;
+    }
+
+    // Mostra o container e limpa qualquer flatpickr anterior
+    dateOptionsDiv.style.display = dateOptionsDiv.style.display === 'block' ? 'none' : 'block';
+    dateOptionsDiv.innerHTML = ''; // limpar
+
+    // Cria um input para o flatpickr (hidden para não duplicar)
+    const input = document.createElement('input');
+    input.type = 'date';
+    input.placeholder = 'Data';
+    input.id = `flatpickr_delete_${section}`;
+    dateOptionsDiv.appendChild(input);
+
+    // Inicializa flatpickr com datas permitidas (dates)
+    flatpickr(input, {
+      enable: dates, // habilita somente essas datas
+      dateFormat: "Y-m-d",
+      minDate: "2004-02-01", // data mínima
+      maxDate: "2005-02-03",
+      position: "above",
+      onChange: function(dateStr) {
+        if (dateStr.length > 0) {
+            const dt = dateStr[0];
+            const year = dt.getFullYear();
+            const month = String(dt.getMonth() + 1).padStart(2, '0');
+            const day = String(dt.getDate()).padStart(2, '0');
+
+            selectedDate = `${year}-${month}-${day}`;
+            confirmBtn.style.display = 'flex';
+        }
+      },
+    });
+
+    input.focus(); // abre o calendário
+  });
+
+  confirmBtn.addEventListener('click', async () => {
+    if (!selectedDate) {
+      return;
+    }
+
+    try {
+      // Chama a função para deletar comentário no Firebase
+      await deleteUserCommentByDate(name, selectedDate);
+
+      const updatedUserComments = await getAllUserCommentsByDate();
+
+      userComments = updatedUserComments;
+
+      // Atualiza o gráfico
+      loadDateCommentsIntoCharts(userComments);
+
+      // Esconde o flatpickr e botão confirmar
+      dateOptionsDiv.style.display = 'none';
+      dateOptionsDiv.innerHTML = '';
+      confirmBtn.style.display = 'none';
+
+      selectedDate = null;
+
+      // Se não tiver mais comentários, esconde o botão deletar
+      if (userComments[section].length === 0) {
+        deleteBtn.style.display = 'none';
+        const deleteContainer = document.getElementById(`delete_date_container_${section}`);
+        if (deleteContainer) deleteContainer.style.display = 'none';
+      }
+
+    } catch (error) {
+      console.error('Erro ao deletar comentário:', error);
+    }
+  });
+}
 
 
 /*==================== LINK ACTIVE ====================*/
