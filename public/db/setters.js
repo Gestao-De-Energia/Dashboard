@@ -113,7 +113,7 @@ export async function deleteUserCommentByDate(sectionKey, date) {
         let userData = userDoc.data();
         let comments = userData[sectionKey] || [];
 
-        const commentToRemove = comments.find(commentObj => new Date(commentObj.date).toISOString().split("T")[0] === date);
+        const commentToRemove = comments.find(comment => comment.date === date);
 
         if (commentToRemove) {
             await updateDoc(userRef, {
