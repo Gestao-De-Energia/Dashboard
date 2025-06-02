@@ -1278,25 +1278,25 @@ var resetCssClasses = function (activeEl) {
 }
 
 const periodsFotovoltaica = [
-  { id: '#fev1', start: '01 Feb 2004', end: '29 Feb 2004' },
-  { id: '#fev51', start: '01 Feb 2005', end: '03 Feb 2005' },
-  { id: '#jan1', start: '01 Jan 2005', end: '30 Jan 2005' },
-  { id: '#mar1', start: '01 Mar 2004', end: '31 Mar 2004' },
-  { id: '#abr1', start: '01 Apr 2004', end: '30 Apr 2004' },
-  { id: '#mai1', start: '01 May 2004', end: '30 May 2004' },
-  { id: '#jun1', start: '01 Jun 2004', end: '30 Jun 2004' },
-  { id: '#jul1', start: '01 Jul 2004', end: '30 Jul 2004' },
-  { id: '#ago1', start: '01 Aug 2004', end: '30 Aug 2004' },
-  { id: '#set1', start: '01 Sept 2004', end: '30 Sept 2004' },
-  { id: '#out1', start: '01 Oct 2004', end: '30 Oct 2004' },
-  { id: '#nov1', start: '01 Nov 2004', end: '30 Nov 2004' },
-  { id: '#dez1', start: '01 Dec 2004', end: '30 Dec 2004' },
-  { id: '#sem1', start: '01 Feb 2004', end: '30 Jul 2004' },
-  { id: '#sem2', start: '01 Aug 2004', end: '03 Feb 2005' },
-  { id: '#one_year1', start: '01 Feb 2004', end: '03 Feb 2005' },
+  { id: '#fev_f', start: '01 Feb 2004', end: '29 Feb 2004' },
+  { id: '#fev_2005_f', start: '01 Feb 2005', end: '03 Feb 2005' },
+  { id: '#jan_f', start: '01 Jan 2005', end: '30 Jan 2005' },
+  { id: '#mar_f', start: '01 Mar 2004', end: '31 Mar 2004' },
+  { id: '#abr_f', start: '01 Apr 2004', end: '30 Apr 2004' },
+  { id: '#mai_f', start: '01 May 2004', end: '30 May 2004' },
+  { id: '#jun_f', start: '01 Jun 2004', end: '30 Jun 2004' },
+  { id: '#jul_f', start: '01 Jul 2004', end: '30 Jul 2004' },
+  { id: '#ago_f', start: '01 Aug 2004', end: '30 Aug 2004' },
+  { id: '#set_f', start: '01 Sept 2004', end: '30 Sept 2004' },
+  { id: '#out_f', start: '01 Oct 2004', end: '30 Oct 2004' },
+  { id: '#nov_f', start: '01 Nov 2004', end: '30 Nov 2004' },
+  { id: '#dez_f', start: '01 Dec 2004', end: '30 Dec 2004' },
+  { id: '#sem1_f', start: '01 Feb 2004', end: '30 Jul 2004' },
+  { id: '#sem2_f', start: '01 Aug 2004', end: '03 Feb 2005' },
+  { id: '#one_year_f', start: '01 Feb 2004', end: '03 Feb 2005' },
 ];
 
-//funcionalidade de mudar o gráfico de acordo com o botão clicado
+// mudar o gráfico de acordo com o botão clicado
 periodsFotovoltaica.forEach(period => {
   document.querySelector(period.id).addEventListener('click', function (e) {
     resetCssClasses(e);
@@ -1311,25 +1311,25 @@ chartEolica.render();
 
 
 const periodsEolica = [
-  { id: '#fev', start: '01 Feb 2004', end: '29 Feb 2004' },
-  { id: '#fev5', start: '01 Feb 2005', end: '03 Feb 2005' },
-  { id: '#jan', start: '01 Jan 2005', end: '30 Jan 2005' },
-  { id: '#mar', start: '01 Mar 2004', end: '31 Mar 2004' },
-  { id: '#abr', start: '01 Apr 2004', end: '30 Apr 2004' },
-  { id: '#mai', start: '01 May 2004', end: '30 May 2004' },
-  { id: '#jun', start: '01 Jun 2004', end: '30 Jun 2004' },
-  { id: '#jul', start: '01 Jul 2004', end: '30 Jul 2004' },
-  { id: '#ago', start: '01 Aug 2004', end: '30 Aug 2004' },
-  { id: '#set', start: '01 Sept 2004', end: '30 Sept 2004' },
-  { id: '#out', start: '01 Oct 2004', end: '30 Oct 2004' },
-  { id: '#nov', start: '01 Nov 2004', end: '30 Nov 2004' },
-  { id: '#dez', start: '01 Dec 2004', end: '30 Dec 2004' },
-  { id: '#sem_1', start: '01 Feb 2004', end: '30 Jul 2004' },
-  { id: '#sem_2', start: '01 Aug 2004', end: '03 Feb 2005' },
-  { id: '#one_year', start: '01 Feb 2004', end: '03 Feb 2005' },
+  { id: '#fev_e', start: '01 Feb 2004', end: '29 Feb 2004' },
+  { id: '#fev_2005_e', start: '01 Feb 2005', end: '03 Feb 2005' },
+  { id: '#jan_e', start: '01 Jan 2005', end: '30 Jan 2005' },
+  { id: '#mar_e', start: '01 Mar 2004', end: '31 Mar 2004' },
+  { id: '#abr_e', start: '01 Apr 2004', end: '30 Apr 2004' },
+  { id: '#mai_e', start: '01 May 2004', end: '30 May 2004' },
+  { id: '#jun_e', start: '01 Jun 2004', end: '30 Jun 2004' },
+  { id: '#jul_e', start: '01 Jul 2004', end: '30 Jul 2004' },
+  { id: '#ago_e', start: '01 Aug 2004', end: '30 Aug 2004' },
+  { id: '#set_e', start: '01 Sept 2004', end: '30 Sept 2004' },
+  { id: '#out_e', start: '01 Oct 2004', end: '30 Oct 2004' },
+  { id: '#nov_e', start: '01 Nov 2004', end: '30 Nov 2004' },
+  { id: '#dez_e', start: '01 Dec 2004', end: '30 Dec 2004' },
+  { id: '#sem1_e', start: '01 Feb 2004', end: '30 Jul 2004' },
+  { id: '#sem2_e', start: '01 Aug 2004', end: '03 Feb 2005' },
+  { id: '#one_year_e', start: '01 Feb 2004', end: '03 Feb 2005' },
 ];
 
-//funcionalidade de mudar o gráfico de acordo com o botão clicado
+// mudar o gráfico de acordo com o botão clicado
 periodsEolica.forEach(period => {
   document.querySelector(period.id).addEventListener('click', function (e) {
     resetCssClasses(e);
@@ -1344,25 +1344,25 @@ chartEnergiaXDemanda.render();
 
 
 const periodsEnergiaXDemanda = [
-    { id: '#fevd', start: '01 Feb 2004', end: '29 Feb 2004' },
-    { id: '#fev5d', start: '01 Feb 2005', end: '03 Feb 2005' },
-    { id: '#jand', start: '01 Jan 2005', end: '30 Jan 2005' },
-    { id: '#mard', start: '01 Mar 2004', end: '31 Mar 2004' },
-    { id: '#abrd', start: '01 Apr 2004', end: '30 Apr 2004' },
-    { id: '#maid', start: '01 May 2004', end: '30 May 2004' },
-    { id: '#jund', start: '01 Jun 2004', end: '30 Jun 2004' },
-    { id: '#juld', start: '01 Jul 2004', end: '30 Jul 2004' },
-    { id: '#agod', start: '01 Aug 2004', end: '30 Aug 2004' },
-    { id: '#setd', start: '01 Sept 2004', end: '30 Sept 2004' },
-    { id: '#outd', start: '01 Oct 2004', end: '30 Oct 2004' },
-    { id: '#novd', start: '01 Nov 2004', end: '30 Nov 2004' },
-    { id: '#dezd', start: '01 Dec 2004', end: '30 Dec 2004' },
-    { id: '#sem_1d', start: '01 Feb 2004', end: '30 Jul 2004' },
-    { id: '#sem_2d', start: '01 Aug 2004', end: '03 Feb 2005' },
-    { id: '#one_yeard', start: '01 Feb 2004', end: '03 Feb 2005' },
+    { id: '#fev_exd', start: '01 Feb 2004', end: '29 Feb 2004' },
+    { id: '#fev_2005_exd', start: '01 Feb 2005', end: '03 Feb 2005' },
+    { id: '#jan_exd', start: '01 Jan 2005', end: '30 Jan 2005' },
+    { id: '#mar_exd', start: '01 Mar 2004', end: '31 Mar 2004' },
+    { id: '#abr_exd', start: '01 Apr 2004', end: '30 Apr 2004' },
+    { id: '#mai_exd', start: '01 May 2004', end: '30 May 2004' },
+    { id: '#jun_exd', start: '01 Jun 2004', end: '30 Jun 2004' },
+    { id: '#jul_exd', start: '01 Jul 2004', end: '30 Jul 2004' },
+    { id: '#ago_exd', start: '01 Aug 2004', end: '30 Aug 2004' },
+    { id: '#set_exd', start: '01 Sept 2004', end: '30 Sept 2004' },
+    { id: '#out_exd', start: '01 Oct 2004', end: '30 Oct 2004' },
+    { id: '#nov_exd', start: '01 Nov 2004', end: '30 Nov 2004' },
+    { id: '#dez_exd', start: '01 Dec 2004', end: '30 Dec 2004' },
+    { id: '#sem1_exd', start: '01 Feb 2004', end: '30 Jul 2004' },
+    { id: '#sem2_exd', start: '01 Aug 2004', end: '03 Feb 2005' },
+    { id: '#one_year_exd', start: '01 Feb 2004', end: '03 Feb 2005' },
 ];
 
-//funcionalidade de mudar o gráfico de acordo com o botão clicado
+// mudar o gráfico de acordo com o botão clicado
 periodsEnergiaXDemanda.forEach(period => {
     document.querySelector(period.id).addEventListener('click', function (e) {
     resetCssClasses(e);
@@ -1377,25 +1377,25 @@ chartDesempenho.render();
 
 
 const periodsDesempenho = [
-    { id: '#fevde', start: '01 Feb 2004', end: '29 Feb 2004' },
-    { id: '#fev5de', start: '01 Feb 2005', end: '03 Feb 2005' },
-    { id: '#jande', start: '01 Jan 2005', end: '30 Jan 2005' },
-    { id: '#marde', start: '01 Mar 2004', end: '31 Mar 2004' },
-    { id: '#abrde', start: '01 Apr 2004', end: '30 Apr 2004' },
-    { id: '#maide', start: '01 May 2004', end: '30 May 2004' },
-    { id: '#junde', start: '01 Jun 2004', end: '30 Jun 2004' },
-    { id: '#julde', start: '01 Jul 2004', end: '30 Jul 2004' },
-    { id: '#agode', start: '01 Aug 2004', end: '30 Aug 2004' },
-    { id: '#setde', start: '01 Sept 2004', end: '30 Sept 2004' },
-    { id: '#outde', start: '01 Oct 2004', end: '30 Oct 2004' },
-    { id: '#novde', start: '01 Nov 2004', end: '30 Nov 2004' },
-    { id: '#dezde', start: '01 Dec 2004', end: '30 Dec 2004' },
-    { id: '#sem1de', start: '01 Feb 2004', end: '30 Jul 2004' },
-    { id: '#sem2de', start: '01 Aug 2004', end: '03 Feb 2005' },
-    { id: '#one_yearde', start: '01 Feb 2004', end: '03 Feb 2005' },
+    { id: '#fev_des', start: '01 Feb 2004', end: '29 Feb 2004' },
+    { id: '#fev_2005_des', start: '01 Feb 2005', end: '03 Feb 2005' },
+    { id: '#jan_des', start: '01 Jan 2005', end: '30 Jan 2005' },
+    { id: '#mar_des', start: '01 Mar 2004', end: '31 Mar 2004' },
+    { id: '#abr_des', start: '01 Apr 2004', end: '30 Apr 2004' },
+    { id: '#mai_des', start: '01 May 2004', end: '30 May 2004' },
+    { id: '#jun_des', start: '01 Jun 2004', end: '30 Jun 2004' },
+    { id: '#jul_des', start: '01 Jul 2004', end: '30 Jul 2004' },
+    { id: '#ago_des', start: '01 Aug 2004', end: '30 Aug 2004' },
+    { id: '#set_des', start: '01 Sept 2004', end: '30 Sept 2004' },
+    { id: '#out_des', start: '01 Oct 2004', end: '30 Oct 2004' },
+    { id: '#nov_des', start: '01 Nov 2004', end: '30 Nov 2004' },
+    { id: '#dez_des', start: '01 Dec 2004', end: '30 Dec 2004' },
+    { id: '#sem1_des', start: '01 Feb 2004', end: '30 Jul 2004' },
+    { id: '#sem2_des', start: '01 Aug 2004', end: '03 Feb 2005' },
+    { id: '#one_year_des', start: '01 Feb 2004', end: '03 Feb 2005' },
 ];
 
-//funcionalidade de mudar o gráfico de acordo com o botão clicado
+// mudar o gráfico de acordo com o botão clicado
 periodsDesempenho.forEach(period => {
     document.querySelector(period.id).addEventListener('click', function (e) {
     resetCssClasses(e);
@@ -1410,25 +1410,25 @@ chartEnergiaXCompensacao.render();
 
 
 const periodsEnergiaXCompensacao = [
-    { id: '#fevda', start: '01 Feb 2004', end: '29 Feb 2004' },
-    { id: '#fev5da', start: '01 Feb 2005', end: '03 Feb 2005' },
-    { id: '#janda', start: '01 Jan 2005', end: '30 Jan 2005' },
-    { id: '#marda', start: '01 Mar 2004', end: '31 Mar 2004' },
-    { id: '#abrda', start: '01 Apr 2004', end: '30 Apr 2004' },
-    { id: '#maida', start: '01 May 2004', end: '30 May 2004' },
-    { id: '#junda', start: '01 Jun 2004', end: '30 Jun 2004' },
-    { id: '#julda', start: '01 Jul 2004', end: '30 Jul 2004' },
-    { id: '#agoda', start: '01 Aug 2004', end: '30 Aug 2004' },
-    { id: '#setda', start: '01 Sept 2004', end: '30 Sept 2004' },
-    { id: '#outda', start: '01 Oct 2004', end: '30 Oct 2004' },
-    { id: '#novda', start: '01 Nov 2004', end: '30 Nov 2004' },
-    { id: '#dezda', start: '01 Dec 2004', end: '30 Dec 2004' },
-    { id: '#sem1da', start: '01 Feb 2004', end: '30 Jul 2004' },
-    { id: '#sem2da', start: '01 Aug 2004', end: '03 Feb 2005' },
-    { id: '#one_yearda', start: '01 Feb 2004', end: '03 Feb 2005' },
+    { id: '#fev_exc', start: '01 Feb 2004', end: '29 Feb 2004' },
+    { id: '#fev_2005_exc', start: '01 Feb 2005', end: '03 Feb 2005' },
+    { id: '#jan_exc', start: '01 Jan 2005', end: '30 Jan 2005' },
+    { id: '#mar_exc', start: '01 Mar 2004', end: '31 Mar 2004' },
+    { id: '#abr_exc', start: '01 Apr 2004', end: '30 Apr 2004' },
+    { id: '#mai_exc', start: '01 May 2004', end: '30 May 2004' },
+    { id: '#jun_exc', start: '01 Jun 2004', end: '30 Jun 2004' },
+    { id: '#jul_exc', start: '01 Jul 2004', end: '30 Jul 2004' },
+    { id: '#ago_exc', start: '01 Aug 2004', end: '30 Aug 2004' },
+    { id: '#set_exc', start: '01 Sept 2004', end: '30 Sept 2004' },
+    { id: '#out_exc', start: '01 Oct 2004', end: '30 Oct 2004' },
+    { id: '#nov_exc', start: '01 Nov 2004', end: '30 Nov 2004' },
+    { id: '#dez_exc', start: '01 Dec 2004', end: '30 Dec 2004' },
+    { id: '#sem1_exc', start: '01 Feb 2004', end: '30 Jul 2004' },
+    { id: '#sem2_exc', start: '01 Aug 2004', end: '03 Feb 2005' },
+    { id: '#one_year_exc', start: '01 Feb 2004', end: '03 Feb 2005' },
 ];
 
-//funcionalidade de mudar o gráfico de acordo com o botão clicado
+// mudar o gráfico de acordo com o botão clicado
 periodsEnergiaXCompensacao.forEach(period => {
     document.querySelector(period.id).addEventListener('click', function (e) {
     resetCssClasses(e);
@@ -1443,25 +1443,25 @@ chartBateria.render();
 
 
 const periodsBateria = [
-    { id: '#fevb', start: '01 Feb 2004', end: '29 Feb 2004' },
-    { id: '#fev5b', start: '01 Feb 2005', end: '03 Feb 2005' },
-    { id: '#janb', start: '01 Jan 2005', end: '30 Jan 2005' },
-    { id: '#marb', start: '01 Mar 2004', end: '31 Mar 2004' },
-    { id: '#abrb', start: '01 Apr 2004', end: '30 Apr 2004' },
-    { id: '#maib', start: '01 May 2004', end: '30 May 2004' },
-    { id: '#junb', start: '01 Jun 2004', end: '30 Jun 2004' },
-    { id: '#julb', start: '01 Jul 2004', end: '30 Jul 2004' },
-    { id: '#agob', start: '01 Aug 2004', end: '30 Aug 2004' },
-    { id: '#setb', start: '01 Sept 2004', end: '30 Sept 2004' },
-    { id: '#outb', start: '01 Oct 2004', end: '30 Oct 2004' },
-    { id: '#novb', start: '01 Nov 2004', end: '30 Nov 2004' },
-    { id: '#dezb', start: '01 Dec 2004', end: '30 Dec 2004' },
-    { id: '#semb1', start: '01 Feb 2004', end: '30 Jul 2004' },
-    { id: '#semb2', start: '01 Aug 2004', end: '03 Feb 2005' },
-    { id: '#one_yearb', start: '01 Feb 2004', end: '03 Feb 2005' },
+    { id: '#fev_bat', start: '01 Feb 2004', end: '29 Feb 2004' },
+    { id: '#fev_2005_bat', start: '01 Feb 2005', end: '03 Feb 2005' },
+    { id: '#jan_bat', start: '01 Jan 2005', end: '30 Jan 2005' },
+    { id: '#mar_bat', start: '01 Mar 2004', end: '31 Mar 2004' },
+    { id: '#abr_bat', start: '01 Apr 2004', end: '30 Apr 2004' },
+    { id: '#mai_bat', start: '01 May 2004', end: '30 May 2004' },
+    { id: '#jun_bat', start: '01 Jun 2004', end: '30 Jun 2004' },
+    { id: '#jul_bat', start: '01 Jul 2004', end: '30 Jul 2004' },
+    { id: '#ago_bat', start: '01 Aug 2004', end: '30 Aug 2004' },
+    { id: '#set_bat', start: '01 Sept 2004', end: '30 Sept 2004' },
+    { id: '#out_bat', start: '01 Oct 2004', end: '30 Oct 2004' },
+    { id: '#nov_bat', start: '01 Nov 2004', end: '30 Nov 2004' },
+    { id: '#dez_bat', start: '01 Dec 2004', end: '30 Dec 2004' },
+    { id: '#sem1_bat', start: '01 Feb 2004', end: '30 Jul 2004' },
+    { id: '#sem2_bat', start: '01 Aug 2004', end: '03 Feb 2005' },
+    { id: '#one_year_bat', start: '01 Feb 2004', end: '03 Feb 2005' },
 ];
 
-//funcionalidade de mudar o gráfico de acordo com o botão clicado
+// mudar o gráfico de acordo com o botão clicado
 periodsBateria.forEach(period => {
     document.querySelector(period.id).addEventListener('click', function (e) {
     resetCssClasses(e);
@@ -1476,25 +1476,25 @@ chartSTSolar.render();
 
 
 const periodsSTSolar = [
-  { id: '#fevv', start: '01 Feb 2004', end: '29 Feb 2004' },
-  { id: '#fev5v', start: '01 Feb 2005', end: '03 Feb 2005' },
-  { id: '#janv', start: '01 Jan 2005', end: '30 Jan 2005' },
-  { id: '#marv', start: '01 Mar 2004', end: '31 Mar 2004' },
-  { id: '#abrv', start: '01 Apr 2004', end: '30 Apr 2004' },
-  { id: '#maiv', start: '01 May 2004', end: '30 May 2004' },
-  { id: '#junv', start: '01 Jun 2004', end: '30 Jun 2004' },
-  { id: '#julv', start: '01 Jul 2004', end: '30 Jul 2004' },
-  { id: '#agov', start: '01 Aug 2004', end: '30 Aug 2004' },
-  { id: '#setv', start: '01 Sept 2004', end: '30 Sept 2004' },
-  { id: '#outv', start: '01 Oct 2004', end: '30 Oct 2004' },
-  { id: '#novv', start: '01 Nov 2004', end: '30 Nov 2004' },
-  { id: '#dezv', start: '01 Dec 2004', end: '30 Dec 2004' },
-  { id: '#semv1', start: '01 Feb 2004', end: '30 Jul 2004' },
-  { id: '#semv2', start: '01 Aug 2004', end: '03 Feb 2005' },
-  { id: '#one_yearv', start: '01 Feb 2004', end: '03 Feb 2005' },
+  { id: '#fev_sts', start: '01 Feb 2004', end: '29 Feb 2004' },
+  { id: '#fev_2005_sts', start: '01 Feb 2005', end: '03 Feb 2005' },
+  { id: '#jan_sts', start: '01 Jan 2005', end: '30 Jan 2005' },
+  { id: '#mar_sts', start: '01 Mar 2004', end: '31 Mar 2004' },
+  { id: '#abr_sts', start: '01 Apr 2004', end: '30 Apr 2004' },
+  { id: '#mai_sts', start: '01 May 2004', end: '30 May 2004' },
+  { id: '#jun_sts', start: '01 Jun 2004', end: '30 Jun 2004' },
+  { id: '#jul_sts', start: '01 Jul 2004', end: '30 Jul 2004' },
+  { id: '#ago_sts', start: '01 Aug 2004', end: '30 Aug 2004' },
+  { id: '#set_sts', start: '01 Sept 2004', end: '30 Sept 2004' },
+  { id: '#out_sts', start: '01 Oct 2004', end: '30 Oct 2004' },
+  { id: '#nov_sts', start: '01 Nov 2004', end: '30 Nov 2004' },
+  { id: '#dez_sts', start: '01 Dec 2004', end: '30 Dec 2004' },
+  { id: '#sem1_sts', start: '01 Feb 2004', end: '30 Jul 2004' },
+  { id: '#sem2_sts', start: '01 Aug 2004', end: '03 Feb 2005' },
+  { id: '#one_year_sts', start: '01 Feb 2004', end: '03 Feb 2005' },
 ];
 
-//funcionalidade de mudar o gráfico de acordo com o botão clicado
+// mudar o gráfico de acordo com o botão clicado
 periodsSTSolar.forEach(period => {
   document.querySelector(period.id).addEventListener('click', function (e) {
     resetCssClasses(e);
@@ -1509,25 +1509,25 @@ chartSTVento.render();
 
 
 const periodsSTVento = [
-    { id: '#fevs', start: '01 Feb 2004', end: '29 Feb 2004' },
-    { id: '#fev5s', start: '01 Feb 2005', end: '03 Feb 2005' },
-    { id: '#jans', start: '01 Jan 2005', end: '30 Jan 2005' },
-    { id: '#mars', start: '01 Mar 2004', end: '31 Mar 2004' },
-    { id: '#abrs', start: '01 Apr 2004', end: '30 Apr 2004' },
-    { id: '#mais', start: '01 May 2004', end: '30 May 2004' },
-    { id: '#juns', start: '01 Jun 2004', end: '30 Jun 2004' },
-    { id: '#juls', start: '01 Jul 2004', end: '30 Jul 2004' },
-    { id: '#agos', start: '01 Aug 2004', end: '30 Aug 2004' },
-    { id: '#sets', start: '01 Sept 2004', end: '30 Sept 2004' },
-    { id: '#outs', start: '01 Oct 2004', end: '30 Oct 2004' },
-    { id: '#novs', start: '01 Nov 2004', end: '30 Nov 2004' },
-    { id: '#dezs', start: '01 Dec 2004', end: '30 Dec 2004' },
-    { id: '#sems1', start: '01 Feb 2004', end: '30 Jul 2004' },
-    { id: '#sems2', start: '01 Aug 2004', end: '03 Feb 2005' },
-    { id: '#one_years', start: '01 Feb 2004', end: '03 Feb 2005' },
+    { id: '#fev_stv', start: '01 Feb 2004', end: '29 Feb 2004' },
+    { id: '#fev_2005_stv', start: '01 Feb 2005', end: '03 Feb 2005' },
+    { id: '#jan_stv', start: '01 Jan 2005', end: '30 Jan 2005' },
+    { id: '#mar_stv', start: '01 Mar 2004', end: '31 Mar 2004' },
+    { id: '#abr_stv', start: '01 Apr 2004', end: '30 Apr 2004' },
+    { id: '#mai_stv', start: '01 May 2004', end: '30 May 2004' },
+    { id: '#jun_stv', start: '01 Jun 2004', end: '30 Jun 2004' },
+    { id: '#jul_stv', start: '01 Jul 2004', end: '30 Jul 2004' },
+    { id: '#ago_stv', start: '01 Aug 2004', end: '30 Aug 2004' },
+    { id: '#set_stv', start: '01 Sept 2004', end: '30 Sept 2004' },
+    { id: '#out_stv', start: '01 Oct 2004', end: '30 Oct 2004' },
+    { id: '#nov_stv', start: '01 Nov 2004', end: '30 Nov 2004' },
+    { id: '#dez_stv', start: '01 Dec 2004', end: '30 Dec 2004' },
+    { id: '#sem1_stv', start: '01 Feb 2004', end: '30 Jul 2004' },
+    { id: '#sem2_stv', start: '01 Aug 2004', end: '03 Feb 2005' },
+    { id: '#one_year_stv', start: '01 Feb 2004', end: '03 Feb 2005' },
 ];
 
-//funcionalidade de mudar o gráfico de acordo com o botão clicado
+// mudar o gráfico de acordo com o botão clicado
 periodsSTVento.forEach(period => {
     document.querySelector(period.id).addEventListener('click', function (e) {
     resetCssClasses(e);
