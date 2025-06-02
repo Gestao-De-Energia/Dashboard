@@ -11,7 +11,8 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!--========== CSS ==========-->
-  <link rel="stylesheet" href="../../../css/styles.css">
+  <link rel="stylesheet" href="../../../styles.css"> <!-- Geral -->
+  <link rel="stylesheet" href="../styles.css"> <!-- Da página -->
 
   <!--========== Charts ==========-->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -32,7 +33,8 @@
         <div class="user-container">
             <img id="profile-img" alt="Perfil" class="header-img">
             <div class="dropdown-menu">
-              <!--<a href="#" id="edit-profile">Editar perfil</a>-->
+              <!-- Para a funcionalidade de editar dados do perfil: -->
+              <!-- <a href="#" id="edit-profile">Editar perfil</a> -->
               <a href="#" id="logout">Desconectar-se</a>
             </div>
             <p class="user-name"></p>
@@ -51,7 +53,7 @@
         </a>
         <div class="nav-list">
           <div class="nav-items">
-            <a href="home.html" class="nav-link active">
+            <a href="../../home/home.html" class="nav-link active">
               <i class='fa-solid fa-house'></i>
               <span class="nav-name">Home</span>
             </a>
@@ -63,11 +65,11 @@
               </a>
               <div class="nav-dropdown-collapse">
                 <div class="nav-dropdown-content">
-                  <a href="#chart-EneF" class="nav-dropdown-item">Produção de Energia Fotovoltáica</a>
-                  <a href="#chart-EneE" class="nav-dropdown-item">Produção de Energia Eólica</a>
-                  <a href="#chartD" class="nav-dropdown-item">Produção x Demanda</a>
-                  <a href="#chartDe" class="nav-dropdown-item">Desempenho</a>
-                  <a href="#chartN" class="nav-dropdown-item">Produção x Compensação</a>
+                  <a href="#chartFotovoltaica" class="nav-dropdown-item">Produção de Energia Fotovoltáica</a>
+                  <a href="#chartEolica" class="nav-dropdown-item">Produção de Energia Eólica</a>
+                  <a href="#chartEnergiaXDemanda" class="nav-dropdown-item">Produção x Demanda</a>
+                  <a href="#chartDesempenho" class="nav-dropdown-item">Desempenho</a>
+                  <a href="#chartEnergiaXCompensacao" class="nav-dropdown-item">Produção x Compensação</a>
                 </div>
               </div>
             </div>
@@ -79,8 +81,7 @@
               </a>
               <div class="nav-dropdown-collapse">
                 <div class="nav-dropdown-content">
-                  <a href="#chartB" class="nav-dropdown-item">Quantidade de carga e descarga</a>
-                  <a href="#chart" class="nav-dropdown-item">Comportamento da bateria</a>
+                  <a href="#chartBateria" class="nav-dropdown-item">Quantidade de carga e descarga</a>
                 </div>
               </div>
             </div>
@@ -92,8 +93,8 @@
               </a>
               <div class="nav-dropdown-collapse">
                 <div class="nav-dropdown-content">
-                  <a href="#chart-timeline" class="nav-dropdown-item">Irradiação solar anual</a>
-                  <a href="#chart-vento" class="nav-dropdown-item">Vento anual</a>
+                  <a href="#chartSTSolar" class="nav-dropdown-item">Irradiação solar anual</a>
+                  <a href="#chartSTVento" class="nav-dropdown-item">Vento anual</a>
                 </div>
               </div>
             </div>
@@ -103,6 +104,9 @@
     </nav>
   </div>
   <!--========== CONTENTS ==========-->
+
+  <!------------ MÉTRICAS ------------>
+  
   <main>
     <section>
       <div class="dashboard-metrica">
@@ -188,7 +192,6 @@
               <button class="dropdown_item" data-value="20">20</button>
             </div>
           </div>
-      
           <!-- Dropdown para período -->
           <div class="dropdown_sim">
             <button class="config_button" id="period_button">Período: 12 meses ▼</button>
@@ -202,12 +205,13 @@
               <button class="dropdown_item" data-value="12 meses">12 meses</button>
             </div>
           </div>
-      
           <!-- Botão de confirmar -->
           <button class="confirm_button" id="confirm_button">Confirmar</button>
         </div>
       </div>
-      <!-- SEÇÃO ENERGIA -->
+
+      <!------------ SEÇÃO ENERGIA ------------>
+
       <h2 style="padding-top: 80px;" id="Energia">Energia</h2>
       <!-- FOTOVOLTAICA -->
       <div class="chart" id="chartFotovoltaica" style="padding-top: 50px"></div>
@@ -216,30 +220,30 @@
         <div class="dropdown">
           <button class="meses">Mês</button>
           <div class="mes">
-            <button id="jan1" class="lista">Janeiro(2005)</button>
-            <button id="fev1" class="lista">Fevereiro(2004)</button>
-            <button id="fev51" class="lista">Fevereiro(2005)</button>
-            <button id="mar1" class="lista">Março(2004)</button>
-            <button id="abr1" class="lista">Abril(2004)</button>
-            <button id="mai1" class="lista">Maio(2004)</button>
-            <button id="jun1" class="lista">Junho(2004)</button>
-            <button id="jul1" class="lista">Julho(2004)</button>
-            <button id="ago1" class="lista">Agosto(2004)</button>
-            <button id="set1" class="lista">Setembro(2004)</button>
-            <button id="out1" class="lista">Outubro(2004)</button>
-            <button id="nov1" class="lista">Novembro(2004)</button>
-            <button id="dez1" class="lista">Dezembro(2004)</button>
+            <button id="jan_f" class="lista">Janeiro(2005)</button>
+            <button id="fev_f" class="lista">Fevereiro(2004)</button>
+            <button id="fev_2005_f" class="lista">Fevereiro(2005)</button>
+            <button id="mar_f" class="lista">Março(2004)</button>
+            <button id="abr_f" class="lista">Abril(2004)</button>
+            <button id="mai_f" class="lista">Maio(2004)</button>
+            <button id="jun_f" class="lista">Junho(2004)</button>
+            <button id="jul_f" class="lista">Julho(2004)</button>
+            <button id="ago_f" class="lista">Agosto(2004)</button>
+            <button id="set_f" class="lista">Setembro(2004)</button>
+            <button id="out_f" class="lista">Outubro(2004)</button>
+            <button id="nov_f" class="lista">Novembro(2004)</button>
+            <button id="dez_f" class="lista">Dezembro(2004)</button>
           </div>
         </div>
         <div class="dropdown">
-          <button id="six_months1" class="meses">6M</button>
+          <button class="meses">6M</button>
           <div class="mes">
-            <button id="sem1" class="lista">1 Semestre</button>
-            <button id="sem2" class="lista">2 Semestre</button>
+            <button id="sem1_f" class="lista">1 Semestre</button>
+            <button id="sem2_f" class="lista">2 Semestre</button>
           </div>
         </div>
         <div class="botao_1ano">
-          <button id="one_year1" class="botao">1A</button>
+          <button id="one_year_f" class="botao">1A</button>
         </div>
         <!-- COMENTARIO POR DATA -->
         <div class="date_comment">
@@ -278,30 +282,30 @@
         <div class="dropdown">
           <button class="meses">Mês</button>
           <div class="mes">
-            <button id="jan" class="lista">Janeiro(2005)</button>
-            <button id="fev" class="lista">Fevereiro(2004)</button>
-            <button id="fev5" class="lista">Fevereiro(2005)</button>
-            <button id="mar" class="lista">Março(2004)</button>
-            <button id="abr" class="lista">Abril(2004)</button>
-            <button id="mai" class="lista">Maio(2004)</button>
-            <button id="jun" class="lista">Junho(2004)</button>
-            <button id="jul" class="lista">Julho(2004)</button>
-            <button id="ago" class="lista">Agosto(2004)</button>
-            <button id="set" class="lista">Setembro(2004)</button>
-            <button id="out" class="lista">Outubro(2004)</button>
-            <button id="nov" class="lista">Novembro(2004)</button>
-            <button id="dez" class="lista">Dezembro(2004)</button>
+            <button id="jan_e" class="lista">Janeiro(2005)</button>
+            <button id="fev_e" class="lista">Fevereiro(2004)</button>
+            <button id="fev_2005_e" class="lista">Fevereiro(2005)</button>
+            <button id="mar_e" class="lista">Março(2004)</button>
+            <button id="abr_e" class="lista">Abril(2004)</button>
+            <button id="mai_e" class="lista">Maio(2004)</button>
+            <button id="jun_e" class="lista">Junho(2004)</button>
+            <button id="jul_e" class="lista">Julho(2004)</button>
+            <button id="ago_e" class="lista">Agosto(2004)</button>
+            <button id="set_e" class="lista">Setembro(2004)</button>
+            <button id="out_e" class="lista">Outubro(2004)</button>
+            <button id="nov_e" class="lista">Novembro(2004)</button>
+            <button id="dez_e" class="lista">Dezembro(2004)</button>
           </div>
         </div>
         <div class="dropdown">
-          <button id="six_months" class="meses">6M</button>
+          <button class="meses">6M</button>
           <div class="mes">
-            <button id="sem_1" class="lista">1 Semestre</button>
-            <button id="sem_2" class="lista">2 Semestre</button>
+            <button id="sem1_e" class="lista">1 Semestre</button>
+            <button id="sem2_e" class="lista">2 Semestre</button>
           </div>
         </div>
         <div class="botao_1ano">
-          <button id="one_year" class="botao">1A</button>
+          <button id="one_year_e" class="botao">1A</button>
         </div>
         <!-- COMENTARIO POR DATA-->
         <div class="date_comment">
@@ -339,30 +343,30 @@
         <div class="dropdown">
           <button class="meses">Mês</button>
           <div class="mes">
-            <button id="jand" class="lista">Janeiro(2005)</button>
-            <button id="fevd" class="lista">Fevereiro(2004)</button>
-            <button id="fev5d" class="lista">Fevereiro(2005)</button>
-            <button id="mard" class="lista">Março(2004)</button>
-            <button id="abrd" class="lista">Abril(2004)</button>
-            <button id="maid" class="lista">Maio(2004)</button>
-            <button id="jund" class="lista">Junho(2004)</button>
-            <button id="juld" class="lista">Julho(2004)</button>
-            <button id="agod" class="lista">Agosto(2004)</button>
-            <button id="setd" class="lista">Setembro(2004)</button>
-            <button id="outd" class="lista">Outubro(2004)</button>
-            <button id="novd" class="lista">Novembro(2004)</button>
-            <button id="dezd" class="lista">Dezembro(2004)</button>
+            <button id="jan_exd" class="lista">Janeiro(2005)</button>
+            <button id="fev_exd" class="lista">Fevereiro(2004)</button>
+            <button id="fev_2005_exd" class="lista">Fevereiro(2005)</button>
+            <button id="mar_exd" class="lista">Março(2004)</button>
+            <button id="abr_exd" class="lista">Abril(2004)</button>
+            <button id="mai_exd" class="lista">Maio(2004)</button>
+            <button id="jun_exd" class="lista">Junho(2004)</button>
+            <button id="jul_exd" class="lista">Julho(2004)</button>
+            <button id="ago_exd" class="lista">Agosto(2004)</button>
+            <button id="set_exd" class="lista">Setembro(2004)</button>
+            <button id="out_exd" class="lista">Outubro(2004)</button>
+            <button id="nov_exd" class="lista">Novembro(2004)</button>
+            <button id="dez_exd" class="lista">Dezembro(2004)</button>
           </div>
         </div>
         <div class="dropdown">
-          <button id="six_monthsd" class="meses">6M</button>
+          <button class="meses">6M</button>
           <div class="mes">
-            <button id="sem_1d" class="lista">1 Semestre</button>
-            <button id="sem_2d" class="lista">2 Semestre</button>
+            <button id="sem1_exd" class="lista">1 Semestre</button>
+            <button id="sem2_exd" class="lista">2 Semestre</button>
           </div>
         </div>
         <div class="botao_1ano">
-          <button id="one_yeard" class="botao">1A</button>
+          <button id="one_year_exd" class="botao">1A</button>
         </div>
         <!-- COMENTARIO POR DATA -->
         <div class="date_comment">
@@ -401,30 +405,30 @@
         <div class="dropdown">
           <button class="meses">Mês</button>
           <div class="mes">
-            <button id="jande" class="lista">Janeiro(2005)</button>
-            <button id="fevde" class="lista">Fevereiro(2004)</button>
-            <button id="fev5de" class="lista">Fevereiro(2005)</button>
-            <button id="marde" class="lista">Março(2004)</button>
-            <button id="abrde" class="lista">Abril(2004)</button>
-            <button id="maide" class="lista">Maio(2004)</button>
-            <button id="junde" class="lista">Junho(2004)</button>
-            <button id="julde" class="lista">Julho(2004)</button>
-            <button id="agode" class="lista">Agosto(2004)</button>
-            <button id="setde" class="lista">Setembro(2004)</button>
-            <button id="outde" class="lista">Outubro(2004)</button>
-            <button id="novde" class="lista">Novembro(2004)</button>
-            <button id="dezde" class="lista">Dezembro(2004)</button>
+            <button id="jan_des" class="lista">Janeiro(2005)</button>
+            <button id="fev_des" class="lista">Fevereiro(2004)</button>
+            <button id="fev_2005_des" class="lista">Fevereiro(2005)</button>
+            <button id="mar_des" class="lista">Março(2004)</button>
+            <button id="abr_des" class="lista">Abril(2004)</button>
+            <button id="mai_des" class="lista">Maio(2004)</button>
+            <button id="jun_des" class="lista">Junho(2004)</button>
+            <button id="jul_des" class="lista">Julho(2004)</button>
+            <button id="ago_des" class="lista">Agosto(2004)</button>
+            <button id="set_des" class="lista">Setembro(2004)</button>
+            <button id="out_des" class="lista">Outubro(2004)</button>
+            <button id="nov_des" class="lista">Novembro(2004)</button>
+            <button id="dez_des" class="lista">Dezembro(2004)</button>
           </div>
         </div>
         <div class="dropdown">
           <button class="meses">6M</button>
           <div class="mes">
-            <button id="sem1de" class="lista">1 Semestre</button>
-            <button id="sem2de" class="lista">2 Semestre</button>
+            <button id="sem1_des" class="lista">1 Semestre</button>
+            <button id="sem2_des" class="lista">2 Semestre</button>
           </div>
         </div>
         <div class="botao_1ano">
-          <button id="one_yearde" class="botao">1A</button>
+          <button id="one_year_des" class="botao">1A</button>
         </div>
         <!-- COMENTARIO POR DATA -->
         <div class="date_comment">
@@ -463,30 +467,30 @@
         <div class="dropdown">
           <button class="meses">Mês</button>
           <div class="mes">
-            <button id="janda" class="lista">Janeiro(2005)</button>
-            <button id="fevda" class="lista">Fevereiro(2004)</button>
-            <button id="fev5da" class="lista">Fevereiro(2005)</button>
-            <button id="marda" class="lista">Março(2004)</button>
-            <button id="abrda" class="lista">Abril(2004)</button>
-            <button id="maida" class="lista">Maio(2004)</button>
-            <button id="junda" class="lista">Junho(2004)</button>
-            <button id="julda" class="lista">Julho(2004)</button>
-            <button id="agoda" class="lista">Agosto(2004)</button>
-            <button id="setda" class="lista">Setembro(2004)</button>
-            <button id="outda" class="lista">Outubro(2004)</button>
-            <button id="novda" class="lista">Novembro(2004)</button>
-            <button id="dezda" class="lista">Dezembro(2004)</button>
+            <button id="jan_exc" class="lista">Janeiro(2005)</button>
+            <button id="fev_exc" class="lista">Fevereiro(2004)</button>
+            <button id="fev_2005_exc" class="lista">Fevereiro(2005)</button>
+            <button id="mar_exc" class="lista">Março(2004)</button>
+            <button id="abr_exc" class="lista">Abril(2004)</button>
+            <button id="mai_exc" class="lista">Maio(2004)</button>
+            <button id="jun_exc" class="lista">Junho(2004)</button>
+            <button id="jul_exc" class="lista">Julho(2004)</button>
+            <button id="ago_exc" class="lista">Agosto(2004)</button>
+            <button id="set_exc" class="lista">Setembro(2004)</button>
+            <button id="out_exc" class="lista">Outubro(2004)</button>
+            <button id="nov_exc" class="lista">Novembro(2004)</button>
+            <button id="dez_exc" class="lista">Dezembro(2004)</button>
           </div>
         </div>
         <div class="dropdown">
           <button class="meses">6M</button>
           <div class="mes">
-            <button id="sem1da" class="lista">1 Semestre</button>
-            <button id="sem2da" class="lista">2 Semestre</button>
+            <button id="sem1_exc" class="lista">1 Semestre</button>
+            <button id="sem2_exc" class="lista">2 Semestre</button>
           </div>
         </div>
         <div class="botao_1ano">
-          <button id="one_yearda" class="botao">1A</button>
+          <button id="one_year_exc" class="botao">1A</button>
         </div>
         <!-- COMENTARIO POR DATA -->
         <div class="date_comment">
@@ -519,7 +523,9 @@
           </div>
         </div>
       </div>
-      <!-- SEÇÃO BATERIA -->
+
+      <!------------ SEÇÃO BATERIA ------------>
+
       <h2 style="padding-top: 100px;" id="Bateria">Bateria</h2>
       <!-- BATERIA -->
       <div class="chart" id="chartBateria" style="padding-top: 50px"></div>
@@ -528,30 +534,30 @@
         <div class="dropdown">
           <button class="meses">Mês</button>
           <div class="mes">
-            <button id="janb" class="lista">Janeiro(2005)</button>
-            <button id="fevb" class="lista">Fevereiro(2004)</button>
-            <button id="fev5b" class="lista">Fevereiro(2005)</button>
-            <button id="marb" class="lista">Março(2004)</button>
-            <button id="abrb" class="lista">Abril(2004)</button>
-            <button id="maib" class="lista">Maio(2004)</button>
-            <button id="junb" class="lista">Junho(2004)</button>
-            <button id="julb" class="lista">Julho(2004)</button>
-            <button id="agob" class="lista">Agosto(2004)</button>
-            <button id="setb" class="lista">Setembro(2004)</button>
-            <button id="outb" class="lista">Outubro(2004)</button>
-            <button id="novb" class="lista">Novembro(2004)</button>
-            <button id="dezb" class="lista">Dezembro(2004)</button>
+            <button id="jan_bat" class="lista">Janeiro(2005)</button>
+            <button id="fev_bat" class="lista">Fevereiro(2004)</button>
+            <button id="fev_2005_bat" class="lista">Fevereiro(2005)</button>
+            <button id="mar_bat" class="lista">Março(2004)</button>
+            <button id="abr_bat" class="lista">Abril(2004)</button>
+            <button id="mai_bat" class="lista">Maio(2004)</button>
+            <button id="jun_bat" class="lista">Junho(2004)</button>
+            <button id="jul_bat" class="lista">Julho(2004)</button>
+            <button id="ago_bat" class="lista">Agosto(2004)</button>
+            <button id="set_bat" class="lista">Setembro(2004)</button>
+            <button id="out_bat" class="lista">Outubro(2004)</button>
+            <button id="nov_bat" class="lista">Novembro(2004)</button>
+            <button id="dez_bat" class="lista">Dezembro(2004)</button>
           </div>
         </div>
         <div class="dropdown">
           <button class="meses">6M</button>
           <div class="mes">
-            <button id="semb1" class="lista">1 Semestre</button>
-            <button id="semb2" class="lista">2 Semestre</button>
+            <button id="sem1_bat" class="lista">1 Semestre</button>
+            <button id="sem2_bat" class="lista">2 Semestre</button>
           </div>
         </div>
         <div class="botao_1ano">
-          <button id="one_yearb" class="botao">1A</button>
+          <button id="one_year_bat" class="botao">1A</button>
         </div>
         <!-- COMENTARIO POR DATA -->
         <div class="date_comment">
@@ -582,41 +588,42 @@
           </div>
         </div>
       </div>
-      <!-- SEÇAO SERIE TEMPORAL-->
+
+      <!------------ SEÇAO SERIE TEMPORAL ------------>
+
       <div class="chart" id="chart"></div>
       <h2 style="padding-top: 100px;" id="SerieTemp">Série temporal</h2>
       <!-- SERIE TEMPORAL SOLAR -->
-      <!-- padding para separar o titulo da seçao do titulo do grafico -->
       <div class="chart" id="chartSTSolar" style="padding-top: 50px;"></div>
       <p class="loading_chart">Carregando gráfico...</p>
       <div class="btn_container">
         <div class="dropdown">
           <button class="meses">Mês</button>
           <div class="mes">
-            <button id="janv" class="lista">Janeiro(2005)</button>
-            <button id="fevv" class="lista">Fevereiro(2004)</button>
-            <button id="fev5v" class="lista">Fevereiro(2005)</button>
-            <button id="marv" class="lista">Março(2004)</button>
-            <button id="abrv" class="lista">Abril(2004)</button>
-            <button id="maiv" class="lista">Maio(2004)</button>
-            <button id="junv" class="lista">Junho(2004)</button>
-            <button id="julv" class="lista">Julho(2004)</button>
-            <button id="agov" class="lista">Agosto(2004)</button>
-            <button id="setv" class="lista">Setembro(2004)</button>
-            <button id="outv" class="lista">Outubro(2004)</button>
-            <button id="novv" class="lista">Novembro(2004)</button>
-            <button id="dezv" class="lista">Dezembro(2004)</button>
+            <button id="jan_sts" class="lista">Janeiro(2005)</button>
+            <button id="fev_sts" class="lista">Fevereiro(2004)</button>
+            <button id="fev_2005_sts" class="lista">Fevereiro(2005)</button>
+            <button id="mar_sts" class="lista">Março(2004)</button>
+            <button id="abr_sts" class="lista">Abril(2004)</button>
+            <button id="mai_sts" class="lista">Maio(2004)</button>
+            <button id="jun_sts" class="lista">Junho(2004)</button>
+            <button id="jul_sts" class="lista">Julho(2004)</button>
+            <button id="ago_sts" class="lista">Agosto(2004)</button>
+            <button id="set_sts" class="lista">Setembro(2004)</button>
+            <button id="out_sts" class="lista">Outubro(2004)</button>
+            <button id="nov_sts" class="lista">Novembro(2004)</button>
+            <button id="dez_sts" class="lista">Dezembro(2004)</button>
           </div>
         </div>
         <div class="dropdown">
           <button class="meses">6M</button>
           <div class="mes">
-            <button id="semv1" class="lista">1 Semestre</button>
-            <button id="semv2" class="lista">2 Semestre</button>
+            <button id="sem1_sts" class="lista">1 Semestre</button>
+            <button id="sem2_sts" class="lista">2 Semestre</button>
           </div>
         </div>
         <div class="botao_1ano">
-          <button id="one_yearv" class="botao">1A</button>
+          <button id="one_year_sts" class="botao">1A</button>
         </div>
         <!-- COMENTARIO POR DATA -->
         <div class="date_comment">
@@ -655,30 +662,30 @@
         <div class="dropdown">
           <button class="meses">Mês</button>
           <div class="mes">
-            <button id="jans" class="lista">Janeiro(2005)</button>
-            <button id="fevs" class="lista">Fevereiro(2004)</button>
-            <button id="fev5s" class="lista">Fevereiro(2005)</button>
-            <button id="mars" class="lista">Março(2004)</button>
-            <button id="abrs" class="lista">Abril(2004)</button>
-            <button id="mais" class="lista">Maio(2004)</button>
-            <button id="juns" class="lista">Junho(2004)</button>
-            <button id="juls" class="lista">Julho(2004)</button>
-            <button id="agos" class="lista">Agosto(2004)</button>
-            <button id="sets" class="lista">Setembro(2004)</button>
-            <button id="outs" class="lista">Outubro(2004)</button>
-            <button id="novs" class="lista">Novembro(2004)</button>
-            <button id="dezs" class="lista">Dezembro(2004)</button>
+            <button id="jan_stv" class="lista">Janeiro(2005)</button>
+            <button id="fev_stv" class="lista">Fevereiro(2004)</button>
+            <button id="fev_2005_stv" class="lista">Fevereiro(2005)</button>
+            <button id="mar_stv" class="lista">Março(2004)</button>
+            <button id="abr_stv" class="lista">Abril(2004)</button>
+            <button id="mai_stv" class="lista">Maio(2004)</button>
+            <button id="jun_stv" class="lista">Junho(2004)</button>
+            <button id="jul_stv" class="lista">Julho(2004)</button>
+            <button id="ago_stv" class="lista">Agosto(2004)</button>
+            <button id="set_stv" class="lista">Setembro(2004)</button>
+            <button id="out_stv" class="lista">Outubro(2004)</button>
+            <button id="nov_stv" class="lista">Novembro(2004)</button>
+            <button id="dez_stv" class="lista">Dezembro(2004)</button>
           </div>
         </div>
         <div class="dropdown">
           <button class="meses">6M</button>
           <div class="mes">
-            <button id="sems1" class="lista">1 Semestre</button>
-            <button id="sems2" class="lista">2 Semestre</button>
+            <button id="sem1_stv" class="lista">1 Semestre</button>
+            <button id="sem2_stv" class="lista">2 Semestre</button>
           </div>
         </div>
         <div class="botao_1ano">
-          <button id="one_years" class="botao">1A</button>
+          <button id="one_year_stv" class="botao">1A</button>
         </div>
         <!-- COMENTARIO POR DATA -->
         <div class="date_comment">
