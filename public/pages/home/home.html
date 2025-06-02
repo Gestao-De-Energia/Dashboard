@@ -6,31 +6,29 @@
         <!--========== BOX ICONS ==========-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!--========== CSS ==========-->
-        <link rel="stylesheet" href="../../css/styles.css">
+        <link rel="stylesheet" href="./styles.css">
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <title>Dashboard Energético</title>
     </head>
     <body>
-        <!--========== HEADER ==========-->
-
-        <!--========== CONTENTS ==========-->
         <main>
             <section>
                 <h1 class="titulo">Selecione o modo de visualização</h1>
-               <div class="modo">
-                <!--<a href="../dashboard/consumidor/cons.html">-->
-                    <button class="button disabled" disabled>
-                        <img src="../../assets/Consumidor.png" alt="Ícone de consumidor" class="botao-cons">
-                            <p class="texto">Consumidor</p>
-                    </button>
-                <!--</a>-->
-                <a href="../dashboard/pesquisador/pesq.html">
-                    <button class="button">
-                        <img src="../../assets/pesquisador.webp" alt="Ícone de pesquisador" class="botao-pesq">
-                        <p class="texto">Pesquisador</p>
-                    </button>
-                </a>
-               </div>
+                <div class="modo">
+                  <!-- Habilitar o redirecionamento para a página de consumidor quando ela estiver pronta -->
+                  <!--<a href="../dashboard/consumidor/cons.html">-->
+                      <button class="modo_button disabled" disabled>
+                          <img src="../../assets/Consumidor.png" alt="Ícone de consumidor">
+                          <p class="texto">Consumidor</p>
+                      </button>
+                  <!--</a>-->
+                  <a href="../dashboard/pesquisador/pesq.html">
+                      <button class="modo_button">
+                          <img src="../../assets/pesquisador.webp" alt="Ícone de pesquisador">
+                          <p class="texto">Pesquisador</p>
+                      </button>
+                  </a>
+                </div>
             </section>
         </main>
     </body>
