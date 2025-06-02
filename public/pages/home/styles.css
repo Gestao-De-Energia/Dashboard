@@ -1,0 +1,38 @@
+.modo, .titulo{
+  font-family: 'Poppins', sans-serif;
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  font-size: 36px;
+}
+
+.modo_button {
+  width: 300px;
+  height: 300px;
+  border-radius: 15px;
+  background-color: #a47ae9ad; 
+  border: none; 
+  cursor: pointer; 
+  margin-right: 30px;
+}
+
+.modo_button:hover {
+  background-color: #744db4ad; 
+}
+
+.modo_button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
+.texto {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  color: #2e2d2e;
+  font-size: 20px;
+  bottom: 0;
+  right: 0;
+}
