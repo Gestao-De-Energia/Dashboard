@@ -3,6 +3,9 @@
 ## Introdução 
 Este repositório contém o dashboard para visualização dos dados gerados após a execução do algoritmo C-DEEPSO sobre uma simulação de microrrede. O objetivo é apoiar a tomada de decisão do pesquisador através da interpretação rápida, intuitiva e interativa que os gráficos fornecem aos leitores.
 
+## Execução
+Recomendado usar a extensão **Live Server** do vscode e entrar na pasta **/public**.
+
 ## Organização
 
 ### /.github/workflows
