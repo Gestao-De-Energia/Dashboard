@@ -30,6 +30,7 @@ export async function checkIfEmailExists(email) {
     }
 }
 
+/* Pegando todos os comentários por data */
 export async function getAllUserCommentsByDate() {
     try {
         const currentUser = auth.currentUser;
@@ -72,6 +73,7 @@ export async function getAllUserCommentsByDate() {
     }
 }
 
+/* Pegando todos os comentários gerais */
 export async function getAllUserGeneralComments() {
     try {
         const currentUser = auth.currentUser;

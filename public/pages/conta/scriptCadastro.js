@@ -77,6 +77,7 @@ function validateFormData(user) {
     return isValid;
 }
 
+/* Já cria uma instância no banco de dados de um usuário e salva os dados para completar o cadastro depois */
 async function handlePartialSignup(){
     const partialUser = await getFormData();
     let { nome, email, senha, pesquisador, consumidor } = partialUser;
@@ -106,6 +107,7 @@ async function handlePartialSignup(){
 
         sessionStorage.setItem("partialUser", JSON.stringify(partialUser));
 
+        // Redireciona para completar o cadastro
         if (pesquisador && consumidor) {
             window.location.href = "./cadastroConsPesq.html";
         } else if (pesquisador) {
@@ -131,6 +133,7 @@ async function handlePartialSignup(){
     }
 }
 
+/* Termina o cadastro */
 async function handleFullSignup(btn) {
     const partialUser = JSON.parse(sessionStorage.getItem("partialUser"));
     
@@ -187,6 +190,7 @@ async function handleFullSignup(btn) {
     }
 }
 
+/* Redireciona para o dashboard do perfil após cadastro completo */
 if (partialSubmitBtn) {
     partialSubmitBtn.addEventListener("click", handlePartialSignup);
 }

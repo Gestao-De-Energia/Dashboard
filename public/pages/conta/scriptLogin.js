@@ -5,7 +5,7 @@ import { signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.
 const pwShowHide = document.querySelectorAll(".showHidePw");
 const pwFields = document.querySelectorAll(".password-input");
 
-/* Olho riscado/não-riscado no campo Senha */
+/* Troca entre olho riscado/não-riscado no campo Senha */
 pwShowHide.forEach((eyeIcon) => {
     eyeIcon.addEventListener("click", () => {
         pwFields.forEach((pwField) => {
@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let intervalId;
 
+        // Cria um texto animado com "." ".." "..."
         function startLoadingAnimation(text) {
             let dots = 0;
             intervalId = setInterval(() => {
@@ -57,11 +58,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 500);
         }
 
+        // Volta o texto do botão para "Login"
         function stopLoadingAnimation() {
             clearInterval(intervalId);
             loginButton.textContent = "Login";
         }
 
+        // Faz login com email e senha passados no input
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -87,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.removeItem("savedEmail");
             }
             
+            // Muda de tela de acordo com o perfil do user
             if (userData.pesquisador && userData.consumidor) {
                 window.location.href = "/pages/home/home.html";
             } else if (userData.pesquisador) {
@@ -105,13 +109,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Clicar no botão de login
+    // Chamando a função de realizar login ao clicar no botão login
     loginButton.addEventListener("click", async (event) => {
         event.preventDefault();
         handleLogin();
     });
 
-    // Pressionar "Enter" no campo de senha
+    // O mesmo de cima, mas pressionando "enter" no campo da senha. Acho que pode ser substituído usando um <form> no html
     document.querySelector(".password-input").addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             event.preventDefault();

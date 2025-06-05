@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "12 meses": 8640
     };
   
+    // Monta os botões de seleção de período e iterações
     function setupDropdown(buttonId, dropdownId) {
       const button = document.getElementById(buttonId);
       const dropdown = document.getElementById(dropdownId);
@@ -109,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
       runSimulation();
     });
   
+    // Roda a simulação: Chama o CDEEPSO e preenche os cards das métricas após a execução
     async function runSimulation() {
       let metricas = document.querySelectorAll(".metrica-texto .valor");
       let gifs = document.querySelectorAll(".loadingGif");
@@ -151,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
         let simulationData = JSON.parse(localStorage.getItem("simulationData"));
   
+        // Preenche cards de métricas
         if (simulationData) {
           let valores = [
             (simulationData.renewable_factor * 100).toFixed(2).replace(".", ",") + "%",
@@ -171,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
   
 
-// Recuperar valores ao recarregar a página
+// Recuperar valores das métricas ao recarregar a página
 window.addEventListener("load", () => {
   if (!localStorage) return;
 
@@ -637,6 +640,9 @@ let optionsBateria;
 let optionsSTSolar;
 let optionsSTVento;
 
+// Carrega os dados do json e preenche nos gráficos
+// Cada "options" contém as configurações dos gráficos (tipo, cores, dados, nomes, etc.)
+// Poderia estar em um outro arquivo talvez.
 async function loadData() {
     try {
       const response = await fetch('../../../dados/dados.json');
@@ -1261,6 +1267,14 @@ async function loadData() {
 await loadData();
 
 /*==================== RENDERIZANDO GRÁFICOS ====================*/
+
+/* .render() cria o gráfico com as options dadas */
+
+/* 
+    * cada "periods..." indica um possível período de tempo do gráfico, selecionável por meio dos botões 
+    * o id faz referência ao html
+*/
+
 
 /* ========== GRÁFICO ENERGIA FOTOVOLTAICA ========== */
 var chartFotovoltaica = new ApexCharts(document.querySelector("#chartFotovoltaica"), optionsFotovoltaica);
