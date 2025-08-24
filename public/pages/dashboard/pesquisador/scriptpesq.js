@@ -43,6 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const runButtonText = document.querySelector(".run_btn_text");
     const configButtons = document.querySelector(".config_buttons");
     const confirmButton = document.getElementById("confirm_button");
+    const pauseButton = document.getElementById("pause_button");
+    const valorContainer = document.querySelectorAll(".valor-container");
+
+    let isPaused = false;
+    let pausedAtIteration = null;
   
     let selectedIteration = 10;
     let selectedPeriod = 8640; // 12 meses (8640 horas)
@@ -107,8 +112,52 @@ document.addEventListener("DOMContentLoaded", function () {
   
     confirmButton.addEventListener("click", function () {
       configButtons.style.display = "none";
+      pauseButton.style.display = "flex";
       runSimulation();
     });
+
+    pauseButton.addEventListener("click", () => {
+        isPaused = !isPaused;
+
+        const metricas = document.querySelectorAll(".metrica-texto .valor");
+        const gifs = document.querySelectorAll(".loadingGif");
+
+        if (isPaused) {
+            pauseButton.innerHTML = "<h3>Despausar</h3>";
+            gifs.forEach(gif => gif.style.display = "none");
+
+            // casas e turbinas (3 e 4)
+            [3, 4].forEach(i => {
+            const valorAtual = metricas[i].innerText.trim();
+            metricas[i].innerHTML = `<span class="editavel-numero" contenteditable="true">${valorAtual}</span>`;
+            });
+
+            // geração máxima (5) — manter unidade
+            const metrica6 = metricas[5];
+            const valorCompleto = metrica6.innerText.trim();
+            const numero = valorCompleto.split(" ")[0];
+            metrica6.innerHTML = `<span class="editavel-numero" contenteditable="true">${numero}</span> <span class="sufixo-unidade">kWh</span>`;
+        } else {
+            pauseButton.innerHTML = "<h3>Pausar</h3>";
+            gifs.forEach(gif => gif.style.display = "inline");
+
+            // desfaz edição
+            [3, 4].forEach(i => {
+            const span = metricas[i].querySelector(".editavel-numero");
+            if (span) {
+                const novoValor = span.innerText.trim();
+                metricas[i].innerText = novoValor;
+            }
+            });
+
+            const span6 = metricas[5].querySelector(".editavel-numero");
+            if (span6) {
+            const valor6 = span6.innerText.trim();
+            metricas[5].innerText = valor6 + " kWh";
+            }
+        }
+    });
+
   
     // Roda a simulação: Chama o CDEEPSO e preenche os cards das métricas após a execução
     async function runSimulation() {
@@ -120,6 +169,12 @@ document.addEventListener("DOMContentLoaded", function () {
       let interval;
   
       try {
+        // Escurece fundo dos lugares onde ficam as métricas, indicando que está executando a simulação.
+        valorContainer.forEach((container) => {
+            container.style.backgroundColor = "#4D4D4D";
+            container.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.15)";
+        });
+
         // Desabilita botão durante a simulação
         runButton.disabled = true;
         runButton.style.opacity = "0.5";
@@ -133,9 +188,29 @@ document.addEventListener("DOMContentLoaded", function () {
   
         // Esconde os valores e mostra GIFs de carregamento
         metricas.forEach((el) => el.style.display = "none");
+        metricas.forEach((el) => el.classList.remove("temp")); // limpa antes
         gifs.forEach((gif) => gif.style.display = "inline");
   
-        await CDEEPSO(selectedIteration, selectedPeriod);
+        let currentIteration = 0;
+        let resultado;
+
+        while (currentIteration < selectedIteration) {
+            resultado = await CDEEPSO(selectedIteration, selectedPeriod, () => isPaused, currentIteration);
+
+            if (resultado?.pausedAtIteration !== undefined) {
+                // simulação pausada no meio de uma iteração
+                currentIteration = resultado.pausedAtIteration;
+                
+                // espera até despausar
+                while (isPaused) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+            } else {
+                // terminou tudo normalmente
+                break;
+            }
+        }
   
       } catch (error) {
         console.error("Erro ao rodar a simulação:", error);
@@ -144,6 +219,11 @@ document.addEventListener("DOMContentLoaded", function () {
       } finally {
         clearInterval(interval);
   
+        valorContainer.forEach((container) => {
+            container.style.backgroundColor = "transparent";
+            container.style.boxShadow = "none";
+        });
+        pauseButton.style.display = "none";
         runButtonText.innerHTML = "Rodar simulação";
         runButton.disabled = false;
         runButton.style.opacity = "1";
@@ -167,6 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
           metricas.forEach((el, index) => {
             el.style.display = "inline";
             el.innerText = valores[index];
+            el.classList.remove("temp"); // removendo opacidade
           });
         }
       }
