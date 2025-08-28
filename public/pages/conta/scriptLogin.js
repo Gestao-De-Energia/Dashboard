@@ -92,11 +92,11 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Muda de tela de acordo com o perfil do user
             if (userData.pesquisador && userData.consumidor) {
-                window.location.href = "/pages/home/home.html";
+                window.location.href = "/pages/home/home.html"; // path em desenvolvimento: "/public/pages/home/home.html" ---- path em produção: "/pages/home/home.html"
             } else if (userData.pesquisador) {
-                window.location.href = "/pages/dashboard/pesquisador/pesq.html";
+                window.location.href = "/pages/dashboard/pesquisador/pesq.html"; // path em desenvolvimento: "/public/pages/dashboard/pesquisador/pesq.html" ---- path em produção: "/pages/dashboard/pesquisador/pesq.html"
             } else if (userData.consumidor) {
-                window.location.href = "/pages/dashboard/consumidor/cons.html";
+                window.location.href = "/pages/dashboard/consumidor/cons.html"; // path em desenvolvimento: "/public/pages/dashboard/consumidor/cons.html" ---- path em produção: "/pages/dashboard/consumidor/cons.html"
             } else {
                 loginWarning.style.display = "flex";
                 loginWarning.textContent = "Erro: Perfil do usuário não definido.";
