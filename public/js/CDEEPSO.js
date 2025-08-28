@@ -1,7 +1,7 @@
 import { techno_ka } from './techno_ka.js';
 import { emptyparticle, best, globalbest } from './structure.js';
 
-export default async function CDEEPSO(iterations, steps){
+export default async function CDEEPSO(iterations, steps, shouldPause, fixedValues, startIteration = 0) {
     const init_t = Date.now() / 1000;
 
     let runningStatus = document.getElementById("running_sim_status"); // apenas para avisar em qual iteração está
@@ -78,11 +78,19 @@ export default async function CDEEPSO(iterations, steps){
 
     // Algorithm main loop
     let Fminn = Array(iterations).fill(0);
-    
-    for (let u = 0; u < iterations; u++) {
+
+    let temp_renewable_factor, temp_LPSP, temp_price_electricity;
+
+    let u = startIteration;
+    for (u; u < iterations; u++) {
         let vv = 0;
         runningStatus.innerHTML = `Rodando iteração ${u+1}/${iterations}`;
+
         for (let i = 0; i < NPOP; i++) {
+            if (shouldPause()) {
+                return { pausedAtIteration: u }; // cancela a iteração atual se usuario pausou
+            }
+
             let cc = 1;
             let LPSP = 0.3;
             let renewable_factor = 2;
@@ -107,6 +115,11 @@ export default async function CDEEPSO(iterations, steps){
                 var houses = Math.round(particle[i].position[2]);
                 var nwt = Math.round(particle[i].position[3]);
 
+                // Sobrescreve se tiver fixado
+                if (fixedValues.generation !== null) p_npv = fixedValues.generation;
+                if (fixedValues.houses !== null) houses = fixedValues.houses;
+                if (fixedValues.turbines !== null) nwt = fixedValues.turbines;
+
                 [LPSP, price_electricity, renewable_factor, b, ali, ali2] = await techno_ka(houses, p_npv, ad, nwt, steps);
                 bb += 1;
             }
@@ -125,17 +138,39 @@ export default async function CDEEPSO(iterations, steps){
                     var rnwfct_best = rnwfct;
                 }
             }
-        }
 
+            temp_renewable_factor = renewable_factor;
+            temp_LPSP = LPSP;
+            temp_price_electricity = price_electricity;
+        }
+        
         Fminn[u] = global_best.cost;
         let Xmin = global_best.position;
-        p_npv = Math.round(global_best.position[0]);
+        p_npv = fixedValues.generation !== null ? fixedValues.generation : Math.round(global_best.position[0]);
         ad = Math.round(global_best.position[1]);
-        houses = Math.round(global_best.position[2]);
-        nwt = Math.round(global_best.position[3]);
+        houses = fixedValues.houses !== null ? fixedValues.houses : Math.round(global_best.position[2]);
+        nwt = fixedValues.turbines !== null ? fixedValues.turbines : Math.round(global_best.position[3]);
 
-        //console.log(`Iteration ${u}, Best cost = ${Fminn[u]}`);
-        //console.log(`Best solution p_npv = ${p_npv}, ad = ${ad}, houses = ${houses}, nwt = ${nwt}`);
+        console.log(`Iteration ${u}, Best cost = ${Fminn[u]}`);
+        console.log(`Best solution p_npv = ${p_npv}, ad = ${ad}, houses = ${houses}, nwt = ${nwt}`);
+
+        // mostrando valores temporários nos cards (exceto na primeira iteração)
+        const metricas = document.querySelectorAll(".metrica-texto .valor");
+        const valoresTemp = [
+            (temp_renewable_factor * 100).toFixed(2).replace(".", ",") + "%",
+            (temp_LPSP * 100).toFixed(2).replace(".", ",") + "%",
+            "R$" + temp_price_electricity.toFixed(3).replace(".", ",") + "/kWh",
+            houses,
+            nwt,
+            p_npv + " kWh"
+        ];
+
+        metricas.forEach((el, index) => {
+            el.innerText = valoresTemp[index];
+            el.classList.add("temp"); // aplicando opacidade
+            el.style.display = "inline";
+        });
+    
     }
 
     runningStatus.innerHTML = ""; // apagando

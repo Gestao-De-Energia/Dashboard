@@ -5,7 +5,7 @@ import { RunGridConnected } from "./RunGridConnected.js";
 import { read_file, transpose } from "./auxiliar.js";
 
 export async function techno_ka(houses, p_npv, ad, nwt, steps) {
-    let g = await read_file("/js/solreal.txt");
+    let g = await read_file("/js/solreal.txt"); // path em desenvolvimento: "../../../js/solreal.txt"; path em prod: "/js/solreal.txt"
     g = g.slice(0, steps);
     
     let tamb = [12, 13, 15, 16, 19, 22, 24, 24, 23, 20, 16, 13];
@@ -25,9 +25,9 @@ export async function techno_ka(houses, p_npv, ad, nwt, steps) {
     let upv = 0.986;
     let p_pvout_hourly = g.map((gi, i) => upv * (p_npv * (gi / gref)) * (1 + kt * (tc[i] - tref)));
     
-    let loadind = await read_file("/js/loadind.txt");
+    let loadind = await read_file("/js/loadind.txt"); // path em desenvolvimento: "../../../js/loadind.txt"; path em prod: "/js/loadind.txt"
     loadind = loadind.slice(0, steps);
-    let loadres = await read_file("/js/loadres.txt");
+    let loadres = await read_file("/js/loadres.txt"); // path em desenvolvimento: "../../../js/loadres.txt"; path em prod: "/js/loadres.txt"
     loadres = loadres.slice(0, steps + 2);
     let factor = 5.1;
     let load = loadres.map((l) => (l * factor));
@@ -36,7 +36,7 @@ export async function techno_ka(houses, p_npv, ad, nwt, steps) {
     let cwh = (bcap / (uinv * ub)) * (1 + 1 - dod);
     
     let shape_w = 1;
-    let v1 = await read_file("/js/wind_data.txt");
+    let v1 = await read_file("/js/wind_data.txt"); // path em desenvolvimento: "../../../js/wind_data.txt"; path em prod: "/js/wind_data.txt"
     v1 = v1.slice(0, steps);
     v1 = v1.map((v) => (v * shape_w));
     let h2 = 18;

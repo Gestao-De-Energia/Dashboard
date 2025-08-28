@@ -115,8 +115,10 @@
             <div class="left">
               <img src="../../../assets/icons/mediaFatorRenovavel.png" alt="Ícone" class="icone-metrica">
               <div class="metrica-texto">
-                <h3 class="valor">-</h3>
-                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                <div class="valor-container">
+                  <h3 class="valor">-</h3>
+                  <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                </div>
                 <h3 class="legenda">Média Fator Renovável</h3>
               </div>
             </div>
@@ -125,8 +127,10 @@
             <div class="left">
               <img src="../../../assets/icons/perdaCarga.png" alt="Ícone" class="icone-metrica">
               <div class="metrica-texto">
-                <h3 class="valor">-</h3>
-                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                <div class="valor-container">
+                    <h3 class="valor">-</h3>
+                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                </div>
               <h3 class="legenda">Perda de carga no grid</h3>
             </div>
           </div>
@@ -135,8 +139,10 @@
           <div class="left">
             <img src="../../../assets/icons/custoEnergia.png" alt="Ícone" class="icone-metrica">
             <div class="metrica-texto">
-              <h3 class="valor">-</h3>
-              <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+              <div class="valor-container">
+                <h3 class="valor">-</h3>
+                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+              </div>
               <h3 class="legenda">Custo de energia elétrica</h3>
             </div>
           </div>
@@ -147,8 +153,11 @@
           <div class="left">
             <img src="../../../assets/icons/numeroCasas.png" alt="Ícone" class="icone-metrica">
             <div class="metrica-texto">
-              <h3 class="valor">-</h3>
-              <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+              <div class="valor-container">
+                <h3 class="valor">-</h3>
+                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                <img id="fixedHouses" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+              </div>
               <h3 class="legenda">Número de Casas</h3>
             </div>
           </div>
@@ -157,8 +166,11 @@
           <div class="left">
             <img src="../../../assets/icons/turbinasEolicas.png" alt="Ícone" class="icone-metrica">
             <div class="metrica-texto">
-              <h3 class="valor">-</h3>
-              <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+              <div class="valor-container">
+                <h3 class="valor">-</h3>
+                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                <img id="fixedTurbines" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+              </div>
               <h3 class="legenda">Turbinas eólicas</h3>
             </div>
           </div>
@@ -167,8 +179,11 @@
           <div class="left">
             <img src="../../../assets/icons/geracaoMaxima.png" alt="Ícone" class="icone-metrica">
             <div class="metrica-texto">
-              <h3 class="valor">-</h3>
-              <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+              <div class="valor-container">
+                <h3 class="valor">-</h3>
+                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                <img id="fixedPanelGen" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+              </div>
               <h3 class="legenda">Geração Máxima dos panéis</h3>
             </div>
           </div>
@@ -181,6 +196,9 @@
           <h3 class="run_btn_text">Rodar simulação</h3>
         </button>
         <p id="running_sim_status"></p>
+        <button class="pause_button" id="pause_button">
+          <h3>Pausar</h3>
+        </button>
         <div class="config_buttons" style="display: none;">
           <!-- Dropdown para número de iterações -->
           <div class="dropdown_sim">

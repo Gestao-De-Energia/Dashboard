@@ -43,7 +43,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const runButtonText = document.querySelector(".run_btn_text");
     const configButtons = document.querySelector(".config_buttons");
     const confirmButton = document.getElementById("confirm_button");
-  
+    const pauseButton = document.getElementById("pause_button");
+    const valorContainer = document.querySelectorAll(".valor-container");
+
+    let fixedValues = { houses: null, turbines: null, generation: null };
+    let valuesBeforePause = { houses: null, turbines: null, generation: null };
+    const fixedIcons = {
+        houses: document.getElementById("fixedHouses"),
+        turbines: document.getElementById("fixedTurbines"),
+        generation: document.getElementById("fixedPanelGen")
+    };
+
+    let isPaused = false;
     let selectedIteration = 10;
     let selectedPeriod = 8640; // 12 meses (8640 horas)
   
@@ -107,7 +118,104 @@ document.addEventListener("DOMContentLoaded", function () {
   
     confirmButton.addEventListener("click", function () {
       configButtons.style.display = "none";
+      pauseButton.style.display = "flex";
+      fixedValues = { houses: null, turbines: null, generation: null };
+      valuesBeforePause = { houses: null, turbines: null, generation: null };
+      Object.values(fixedIcons).forEach(icon => icon.style.display = 'none');
       runSimulation();
+    });
+
+    pauseButton.addEventListener("click", () => {
+        isPaused = !isPaused;
+        const metricas = document.querySelectorAll(".metrica-texto .valor");
+        const gifs = document.querySelectorAll(".loadingGif");
+
+        if (isPaused) {
+            // Ao pausar
+            pauseButton.innerHTML = "<h3>Continuar</h3>";
+            gifs.forEach(gif => gif.style.display = "none");
+
+            // Esconde os ícones de fixado ao pausar
+            Object.values(fixedIcons).forEach(icon => icon.style.display = 'none');
+
+            // Salva os valores exatos que estão na tela antes de torná-los editáveis
+            valuesBeforePause.houses = metricas[3].innerText.trim();
+            valuesBeforePause.turbines = metricas[4].innerText.trim();
+            valuesBeforePause.generation = metricas[5].innerText.trim().replace(/\s*kWh$/, "");
+
+            // Torna todos os 3 campos editáveis
+            [3, 4, 5].forEach(i => {
+                const valorAtual = metricas[i].innerText.trim().split(" ")[0];
+                metricas[i].innerHTML = `<span class="editavel-numero" contenteditable="true">${valorAtual}</span>` + (i === 5 ? ' <span class="sufixo-unidade">kWh</span>' : '');
+            });
+
+        } else {
+            // Ao despausar
+            pauseButton.innerHTML = "<h3>Pausar</h3>";
+
+            // Para cada campo, verifica se o valor foi alterado pelo usuário
+            // Se foi alterado, atualiza o 'fixedValues'. Se não, não faz nada.
+
+            // CASAS (índice 3)
+            const casasSpan = metricas[3].querySelector(".editavel-numero");
+            if (casasSpan) {
+                const novoValorStr = casasSpan.innerText.trim();
+                // Apenas fixa se o valor mudou
+                if (novoValorStr !== valuesBeforePause.houses) {
+                    const novoValorNum = parseInt(novoValorStr.replace(/[^\d]/g, ""));
+                    if (!isNaN(novoValorNum)) {
+                        fixedValues.houses = novoValorNum;
+                    }
+                }
+                // Atualiza a tela com o valor (seja o novo fixo ou o antigo)
+                metricas[3].innerText = fixedValues.houses !== null ? fixedValues.houses : novoValorStr;
+            }
+
+            // TURBINAS (índice 4)
+            const turbinasSpan = metricas[4].querySelector(".editavel-numero");
+            if (turbinasSpan) {
+                const novoValorStr = turbinasSpan.innerText.trim();
+                if (novoValorStr !== valuesBeforePause.turbines) {
+                    const novoValorNum = parseInt(novoValorStr.replace(/[^\d]/g, ""));
+                    if (!isNaN(novoValorNum)) {
+                        fixedValues.turbines = novoValorNum;
+                    }
+                }
+                metricas[4].innerText = fixedValues.turbines !== null ? fixedValues.turbines : novoValorStr;
+            }
+
+            // GERAÇÃO (índice 5)
+            const geracaoSpan = metricas[5].querySelector(".editavel-numero");
+            if (geracaoSpan) {
+                const novoValorStr = geracaoSpan.innerText.trim();
+                if (novoValorStr !== valuesBeforePause.generation) {
+                    const novoValorNum = parseInt(novoValorStr.replace(/[^\d]/g, ""));
+                    if (!isNaN(novoValorNum)) {
+                        fixedValues.generation = novoValorNum;
+                    }
+                }
+                const valorFinal = fixedValues.generation !== null ? fixedValues.generation : novoValorStr;
+                metricas[5].innerText = valorFinal + " kWh";
+            }
+
+            // Atualiza a visibilidade dos ícones de "fixado" e dos GIFs
+            Object.keys(fixedValues).forEach(key => {
+                if (fixedValues [key] !== null) {
+                    fixedIcons [key].style.display = 'inline';
+                } else {
+                    fixedIcons [key].style.display = 'none'; // Garante que sumam se não estiverem fixos
+                }
+            });
+
+            gifs.forEach((gif, index) => {
+                const isFixed = (index === 3 && fixedValues.houses !== null) ||
+                                (index === 4 && fixedValues.turbines !== null) ||
+                                (index === 5 && fixedValues.generation !== null);
+                if (index < 3 || !isFixed) {
+                    gif.style.display = "inline";
+                }
+            });
+        }
     });
   
     // Roda a simulação: Chama o CDEEPSO e preenche os cards das métricas após a execução
@@ -120,6 +228,12 @@ document.addEventListener("DOMContentLoaded", function () {
       let interval;
   
       try {
+        // Escurece fundo dos lugares onde ficam as métricas, indicando que está executando a simulação.
+        valorContainer.forEach((container) => {
+            container.style.backgroundColor = "#4D4D4D";
+            container.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.15)";
+        });
+
         // Desabilita botão durante a simulação
         runButton.disabled = true;
         runButton.style.opacity = "0.5";
@@ -133,9 +247,29 @@ document.addEventListener("DOMContentLoaded", function () {
   
         // Esconde os valores e mostra GIFs de carregamento
         metricas.forEach((el) => el.style.display = "none");
+        metricas.forEach((el) => el.classList.remove("temp")); // limpa antes
         gifs.forEach((gif) => gif.style.display = "inline");
   
-        await CDEEPSO(selectedIteration, selectedPeriod);
+        let currentIteration = 0;
+        let resultado;
+
+        while (currentIteration < selectedIteration) {
+            resultado = await CDEEPSO(selectedIteration, selectedPeriod, () => isPaused, fixedValues, currentIteration);
+
+            if (resultado?.pausedAtIteration !== undefined) {
+                // simulação pausada no meio de uma iteração
+                currentIteration = resultado.pausedAtIteration;
+                
+                // espera até despausar
+                while (isPaused) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+            } else {
+                // terminou tudo normalmente
+                break;
+            }
+        }
   
       } catch (error) {
         console.error("Erro ao rodar a simulação:", error);
@@ -144,12 +278,20 @@ document.addEventListener("DOMContentLoaded", function () {
       } finally {
         clearInterval(interval);
   
+        valorContainer.forEach((container) => {
+            container.style.backgroundColor = "transparent";
+            container.style.boxShadow = "none";
+        });
+        pauseButton.style.display = "none";
         runButtonText.innerHTML = "Rodar simulação";
         runButton.disabled = false;
         runButton.style.opacity = "1";
         runButton.style.cursor = "pointer";
   
         gifs.forEach((gif) => gif.style.display = "none");
+
+        // Esconde os ícones de "fixado" no final da simulação
+        Object.values(fixedIcons).forEach(icon => icon.style.display = 'none');
   
         let simulationData = JSON.parse(localStorage.getItem("simulationData"));
   
@@ -167,6 +309,7 @@ document.addEventListener("DOMContentLoaded", function () {
           metricas.forEach((el, index) => {
             el.style.display = "inline";
             el.innerText = valores[index];
+            el.classList.remove("temp"); // removendo opacidade
           });
         }
       }
