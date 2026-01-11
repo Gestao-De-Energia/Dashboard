@@ -326,6 +326,7 @@ div .valor {
 .btn_container {
     display: flex;
     gap: 5px;
+    margin-bottom: 40px;
 }
 
 .run_btn_container {
@@ -611,10 +612,22 @@ button:hover,
 
 /* ---------- Charts --------- */
 
+#Energia,
+#Bateria,
+#SerieTemp {
+    padding-top: 80px;
+}
+
 .chart {
     min-width: auto;
     width: 100%;
     overflow-x: hidden;
+}
+
+.chartFotovoltaica,
+.chartBateria,
+.chartSTSolar {
+    padding-top: 50px;
 }
 
 main {
@@ -726,7 +739,6 @@ main {
         display: grid;
         grid-template-columns: repeat(2, 1fr); /* 2 Colunas */
         gap: 20px;
-        margin-top: 1rem;
     }
 
     .metricas-cima,
@@ -759,7 +771,7 @@ main {
     .btn_container {
         flex-direction: column;
         align-items: center;
-        gap: 10px; /* Espaço entre a linha de cima e a de baixo */
+        gap: 10px;
     }
 
     .grupo-btns {
@@ -786,7 +798,6 @@ main {
         }
 
         .header-profile {
-            width: 100%;
             justify-content: flex-end;
         }
 
@@ -795,11 +806,8 @@ main {
             margin-left: 0; /* Remove empurrão da main no mobile */
         }
 
-        /* --- Métricas em 1 Coluna (Pilha) --- */
-        .metricas-cima,
-        .metricas-baixo {
-            grid-template-columns: 1fr; /* Uma métrica por linha */
-            gap: 15px;
+        .dashboard-metrica {
+            grid-template-columns: repeat(1, 1fr); /* 1 Coluna */
         }
 
         .metrica1,
@@ -817,9 +825,6 @@ main {
         }
 
         /* --- Gráficos e Botões --- */
-        .btn_container {
-            gap: 10px;
-        }
 
         .dropdown button,
         .botao {
@@ -852,21 +857,28 @@ main {
         .comment_section {
             width: 100%;
         }
+
+        #Energia,
+        #Bateria,
+        #SerieTemp {
+            padding-top: 0;
+        }
+
+        .chartFotovoltaica,
+        .chartBateria,
+        .chartSTSolar {
+            padding-top: 0;
+        }
     }
 
     /* --- Telas muito pequenas (até 480px) --- */
     @media screen and (max-width: 480px) {
         main {
-            padding-left: 1rem;
             padding-bottom: 80px;
         }
 
         .nav {
             width: 50px;
-        }
-
-        main {
-            padding-left: 60px;
         }
 
         div .valor {
@@ -876,6 +888,10 @@ main {
         .icone-metrica {
             width: 50px;
             height: 50px;
+        }
+
+        .run_btn_container {
+            flex-direction: column;
         }
     }
 }

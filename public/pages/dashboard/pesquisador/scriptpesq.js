@@ -51,51 +51,51 @@ document.addEventListener("DOMContentLoaded", async () => {
 /* =============================================================
    LÓGICA DO MENU DE PERFIL (TOGGLE)
    ============================================================= */
-const userContainer = document.querySelector('.user-container');
-const profileDropdown = document.querySelector('.dropdown-menu');
+const userContainer = document.querySelector(".user-container");
+const profileDropdown = document.querySelector(".dropdown-menu");
 
 if (userContainer && profileDropdown) {
-    userContainer.addEventListener('click', (e) => {
+    userContainer.addEventListener("click", (e) => {
         // Alterna a classe que mostra o menu
-        profileDropdown.classList.toggle('show-profile');
-        
+        profileDropdown.classList.toggle("show-profile");
+
         // Impede que o clique se propague imediatamente e feche o menu se tiver um listener na window
         e.stopPropagation();
     });
 }
 
 // Fechar o menu se clicar fora dele
-window.addEventListener('click', (e) => {
-    if (profileDropdown && profileDropdown.classList.contains('show-profile')) {
+window.addEventListener("click", (e) => {
+    if (profileDropdown && profileDropdown.classList.contains("show-profile")) {
         if (!userContainer.contains(e.target)) {
-            profileDropdown.classList.remove('show-profile');
+            profileDropdown.classList.remove("show-profile");
         }
     }
 });
 
 /*==================== SHOW MENU & CLOSE MENU ====================*/
-const navMenu = document.getElementById('navbar'),
-      navToggle = document.getElementById('header-toggle'),
-      navClose = document.getElementById('nav-close')
+const navMenu = document.getElementById("navbar"),
+    navToggle = document.getElementById("header-toggle"),
+    navClose = document.getElementById("nav-close");
 
-if(navToggle){
-    navToggle.addEventListener('click', () =>{
-        navMenu.classList.add('show-menu')
-    })
+if (navToggle) {
+    navToggle.addEventListener("click", () => {
+        navMenu.classList.add("show-menu");
+    });
 }
 
-if(navClose){
-    navClose.addEventListener('click', () =>{
-        navMenu.classList.remove('show-menu')
-    })
+if (navClose) {
+    navClose.addEventListener("click", () => {
+        navMenu.classList.remove("show-menu");
+    });
 }
 
-const navLink = document.querySelectorAll('.nav-link')
+const navLink = document.querySelectorAll(".nav-link");
 
-function linkAction(){
-    navMenu.classList.remove('show-menu')
+function linkAction() {
+    navMenu.classList.remove("show-menu");
 }
-navLink.forEach(n => n.addEventListener('click', linkAction))
+navLink.forEach((n) => n.addEventListener("click", linkAction));
 
 /*==================== RODANDO SIMULAÇÃO ====================*/
 
@@ -1093,9 +1093,17 @@ async function loadData() {
                             offsetX: 0,
                             offsetY: 0,
                         },
+                        title: {
+                            style: {
+                                fontSize: "15px",
+                            },
+                        },
                         xaxis: {
+                            tickAmount: 4,
                             labels: {
-                                show: false, // Oculta datas no eixo X se ficar muito apertado no celular
+                                show: true,
+                                rotate: -45,
+                                hideOverlappingLabels: true, // Evita sobreposição
                             },
                         },
                     },
@@ -1169,9 +1177,17 @@ async function loadData() {
                             offsetX: 0,
                             offsetY: 0,
                         },
+                        title: {
+                            style: {
+                                fontSize: "15px",
+                            },
+                        },
                         xaxis: {
+                            tickAmount: 4,
                             labels: {
-                                show: false, // Oculta datas no eixo X se ficar muito apertado no celular
+                                show: true,
+                                rotate: -45,
+                                hideOverlappingLabels: true, // Evita sobreposição
                             },
                         },
                     },
@@ -1250,9 +1266,17 @@ async function loadData() {
                             offsetX: 0,
                             offsetY: 0,
                         },
+                        title: {
+                            style: {
+                                fontSize: "15px",
+                            },
+                        },
                         xaxis: {
+                            tickAmount: 4,
                             labels: {
-                                show: false, // Oculta datas no eixo X se ficar muito apertado no celular
+                                show: true,
+                                rotate: -45,
+                                hideOverlappingLabels: true, // Evita sobreposição
                             },
                         },
                     },
@@ -1366,9 +1390,17 @@ async function loadData() {
                             offsetX: 0,
                             offsetY: 0,
                         },
+                        title: {
+                            style: {
+                                fontSize: "15px",
+                            },
+                        },
                         xaxis: {
+                            tickAmount: 4,
                             labels: {
-                                show: false, // Oculta datas no eixo X se ficar muito apertado no celular
+                                show: true,
+                                rotate: -45,
+                                hideOverlappingLabels: true, // Evita sobreposição
                             },
                         },
                     },
@@ -1474,9 +1506,17 @@ async function loadData() {
                             offsetX: 0,
                             offsetY: 0,
                         },
+                        title: {
+                            style: {
+                                fontSize: "15px",
+                            },
+                        },
                         xaxis: {
+                            tickAmount: 4,
                             labels: {
-                                show: false, // Oculta datas no eixo X se ficar muito apertado no celular
+                                show: true,
+                                rotate: -45,
+                                hideOverlappingLabels: true, // Evita sobreposição
                             },
                         },
                     },
@@ -1552,9 +1592,17 @@ async function loadData() {
                             offsetX: 0,
                             offsetY: 0,
                         },
+                        title: {
+                            style: {
+                                fontSize: "15px",
+                            },
+                        },
                         xaxis: {
+                            tickAmount: 4,
                             labels: {
-                                show: false, // Oculta datas no eixo X se ficar muito apertado no celular
+                                show: true,
+                                rotate: -45,
+                                hideOverlappingLabels: true, // Evita sobreposição
                             },
                         },
                     },
@@ -1600,7 +1648,7 @@ async function loadData() {
                 },
             },
             title: {
-                text: "Quantidade de carga e descargas nas baterias",
+                text: "Quantidade de cargas e descargas",
                 align: "center",
                 margin: 60,
                 style: {
@@ -1677,9 +1725,17 @@ async function loadData() {
                             offsetX: 0,
                             offsetY: 0,
                         },
+                        title: {
+                            style: {
+                                fontSize: "15px",
+                            },
+                        },
                         xaxis: {
+                            tickAmount: 4,
                             labels: {
-                                show: false, // Oculta datas no eixo X se ficar muito apertado no celular
+                                show: true,
+                                rotate: -45,
+                                hideOverlappingLabels: true, // Evita sobreposição
                             },
                         },
                     },
@@ -1794,9 +1850,17 @@ async function loadData() {
                             offsetX: 0,
                             offsetY: 0,
                         },
+                        title: {
+                            style: {
+                                fontSize: "15px",
+                            },
+                        },
                         xaxis: {
+                            tickAmount: 4,
                             labels: {
-                                show: false, // Oculta datas no eixo X se ficar muito apertado no celular
+                                show: true,
+                                rotate: -45,
+                                hideOverlappingLabels: true, // Evita sobreposição
                             },
                         },
                     },
