@@ -1,30 +1,30 @@
 /* ---------- Header ---------- */
 
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: var(--container-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  padding: 0 3rem 0 6rem;
-  z-index: var(--z-fixed);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--container-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 0 3rem 0 6rem;
+    z-index: var(--z-fixed);
 }
 
 .header-profile {
-  height: 80px;
-  position: relative;
-  display: flex;
-  align-items: start;
-  justify-content: end;
+    height: 80px;
+    position: relative;
+    display: flex;
+    align-items: start;
+    justify-content: end;
 }
 
 .user-container {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .user-container:hover .dropdown-menu {
@@ -32,33 +32,33 @@
 }
 
 .header-img {
-  width: 40px;
-  height: 40px;
-  order: 1;
-  border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    order: 1;
+    border-radius: 50%;
 }
 
 .dropdown-menu {
-  position: absolute;
-  top: 75px;
-  right: 0;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  display: none;
-  flex-direction: column;
-  width: 160px;
-  justify-content: center;
-  align-items: center;
+    position: absolute;
+    top: 75px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    width: 160px;
+    justify-content: center;
+    align-items: center;
 }
 
 .dropdown-menu a {
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  display: block;
-  text-decoration: none;
-  color: black;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    color: black;
 }
 
 .dropdown-menu a:hover {
@@ -72,202 +72,204 @@
 /* ---------- Navigation menu ---------- */
 
 .nav {
-  position: fixed;
-  top: 0;
-  height: 100vh;
-  background-color: var(--container-color);
-  box-shadow: 1px 0 0 rgba(22, 8, 43, 0.1);
-  z-index: var(--z-fixed);
-  transition: .4s;
-  left: 0;
-  padding: 1.2rem 1.5rem 0;
-  width: 68px; /* Reduced navbar */
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    background-color: var(--container-color);
+    box-shadow: 1px 0 0 rgba(22, 8, 43, 0.1);
+    z-index: var(--z-fixed);
+    transition: 0.4s;
+    left: 0;
+    padding: 1.2rem 1.5rem 0;
+    width: 68px; /* Reduced navbar */
 }
 
 .nav-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-bottom: 3rem;
-  overflow: auto;
-  scrollbar-width: none; /* For mozilla */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 3rem;
+    overflow: auto;
+    scrollbar-width: none; /* For mozilla */
 }
 
 /* For Google Chrome and others */
 .nav-container::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .nav-logo {
-  font-weight: var(--font-semi-bold);
-  margin-bottom: 2.5rem;
+    font-weight: var(--font-semi-bold);
+    margin-bottom: 2.5rem;
 }
 
-.nav-list, 
+.nav-list,
 .nav-items {
-  display: grid;
+    display: grid;
 }
 
 .nav-list {
-  row-gap: 2.5rem;
+    row-gap: 2.5rem;
 }
 
 .nav-items {
-  row-gap: 1.7rem;
+    row-gap: 1.7rem;
 }
 
 .nav-link {
-  display: flex;
-  align-items: center;
-  color: var(--text-color);
-  gap: 6px;
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+    gap: 6px;
 }
 
 .nav-link:hover {
-  color: var(--first-color);
+    color: var(--first-color);
 }
 
 .nav-icon {
-  font-size: 1.3rem;
-  margin-right: .5rem;
+    font-size: 1.3rem;
+    margin-right: 0.5rem;
 }
 
 .nav-name {
-  padding-left: 10px;
-  font-size: var(--small-font-size);
-  font-weight: var(--font-medium);
-  white-space: nowrap;
+    padding-left: 10px;
+    font-size: var(--small-font-size);
+    font-weight: var(--font-medium);
+    white-space: nowrap;
 }
 
 /* Dropdown */
 .nav-dropdown {
-  overflow: hidden;
-  max-height: 21px;
-  transition: .4s ease-in-out;
+    overflow: hidden;
+    max-height: 21px;
+    transition: 0.4s ease-in-out;
 }
 
 .nav-dropdown-collapse {
-  background-color: var(--first-color-light);
-  border-radius: .25rem;
-  margin-top: 1rem;
+    background-color: var(--first-color-light);
+    border-radius: 0.25rem;
+    margin-top: 1rem;
 }
 
 .nav-dropdown-content {
-  display: grid;
-  row-gap: .5rem;
-  padding: .75rem 2.5rem .75rem 1.8rem;
+    display: grid;
+    row-gap: 0.5rem;
+    padding: 0.75rem 2.5rem 0.75rem 1.8rem;
 }
 
 .nav-dropdown-item {
-  font-size: var(--smaller-font-size);
-  font-weight: var(--font-medium);
-  color: var(--text-color);
+    font-size: var(--smaller-font-size);
+    font-weight: var(--font-medium);
+    color: var(--text-color);
 }
 
 .nav-dropdown-item:hover {
-  color: var(--first-color);
+    color: var(--first-color);
 }
 
 .nav-dropdown:hover {
-  max-height: 100rem;
+    max-height: 100rem;
 }
 
 /* Navbar expanded */
 .nav:hover {
-  width: var(--nav-width);
+    width: var(--nav-width);
 }
 
-.nav:hover+main {
-  margin-left: 10rem;
+.nav:hover + main {
+    margin-left: 10rem;
 }
 
 /* Visible elements */
 .nav:hover .nav-logo-name {
-  opacity: 1;
+    opacity: 1;
 }
 
 .nav:hover .nav-subtitle {
-  opacity: 1;
+    opacity: 1;
 }
 
 .nav:hover .nav-name {
-  opacity: 1;
+    opacity: 1;
 }
 
 .nav:hover .nav-dropdown-icon {
-  opacity: 1;
+    opacity: 1;
 }
 
 /* Element opacity */
-.nav-logo-name, 
-.nav-name, 
-.nav-subtitle, 
+.nav-logo-name,
+.nav-name,
+.nav-subtitle,
 .nav-dropdown-icon {
-  opacity: 0;
-  transition: .3s;
+    opacity: 0;
+    transition: 0.3s;
 }
-
 
 /*===== Active link =====*/
 .active {
-  color: var(--first-color);
+    color: var(--first-color);
 }
 
 /* ---------- Métricas ----------*/
 
 .metricas-cima,
 .metricas-baixo {
-  display: grid;
-  gap: 20px;
-  margin-top: 1rem;
+    display: grid;
+    gap: 20px;
+    margin-top: 1rem;
 }
 
 .metricas-cima {
-  grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .metricas-baixo {
-  grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
-.left{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+.left {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
-.icone-metrica{
-  width: 70px;
-  height: 70px;
+.icone-metrica {
+    width: 70px;
+    height: 70px;
 }
 
 .metrica-texto {
-  height: 75%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+    height: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-.metrica1, .metrica2, .metrica3,
-.metrica4, .metrica5, .metrica6 {
-  border-radius: 30px;
-  box-shadow: 2px 2px 5px hsl(0, 0%, 0.8);
-  transition: all .3s ease;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 120px; /* ou outro valor fixo se quiser alinhamento */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-
+.metrica1,
+.metrica2,
+.metrica3,
+.metrica4,
+.metrica5,
+.metrica6 {
+    border-radius: 30px;
+    box-shadow: 2px 2px 5px hsl(0, 0%, 0.8);
+    transition: all 0.3s ease;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 120px; /* ou outro valor fixo se quiser alinhamento */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.valor-container{
+.valor-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -277,195 +279,195 @@
     background-color: transparent;
 }
 
-div .valor{
-  font-size: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+div .valor {
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .valor.temp {
-  opacity: 0.7;
+    opacity: 0.7;
 }
 
 .editavel-numero[contenteditable="true"] {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 2px 4px;
-  outline: 1px dashed white;
-  cursor: text;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 2px 4px;
+    outline: 1px dashed white;
+    cursor: text;
 }
 
 .sufixo-unidade {
-  margin-left: 4px;
-  opacity: 0.8;
+    margin-left: 4px;
+    opacity: 0.8;
 }
 
-
-.legenda{
-  font-weight: lighter;
-  font-size: 16px;
-  text-align: center;
+.legenda {
+    font-weight: lighter;
+    font-size: 16px;
+    text-align: center;
 }
 
 .metrica1 {
-  background-image: linear-gradient(to right, #FBA85B, #C24E4E);
+    background-image: linear-gradient(to right, #fba85b, #c24e4e);
 }
 
-.metrica2{
-  background-image: linear-gradient(to right, #86A1E5, #392686);
+.metrica2 {
+    background-image: linear-gradient(to right, #86a1e5, #392686);
 }
 
-.metrica3{
-  background-image: linear-gradient(to right, #AB5BFB, #942B90);
+.metrica3 {
+    background-image: linear-gradient(to right, #ab5bfb, #942b90);
 }
 
-.metrica4{
-  background-image: linear-gradient(to right, #E5FB5B, #59A03F);
+.metrica4 {
+    background-image: linear-gradient(to right, #e5fb5b, #59a03f);
 }
 
-.metrica5{
-  background-image: linear-gradient(to right, #FB5BD8, #952020);
+.metrica5 {
+    background-image: linear-gradient(to right, #fb5bd8, #952020);
 }
 
-.metrica6{
-  background-image: linear-gradient(to right, #5BFBC2, #2B536A);
+.metrica6 {
+    background-image: linear-gradient(to right, #5bfbc2, #2b536a);
 }
 
 /* ---------- Botões de rodar simulação ---------- */
 
 .btn_container {
-  display: flex;
-  gap: 5px;
+    display: flex;
+    gap: 5px;
 }
 
 .run_btn_container {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  margin-top: 20px;
-  gap: 10px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
 }
 
 .run_btn {
-  width: 200px;
-  height: 60px;
-  border-radius: 30px;
-  border: 0px;
-  cursor: pointer;
-  background-color: #0D6EFD;
+    width: 200px;
+    height: 60px;
+    border-radius: 30px;
+    border: 0px;
+    cursor: pointer;
+    background-color: #0d6efd;
 }
 
-.run_btn:hover{
-  background-color: #0B5ED7;
+.run_btn:hover {
+    background-color: #0b5ed7;
 }
 
 .run_btn_text {
-  color: white;
+    color: white;
 }
 
 .config_buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
-.config_button, .confirm_button {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 8px 15px;
-  cursor: pointer;
-  border-radius: 5px;
+.config_button,
+.confirm_button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 .config_button:hover {
-  background-color: #ddd;
-  border: 1px solid #ccc;
+    background-color: #ddd;
+    border: 1px solid #ccc;
 }
 
 .confirm_button {
-  background-color: #28a745;
-  color: white;
-  font-weight: bold;
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
 }
 
 .confirm_button:hover {
-  background-color: #218838;
-  border: 1px solid #ccc;
+    background-color: #218838;
+    border: 1px solid #ccc;
 }
 
 .dropdown_sim {
-  position: relative;
+    position: relative;
 }
 
 .pause_button {
-  width: 200px;
-  height: 60px;
-  border-radius: 30px;
-  border: 0px;
-  cursor: pointer;
-  background-color: #e74c3c;
-  color: white;
-  display: none;
-  justify-content: center;
-  align-items: center;
+    width: 200px;
+    height: 60px;
+    border-radius: 30px;
+    border: 0px;
+    cursor: pointer;
+    background-color: #e74c3c;
+    color: white;
+    display: none;
+    justify-content: center;
+    align-items: center;
 }
 
 .pause_button:hover {
-  background-color: #c0392b;
+    background-color: #c0392b;
 }
 
 /* ---------- Botões de data do gráfico ---------- */
 
 .dropdown_content {
-  display: none;
-  position: absolute;
-  background-color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  overflow: hidden;
-  width: 100%;
-  z-index: 10;
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    width: 100%;
+    z-index: 10;
 }
 
 .dropdown_item {
-  display: block;
-  width: 100%;
-  padding: 8px;
-  text-align: center;
-  border: none;
-  background: none;
-  cursor: pointer;
+    display: block;
+    width: 100%;
+    padding: 8px;
+    text-align: center;
+    border: none;
+    background: none;
+    cursor: pointer;
 }
 
 .dropdown_item:hover {
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
-
 
 .button.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: not-allowed;
-  filter: grayscale(100%);
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(100%);
 }
 
-button:hover, .meses:hover{
-  background-color: rgba(123, 123, 187, 0.336); 
-  transition: .3s;
-  border: 0px;
+button:hover,
+.meses:hover {
+    background-color: rgba(123, 123, 187, 0.336);
+    transition: 0.3s;
+    border: 0px;
 }
 
-.dropdown{
-  display: inline-block;
-  height: 144px; /* para nao sumir as opções quando quero selecionar alguma de baixo */
+.dropdown {
+    display: inline-block;
+    z-index: 100;
 }
 
 .dropdown button,
-.botao{
+.botao {
     background-color: rgb(255, 255, 255);
-    color:var(--first-color);
+    color: var(--first-color);
     min-width: 150px;
     height: 36px;
     padding: 10px 15px;
@@ -474,134 +476,141 @@ button:hover, .meses:hover{
 }
 
 .dropdown .lista {
-    display:block;
-    color:var(--first-color);
+    display: block;
+    color: var(--first-color);
     text-decoration: none;
     padding: 10px 15px;
 }
 
 .dropdown .mes {
-  display:none;
-  position:absolute;
-  min-width: 100px;
-  box-shadow: 2px 2px 5px hsl(0,0%,0.8);
-  height:100px;
-  overflow:hidden;
-  overflow-y:scroll;
+    display: none;
+    position: absolute;
+    min-width: 100px;
+    box-shadow: 2px 2px 5px hsl(0, 0%, 0.8);
+    height: 100px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
-.dropdown:hover .mes {
-  display:block;
+.dropdown .mes.show {
+    display: block;
 }
 
 .botao-1ano {
-  width: 150px;
+    width: 150px;
 }
 
 .lista:hover {
-  background-color: #ad8be057;
+    background-color: #ad8be057;
 }
 
-.botao:active,.meses:active{
-  background-color:  #ad8be057;
+.botao:active,
+.meses:active {
+    background-color: #ad8be057;
 }
 
 #comment_section {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 #comment_input {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
 }
 
 /* ---------- Comentário por data ---------- */
 
+.grupo-btns {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    gap: 5px;
+}
+
 .comment_section {
-  display: none;
-  min-width: 200px;
-  height: 36px;
+    display: none;
+    min-width: 200px;
+    height: 36px;
 }
 
 .comment_input {
-  width: 100%;
-  padding: 10px;
+    width: 100%;
+    padding: 10px;
 }
 
 .date_comment {
-  display: flex;
-  gap: 5px;
+    display: flex;
+    gap: 5px;
 }
 
 .btn-date-comment {
-  font-size: 13px;
+    font-size: 13px;
 }
 
 .btn-delete-date-comment {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-
 .delete_date_comment {
-  display: none;
-  gap: 5px;
+    display: none;
+    gap: 5px;
 }
 
 .btn-confirm-delete {
-  display: none;
-  justify-content: center;
-  background-color: rgb(71, 187, 71);
-  color: white;
-  min-width: 100px;
-  height: 36px;
-  padding: 10px 15px;
-  cursor: pointer;
-  border: none;
+    display: none;
+    justify-content: center;
+    background-color: rgb(71, 187, 71);
+    color: white;
+    min-width: 100px;
+    height: 36px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border: none;
 }
 
 /* ---------- Comentário geral ---------- */
 
 .gc_container {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    width: 100%;
 }
 
 .gc_window {
-  display: none;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  background-color: #CECECE;
-  width: 100%;
-  min-height: 200px;
-  padding: 10px;
-  box-sizing: border-box;
-  overflow: hidden;
-  gap: 10px;
+    display: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: #cecece;
+    width: 100%;
+    min-height: 200px;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    gap: 10px;
 }
 
 .gc_buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
 }
 
 .gc_input {
-  width: 100%;
-  min-height: 100px;
-  resize: vertical;
-  border: 0;
-  padding: 10px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    border: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
 }
 
 .gc_buttons_and_warning {
@@ -612,11 +621,200 @@ button:hover, .meses:hover{
     color: green;
 }
 
-
 /* ---------- Charts --------- */
 
 .chart {
-  min-width: 1000px;
+    min-width: auto;
+    width: 100%;
+    overflow-x: hidden;
 }
 
-/* TODO: Implementar estilos para telas menores */
+main {
+    padding: 1rem;
+    overflow-x: hidden;
+    margin-left: 0;
+    padding-top: 80px;
+}
+
+/* =========================================
+   MEDIA QUERIES (Responsividade)
+   ========================================= */
+
+@media screen and (max-width: 1140px) {
+    div .valor {
+        font-size: 28px;
+    }
+
+    .legenda {
+        font-size: 14px;
+    }
+}
+
+/* --- Tablets e Telas Médias (até 1024px) --- */
+@media screen and (max-width: 1024px) {
+    .header {
+        padding: 0 2rem; /* Reduz padding do header */
+    }
+
+    /* Reduz métricas para 2 colunas */
+    .dashboard-metrica {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 Colunas */
+        gap: 20px;
+        margin-top: 1rem;
+    }
+
+    .metricas-cima,
+    .metricas-baixo {
+        display: contents;
+    }
+
+    /* Remove margens internas que não fazem mais sentido com display: contents */
+    .metricas-cima,
+    .metricas-baixo {
+        margin: 0;
+
+        /* Ajusta botões para quebrarem linha se necessário */
+        .btn_container {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .run_btn_container {
+            flex-direction: column; /* Botões de rodar em coluna */
+            align-items: stretch; /* Botões ocupam largura total */
+        }
+
+        .run_btn,
+        .pause_button {
+            width: 100%; /* Botão full width */
+        }
+    }
+
+    .btn_container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px; /* Espaço entre a linha de cima e a de baixo */
+    }
+
+    .grupo-btns {
+        width: 100%;
+    }
+
+    .gc_container {
+        flex-direction: column;
+        align-items: start;   
+        width: auto;    
+    }
+
+    /* --- Celulares (até 768px) --- */
+    @media screen and (max-width: 768px) {
+        /* Ajuste da Navegação Lateral para Mobile (Ícones na parte inferior ou lateral fina) */
+        .nav {
+            width: 68px;
+            left: -68px; /* Esconde a sidebar por padrão no mobile (opcional) ou mantém fina */
+            left: 0;
+            z-index: 1000;
+        }
+
+        /* Ajusta o padding do Header */
+        .header {
+            padding: 0 1rem;
+            justify-content: space-between;
+        }
+
+        .header-profile {
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        /* Ajusta o Main para não ficar por baixo da nav se ela estiver fixa */
+        .nav:hover + main {
+            margin-left: 0; /* Remove empurrão da main no mobile */
+        }
+
+        /* --- Métricas em 1 Coluna (Pilha) --- */
+        .metricas-cima,
+        .metricas-baixo {
+            grid-template-columns: 1fr; /* Uma métrica por linha */
+            gap: 15px;
+        }
+
+        .metrica1,
+        .metrica2,
+        .metrica3,
+        .metrica4,
+        .metrica5,
+        .metrica6 {
+            height: auto; /* Altura automática */
+            padding: 15px;
+        }
+
+        div .valor {
+            font-size: 22px;
+        }
+
+        /* --- Gráficos e Botões --- */
+        .btn_container {
+            gap: 10px;
+        }
+
+        .dropdown button,
+        .botao {
+            margin-bottom: 5px;
+        }
+
+
+        .gc_window {
+            flex-direction: column;
+        }
+
+        .gc_buttons_and_warning {
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .gc_buttons {
+            flex-direction: row;
+            width: 100%;
+            justify-content: start;
+            flex-wrap: wrap;
+        }
+
+        /* Ajuste no Date Picker container */
+        .date_comment {
+            flex-wrap: wrap;
+        }
+
+        .comment_section {
+            width: 100%;
+        }
+    }
+
+    /* --- Telas muito pequenas (até 480px) --- */
+    @media screen and (max-width: 480px) {
+        main {
+            padding-left: 1rem;
+            padding-bottom: 80px;
+        }
+
+        .nav {
+            width: 50px;
+        }
+
+        main {
+            padding-left: 60px;
+        }
+
+        div .valor {
+            font-size: 28px;
+        }
+
+        .icone-metrica {
+            width: 50px;
+            height: 50px;
+        }
+    }
+}

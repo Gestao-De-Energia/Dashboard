@@ -2,746 +2,728 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!--========== BOX ICONS ==========-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!--========== CSS ==========-->
-  <link rel="stylesheet" href="../../../styles.css"> <!-- Geral -->
-  <link rel="stylesheet" href="../styles.css"> <!-- Da página -->
+    <link rel="stylesheet" href="../../../styles.css"> <link rel="stylesheet" href="../styles.css"> <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!--========== Charts ==========-->
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-  <!--========== Calendario ==========-->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-  <!--========= Título página e ícone da aba ==========-->
-  <title>Dashboard Energético</title>
-  <link rel="icon" type="image/x-icon" href="../../../dashboard_icon.ico">
+    <title>Dashboard Energético</title>
+    <link rel="icon" type="image/x-icon" href="../../../dashboard_icon.ico">
 </head>
 
 <body>
-  <!--========== HEADER ==========-->
-  <header class="header">
-      <div class="header-profile">
-        <div class="user-container">
-            <img id="profile-img" alt="Perfil" class="header-img">
-            <div class="dropdown-menu">
-              <!-- Para a funcionalidade de editar dados do perfil: -->
-              <!-- <a href="#" id="edit-profile">Editar perfil</a> -->
-              <a href="#" id="logout">Desconectar-se</a>
+    <header class="header">
+        <div class="header-profile">
+            <div class="user-container">
+                <img id="profile-img" alt="Perfil" class="header-img">
+                <div class="dropdown-menu">
+                    <a href="#" id="logout">Desconectar-se</a>
+                </div>
+                <p class="user-name"></p>
             </div>
-            <p class="user-name"></p>
         </div>
-      </div>
-  </header>
-  
+    </header>
 
-  <!--========== NAV ==========-->
-  <div class="nav" id="navbar">
-    <nav class="nav-container">
-      <div>
-        <a href="#" class="nav-link nav-logo">
-          <i class='bx bxs-disc nav-icon'></i>
-          <span class="nav-logo-name">Dashboard</span>
-        </a>
-        <div class="nav-list">
-          <div class="nav-items">
-            <a href="../../home/home.html" class="nav-link active">
-              <i class='fa-solid fa-house'></i>
-              <span class="nav-name">Home</span>
-            </a>
-            <div class="nav-dropdown">
-              <a href="#Energia" class="nav-link">
-                <i class='fa-solid fa-bolt'></i>
-                <span class="nav-name">Energia</span>
-                <i class='fas fa-caret-down'></i>
-              </a>
-              <div class="nav-dropdown-collapse">
-                <div class="nav-dropdown-content">
-                  <a href="#chartFotovoltaica" class="nav-dropdown-item">Produção de Energia Fotovoltáica</a>
-                  <a href="#chartEolica" class="nav-dropdown-item">Produção de Energia Eólica</a>
-                  <a href="#chartEnergiaXDemanda" class="nav-dropdown-item">Produção x Demanda</a>
-                  <a href="#chartDesempenho" class="nav-dropdown-item">Desempenho</a>
-                  <a href="#chartEnergiaXCompensacao" class="nav-dropdown-item">Produção x Compensação</a>
+    <div class="nav" id="navbar">
+        <nav class="nav-container">
+            <div>
+                <a href="#" class="nav-link nav-logo">
+                    <i class='bx bxs-disc nav-icon'></i>
+                    <span class="nav-logo-name">Dashboard</span>
+                </a>
+                <div class="nav-list">
+                    <div class="nav-items">
+                        <a href="../../home/home.html" class="nav-link active">
+                            <i class='fa-solid fa-house'></i>
+                            <span class="nav-name">Home</span>
+                        </a>
+                        <div class="nav-dropdown">
+                            <a href="#Energia" class="nav-link">
+                                <i class='fa-solid fa-bolt'></i>
+                                <span class="nav-name">Energia</span>
+                                <i class='fas fa-caret-down'></i>
+                            </a>
+                            <div class="nav-dropdown-collapse">
+                                <div class="nav-dropdown-content">
+                                    <a href="#chartFotovoltaica" class="nav-dropdown-item">Produção de Energia Fotovoltáica</a>
+                                    <a href="#chartEolica" class="nav-dropdown-item">Produção de Energia Eólica</a>
+                                    <a href="#chartEnergiaXDemanda" class="nav-dropdown-item">Produção x Demanda</a>
+                                    <a href="#chartDesempenho" class="nav-dropdown-item">Desempenho</a>
+                                    <a href="#chartEnergiaXCompensacao" class="nav-dropdown-item">Produção x Compensação</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-dropdown">
+                            <a href="#Bateria" class="nav-link">
+                                <i class='fa-solid fa-car-battery'></i>
+                                <span class="nav-name">Bateria</span>
+                                <i class='fas fa-caret-down'></i>
+                            </a>
+                            <div class="nav-dropdown-collapse">
+                                <div class="nav-dropdown-content">
+                                    <a href="#chartBateria" class="nav-dropdown-item">Quantidade de carga e descarga</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-dropdown">
+                            <a href="#SerieTemp" class="nav-link">
+                                <i class='fa-solid fa-chart-simple'></i>
+                                <span class="nav-name">Série Temporal</span>
+                                <i class='fas fa-caret-down'></i>
+                            </a>
+                            <div class="nav-dropdown-collapse">
+                                <div class="nav-dropdown-content">
+                                    <a href="#chartSTSolar" class="nav-dropdown-item">Irradiação solar anual</a>
+                                    <a href="#chartSTVento" class="nav-dropdown-item">Vento anual</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div class="nav-dropdown">
-              <a href="#Bateria" class="nav-link">
-                <i class='fa-solid fa-car-battery'></i>
-                <span class="nav-name">Bateria</span>
-                <i class='fas fa-caret-down'></i>
-              </a>
-              <div class="nav-dropdown-collapse">
-                <div class="nav-dropdown-content">
-                  <a href="#chartBateria" class="nav-dropdown-item">Quantidade de carga e descarga</a>
-                </div>
-              </div>
-            </div>
-            <div class="nav-dropdown">
-              <a href="#SerieTemp" class="nav-link">
-                <i class='fa-solid fa-chart-simple'></i>
-                <span class="nav-name">Série Temporal</span>
-                <i class='fas fa-caret-down'></i>
-              </a>
-              <div class="nav-dropdown-collapse">
-                <div class="nav-dropdown-content">
-                  <a href="#chartSTSolar" class="nav-dropdown-item">Irradiação solar anual</a>
-                  <a href="#chartSTVento" class="nav-dropdown-item">Vento anual</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-  </div>
-  <!--========== CONTENTS ==========-->
-
-  <!------------ MÉTRICAS ------------>
-  
-  <main>
-    <section>
-      <div class="dashboard-metrica">
-        <div class="metricas-cima">
-          <div class="metrica1">
-            <div class="left">
-              <img src="../../../assets/icons/mediaFatorRenovavel.png" alt="Ícone" class="icone-metrica">
-              <div class="metrica-texto">
-                <div class="valor-container">
-                  <h3 class="valor">-</h3>
-                  <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-                </div>
-                <h3 class="legenda">Média Fator Renovável</h3>
-              </div>
-            </div>
-          </div>
-          <div class="metrica2">
-            <div class="left">
-              <img src="../../../assets/icons/perdaCarga.png" alt="Ícone" class="icone-metrica">
-              <div class="metrica-texto">
-                <div class="valor-container">
-                    <h3 class="valor">-</h3>
-                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-                </div>
-              <h3 class="legenda">Perda de carga no grid</h3>
-            </div>
-          </div>
-        </div>
-        <div class="metrica3">
-          <div class="left">
-            <img src="../../../assets/icons/custoEnergia.png" alt="Ícone" class="icone-metrica">
-            <div class="metrica-texto">
-              <div class="valor-container">
-                <h3 class="valor">-</h3>
-                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-              </div>
-              <h3 class="legenda">Custo de energia elétrica</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="metricas-baixo">
-        <div class="metrica4">
-          <div class="left">
-            <img src="../../../assets/icons/numeroCasas.png" alt="Ícone" class="icone-metrica">
-            <div class="metrica-texto">
-              <div class="valor-container">
-                <h3 class="valor">-</h3>
-                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-                <img id="fixedHouses" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
-              </div>
-              <h3 class="legenda">Número de Casas</h3>
-            </div>
-          </div>
-        </div>
-        <div class="metrica5">
-          <div class="left">
-            <img src="../../../assets/icons/turbinasEolicas.png" alt="Ícone" class="icone-metrica">
-            <div class="metrica-texto">
-              <div class="valor-container">
-                <h3 class="valor">-</h3>
-                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-                <img id="fixedTurbines" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
-              </div>
-              <h3 class="legenda">Turbinas eólicas</h3>
-            </div>
-          </div>
-        </div>
-        <div class="metrica6">
-          <div class="left">
-            <img src="../../../assets/icons/geracaoMaxima.png" alt="Ícone" class="icone-metrica">
-            <div class="metrica-texto">
-              <div class="valor-container">
-                <h3 class="valor">-</h3>
-                <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-                <img id="fixedPanelGen" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
-              </div>
-              <h3 class="legenda">Geração Máxima dos panéis</h3>
-            </div>
-          </div>
-        </div>
-      </div>
+        </nav>
     </div>
-      <!-- BOTÃO RODAR SIMULAÇÃO -->
-      <div class="run_btn_container">
-        <button class="run_btn">
-          <h3 class="run_btn_text">Rodar simulação</h3>
-        </button>
-        <p id="running_sim_status"></p>
-        <button class="pause_button" id="pause_button">
-          <h3>Pausar</h3>
-        </button>
-        <div class="config_buttons" style="display: none;">
-          <!-- Dropdown para número de iterações -->
-          <div class="dropdown_sim">
-            <button class="config_button" id="iterations_button">Iterações: 10 ▼</button>
-            <div class="dropdown_content" id="iterations_dropdown">
-              <button class="dropdown_item" data-value="5">5</button>
-              <button class="dropdown_item" data-value="10">10</button>
-              <button class="dropdown_item" data-value="15">15</button>
-              <button class="dropdown_item" data-value="20">20</button>
+    <main>
+        <section>
+            <div class="dashboard-metrica">
+                <div class="metricas-cima">
+                    <div class="metrica1">
+                        <div class="left">
+                            <img src="../../../assets/icons/mediaFatorRenovavel.png" alt="Ícone" class="icone-metrica">
+                            <div class="metrica-texto">
+                                <div class="valor-container">
+                                    <h3 class="valor">-</h3>
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                </div>
+                                <h3 class="legenda">Média Fator Renovável</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metrica2">
+                        <div class="left">
+                            <img src="../../../assets/icons/perdaCarga.png" alt="Ícone" class="icone-metrica">
+                            <div class="metrica-texto">
+                                <div class="valor-container">
+                                    <h3 class="valor">-</h3>
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                </div>
+                                <h3 class="legenda">Perda de carga no grid</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metrica3">
+                        <div class="left">
+                            <img src="../../../assets/icons/custoEnergia.png" alt="Ícone" class="icone-metrica">
+                            <div class="metrica-texto">
+                                <div class="valor-container">
+                                    <h3 class="valor">-</h3>
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                </div>
+                                <h3 class="legenda">Custo de energia elétrica</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metricas-baixo">
+                    <div class="metrica4">
+                        <div class="left">
+                            <img src="../../../assets/icons/numeroCasas.png" alt="Ícone" class="icone-metrica">
+                            <div class="metrica-texto">
+                                <div class="valor-container">
+                                    <h3 class="valor">-</h3>
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                    <img id="fixedHouses" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+                                </div>
+                                <h3 class="legenda">Número de Casas</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metrica5">
+                        <div class="left">
+                            <img src="../../../assets/icons/turbinasEolicas.png" alt="Ícone" class="icone-metrica">
+                            <div class="metrica-texto">
+                                <div class="valor-container">
+                                    <h3 class="valor">-</h3>
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                    <img id="fixedTurbines" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+                                </div>
+                                <h3 class="legenda">Turbinas eólicas</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metrica6">
+                        <div class="left">
+                            <img src="../../../assets/icons/geracaoMaxima.png" alt="Ícone" class="icone-metrica">
+                            <div class="metrica-texto">
+                                <div class="valor-container">
+                                    <h3 class="valor">-</h3>
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                    <img id="fixedPanelGen" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+                                </div>
+                                <h3 class="legenda">Geração Máxima dos panéis</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <!-- Dropdown para período -->
-          <div class="dropdown_sim">
-            <button class="config_button" id="period_button">Período: 12 meses ▼</button>
-            <div class="dropdown_content" id="period_dropdown">
-              <button class="dropdown_item" data-value="1 semana">1 semana</button>
-              <button class="dropdown_item" data-value="2 semanas">2 semanas</button>
-              <button class="dropdown_item" data-value="1 mês">1 mês</button>
-              <button class="dropdown_item" data-value="3 meses">3 meses</button>
-              <button class="dropdown_item" data-value="6 meses">6 meses</button>
-              <button class="dropdown_item" data-value="9 meses">9 meses</button>
-              <button class="dropdown_item" data-value="12 meses">12 meses</button>
+            <div class="run_btn_container">
+                <button class="run_btn">
+                    <h3 class="run_btn_text">Rodar simulação</h3>
+                </button>
+                <p id="running_sim_status"></p>
+                <button class="pause_button" id="pause_button">
+                    <h3>Pausar</h3>
+                </button>
+                <div class="config_buttons" style="display: none;">
+                    <div class="dropdown_sim">
+                        <button class="config_button" id="iterations_button">Iterações: 10 ▼</button>
+                        <div class="dropdown_content" id="iterations_dropdown">
+                            <button class="dropdown_item" data-value="5">5</button>
+                            <button class="dropdown_item" data-value="10">10</button>
+                            <button class="dropdown_item" data-value="15">15</button>
+                            <button class="dropdown_item" data-value="20">20</button>
+                        </div>
+                    </div>
+                    <div class="dropdown_sim">
+                        <button class="config_button" id="period_button">Período: 12 meses ▼</button>
+                        <div class="dropdown_content" id="period_dropdown">
+                            <button class="dropdown_item" data-value="1 semana">1 semana</button>
+                            <button class="dropdown_item" data-value="2 semanas">2 semanas</button>
+                            <button class="dropdown_item" data-value="1 mês">1 mês</button>
+                            <button class="dropdown_item" data-value="3 meses">3 meses</button>
+                            <button class="dropdown_item" data-value="6 meses">6 meses</button>
+                            <button class="dropdown_item" data-value="9 meses">9 meses</button>
+                            <button class="dropdown_item" data-value="12 meses">12 meses</button>
+                        </div>
+                    </div>
+                    <button class="confirm_button" id="confirm_button">Confirmar</button>
+                </div>
             </div>
-          </div>
-          <!-- Botão de confirmar -->
-          <button class="confirm_button" id="confirm_button">Confirmar</button>
-        </div>
-      </div>
 
-      <!------------ SEÇÃO ENERGIA ------------>
+            <h2 style="padding-top: 80px;" id="Energia">Energia</h2>
+            
+            <div class="chart" id="chartFotovoltaica" style="padding-top: 50px"></div>
+            <p class="loading_chart">Carregando gráfico...</p>
+            <div class="btn_container">
+                <div class="grupo-btns">
+                    <div class="dropdown">
+                        <button class="meses">Mês</button>
+                        <div class="mes">
+                            <button id="fev_f" class="lista">Fevereiro(2004)</button>
+                            <button id="mar_f" class="lista">Março(2004)</button>
+                            <button id="abr_f" class="lista">Abril(2004)</button>
+                            <button id="mai_f" class="lista">Maio(2004)</button>
+                            <button id="jun_f" class="lista">Junho(2004)</button>
+                            <button id="jul_f" class="lista">Julho(2004)</button>
+                            <button id="ago_f" class="lista">Agosto(2004)</button>
+                            <button id="set_f" class="lista">Setembro(2004)</button>
+                            <button id="out_f" class="lista">Outubro(2004)</button>
+                            <button id="nov_f" class="lista">Novembro(2004)</button>
+                            <button id="dez_f" class="lista">Dezembro(2004)</button>
+                            <button id="jan_f" class="lista">Janeiro(2005)</button>
+                            <button id="fev_2005_f" class="lista">Fevereiro(2005)</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="meses">6M</button>
+                        <div class="mes">
+                            <button id="sem1_f" class="lista">1º Semestre</button>
+                            <button id="sem2_f" class="lista">2º Semestre</button>
+                        </div>
+                    </div>
+                    <div class="botao_1ano">
+                        <button id="one_year_f" class="botao">1A</button>
+                    </div>
+                </div>
 
-      <h2 style="padding-top: 80px;" id="Energia">Energia</h2>
-      <!-- FOTOVOLTAICA -->
-      <div class="chart" id="chartFotovoltaica" style="padding-top: 50px"></div>
-      <p class="loading_chart">Carregando gráfico...</p>
-      <div class="btn_container">
-        <div class="dropdown">
-          <button class="meses">Mês</button>
-          <div class="mes">
-            <button id="jan_f" class="lista">Janeiro(2005)</button>
-            <button id="fev_f" class="lista">Fevereiro(2004)</button>
-            <button id="fev_2005_f" class="lista">Fevereiro(2005)</button>
-            <button id="mar_f" class="lista">Março(2004)</button>
-            <button id="abr_f" class="lista">Abril(2004)</button>
-            <button id="mai_f" class="lista">Maio(2004)</button>
-            <button id="jun_f" class="lista">Junho(2004)</button>
-            <button id="jul_f" class="lista">Julho(2004)</button>
-            <button id="ago_f" class="lista">Agosto(2004)</button>
-            <button id="set_f" class="lista">Setembro(2004)</button>
-            <button id="out_f" class="lista">Outubro(2004)</button>
-            <button id="nov_f" class="lista">Novembro(2004)</button>
-            <button id="dez_f" class="lista">Dezembro(2004)</button>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="meses">6M</button>
-          <div class="mes">
-            <button id="sem1_f" class="lista">1 Semestre</button>
-            <button id="sem2_f" class="lista">2 Semestre</button>
-          </div>
-        </div>
-        <div class="botao_1ano">
-          <button id="one_year_f" class="botao">1A</button>
-        </div>
-        <!-- COMENTARIO POR DATA -->
-        <div class="date_comment">
-          <button id="select_date_fotovoltaica" class="botao btn-date-comment">Comentário por data</button>
-          <div class="comment_section" id="comment_section_fotovoltaica">
-            <input type="text" class="comment_input" id="comment_input_fotovoltaica"
-              placeholder="Escreva seu comentário...">
-          </div>
-        </div>
-        <!-- DELETAR COMENTARIO POR DATA -->
-        <div id="delete_date_container_fotovoltaica" class="delete_date_comment">
-          <button id="delete_date_fotovoltaica" class="botao btn-delete-date-comment">Deletar comentário</button>
-          <div id="date_options_fotovoltaica" class="date_options_list" style="display: none; margin-top: 10px;"></div>
-          <button id="confirm_delete_fotovoltaica" class="btn-confirm-delete">Confirmar</button>
-        </div>
-        <!-- COMENTARIO GERAL -->
-        <div class="gc_container" id="gc_container_fotovoltaica">
-          <button id="open_gc_fotovoltaica" class="botao">Comentário Geral</button>
-          <div class="gc_window" id="gc_window_fotovoltaica">
-            <div class="gc_buttons_and_warning">
-                <div class="gc_buttons">
-                  <button id="edit_gc_fotovoltaica" class="botao">Alterar</button>
-                  <button id="delete_gc_fotovoltaica" class="botao">Excluir</button>
-                  <button id="save_gc_fotovoltaica" class="botao">Salvar</button>
+                <div class="grupo-btns">
+                    <div class="date_comment">
+                        <button id="select_date_fotovoltaica" class="botao btn-date-comment">Comentário por data</button>
+                        <div class="comment_section" id="comment_section_fotovoltaica">
+                            <input type="text" class="comment_input" id="comment_input_fotovoltaica" placeholder="Escreva seu comentário...">
+                        </div>
+                    </div>
+                    <div id="delete_date_container_fotovoltaica" class="delete_date_comment">
+                        <button id="delete_date_fotovoltaica" class="botao btn-delete-date-comment">Deletar comentário</button>
+                        <div id="date_options_fotovoltaica" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="confirm_delete_fotovoltaica" class="btn-confirm-delete">Confirmar</button>
+                    </div>
+                    <div class="gc_container" id="gc_container_fotovoltaica">
+                        <button id="open_gc_fotovoltaica" class="botao">Comentário Geral</button>
+                    </div>
                 </div>
-                <p id="gc_warning_fotovoltaica" class="gc_warning"></p>
-            </div>
-            <textarea class="gc_input" id="gc_input_fotovoltaica" placeholder="Escreva seu comentário..."></textarea>
-          </div>
-        </div>
-      </div>
-      <!-- EOLICA -->
-      <div class="chart" id="chartEolica"></div>
-      <p class="loading_chart">Carregando gráfico...</p>
-      <div class="btn_container">
-        <div class="dropdown">
-          <button class="meses">Mês</button>
-          <div class="mes">
-            <button id="jan_e" class="lista">Janeiro(2005)</button>
-            <button id="fev_e" class="lista">Fevereiro(2004)</button>
-            <button id="fev_2005_e" class="lista">Fevereiro(2005)</button>
-            <button id="mar_e" class="lista">Março(2004)</button>
-            <button id="abr_e" class="lista">Abril(2004)</button>
-            <button id="mai_e" class="lista">Maio(2004)</button>
-            <button id="jun_e" class="lista">Junho(2004)</button>
-            <button id="jul_e" class="lista">Julho(2004)</button>
-            <button id="ago_e" class="lista">Agosto(2004)</button>
-            <button id="set_e" class="lista">Setembro(2004)</button>
-            <button id="out_e" class="lista">Outubro(2004)</button>
-            <button id="nov_e" class="lista">Novembro(2004)</button>
-            <button id="dez_e" class="lista">Dezembro(2004)</button>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="meses">6M</button>
-          <div class="mes">
-            <button id="sem1_e" class="lista">1 Semestre</button>
-            <button id="sem2_e" class="lista">2 Semestre</button>
-          </div>
-        </div>
-        <div class="botao_1ano">
-          <button id="one_year_e" class="botao">1A</button>
-        </div>
-        <!-- COMENTARIO POR DATA-->
-        <div class="date_comment">
-          <button id="select_date_eolica" class="botao btn-date-comment">Comentário por data</button>
-          <div class="comment_section" id="comment_section_eolica">
-            <input type="text" class="comment_input" id="comment_input_eolica" placeholder="Escreva seu comentário...">
-          </div>
-        </div>
-        <!-- DELETAR COMENTARIO POR DATA -->
-        <div id="delete_date_container_eolica" class="delete_date_comment">
-          <button id="delete_date_eolica" class="botao btn-delete-date-comment">Deletar comentário</button>
-          <div id="date_options_eolica" class="date_options_list" style="display: none; margin-top: 10px;"></div>
-          <button id="confirm_delete_eolica" class="btn-confirm-delete">Ok</button>
-        </div>
-        <!-- COMENTARIO GERAL -->
-        <div class="gc_container" id="gc_container_eolica">
-          <button id="open_gc_eolica" class="botao">Comentário Geral</button>
-          <div class="gc_window" id="gc_window_eolica">
-            <div class="gc_buttons_and_warning">
-                <div class="gc_buttons">
-                <button id="edit_gc_eolica" class="botao">Alterar</button>
-                <button id="delete_gc_eolica" class="botao">Excluir</button>
-                <button id="save_gc_eolica" class="botao">Salvar</button>
+                <div class="gc_window" id="gc_window_fotovoltaica">
+                    <div class="gc_buttons_and_warning">
+                        <div class="gc_buttons">
+                            <button id="save_gc_fotovoltaica" class="botao">Salvar</button>
+                            <button id="edit_gc_fotovoltaica" class="botao">Alterar</button>
+                            <button id="delete_gc_fotovoltaica" class="botao">Excluir</button>
+                        </div>
+                        <p id="gc_warning_fotovoltaica" class="gc_warning"></p>
+                    </div>
+                    <textarea class="gc_input" id="gc_input_fotovoltaica" placeholder="Escreva seu comentário..."></textarea>
                 </div>
-                <p id="gc_warning_eolica" class="gc_warning"></p>
             </div>
-            <textarea class="gc_input" id="gc_input_eolica" placeholder="Escreva seu comentário..."></textarea>
-          </div>
-        </div>
-      </div>
-      <!-- ENERGIA X DEMANDA -->
-      <div class="chart" id="chartEnergiaXDemanda"></div>
-      <p class="loading_chart">Carregando gráfico...</p>
-      <div class="btn_container">
-        <div class="dropdown">
-          <button class="meses">Mês</button>
-          <div class="mes">
-            <button id="jan_exd" class="lista">Janeiro(2005)</button>
-            <button id="fev_exd" class="lista">Fevereiro(2004)</button>
-            <button id="fev_2005_exd" class="lista">Fevereiro(2005)</button>
-            <button id="mar_exd" class="lista">Março(2004)</button>
-            <button id="abr_exd" class="lista">Abril(2004)</button>
-            <button id="mai_exd" class="lista">Maio(2004)</button>
-            <button id="jun_exd" class="lista">Junho(2004)</button>
-            <button id="jul_exd" class="lista">Julho(2004)</button>
-            <button id="ago_exd" class="lista">Agosto(2004)</button>
-            <button id="set_exd" class="lista">Setembro(2004)</button>
-            <button id="out_exd" class="lista">Outubro(2004)</button>
-            <button id="nov_exd" class="lista">Novembro(2004)</button>
-            <button id="dez_exd" class="lista">Dezembro(2004)</button>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="meses">6M</button>
-          <div class="mes">
-            <button id="sem1_exd" class="lista">1 Semestre</button>
-            <button id="sem2_exd" class="lista">2 Semestre</button>
-          </div>
-        </div>
-        <div class="botao_1ano">
-          <button id="one_year_exd" class="botao">1A</button>
-        </div>
-        <!-- COMENTARIO POR DATA -->
-        <div class="date_comment">
-          <button id="select_date_energiaxdemanda" class="botao btn-date-comment">Comentário por data</button>
-          <div class="comment_section" id="comment_section_energiaxdemanda">
-            <input type="text" class="comment_input" id="comment_input_energiaxdemanda"
-              placeholder="Escreva seu comentário...">
-          </div>
-        </div>
-        <!-- DELETAR COMENTARIO POR DATA -->
-        <div id="delete_date_container_energiaxdemanda" class="delete_date_comment">
-          <button id="delete_date_energiaxdemanda" class="botao btn-delete-date-comment">Deletar comentário</button>
-          <div id="date_options_energiaxdemanda" class="date_options_list" style="display: none; margin-top: 10px;"></div>
-          <button id="confirm_delete_energiaxdemanda" class="btn-confirm-delete">Ok</button>
-        </div>
-        <!-- COMENTARIO GERAL -->
-        <div class="gc_container" id="gc_container_energiaxdemanda">
-          <button id="open_gc_energiaxdemanda" class="botao">Comentário Geral</button>
-          <div class="gc_window" id="gc_window_energiaxdemanda">
-            <div class="gc_buttons_and_warning">
-                <div class="gc_buttons">
-                <button id="edit_gc_energiaxdemanda" class="botao">Alterar</button>
-                <button id="delete_gc_energiaxdemanda" class="botao">Excluir</button>
-                <button id="save_gc_energiaxdemanda" class="botao">Salvar</button>
-                </div>
-                <p id="gc_warning_energiaxdemanda" class="gc_warning"></p>
-            </div>
-            <textarea class="gc_input" id="gc_input_energiaxdemanda" placeholder="Escreva seu comentário..."></textarea>
-          </div>
-        </div>
-      </div>
-      <!-- DESEMPENHO -->
-      <div class="chart" id="chartDesempenho"></div>
-      <p class="loading_chart">Carregando gráfico...</p>
-      <div class="btn_container">
-        <div class="dropdown">
-          <button class="meses">Mês</button>
-          <div class="mes">
-            <button id="jan_des" class="lista">Janeiro(2005)</button>
-            <button id="fev_des" class="lista">Fevereiro(2004)</button>
-            <button id="fev_2005_des" class="lista">Fevereiro(2005)</button>
-            <button id="mar_des" class="lista">Março(2004)</button>
-            <button id="abr_des" class="lista">Abril(2004)</button>
-            <button id="mai_des" class="lista">Maio(2004)</button>
-            <button id="jun_des" class="lista">Junho(2004)</button>
-            <button id="jul_des" class="lista">Julho(2004)</button>
-            <button id="ago_des" class="lista">Agosto(2004)</button>
-            <button id="set_des" class="lista">Setembro(2004)</button>
-            <button id="out_des" class="lista">Outubro(2004)</button>
-            <button id="nov_des" class="lista">Novembro(2004)</button>
-            <button id="dez_des" class="lista">Dezembro(2004)</button>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="meses">6M</button>
-          <div class="mes">
-            <button id="sem1_des" class="lista">1 Semestre</button>
-            <button id="sem2_des" class="lista">2 Semestre</button>
-          </div>
-        </div>
-        <div class="botao_1ano">
-          <button id="one_year_des" class="botao">1A</button>
-        </div>
-        <!-- COMENTARIO POR DATA -->
-        <div class="date_comment">
-          <button id="select_date_desempenho" class="botao btn-date-comment">Comentário por data</button>
-          <div class="comment_section" id="comment_section_desempenho">
-            <input type="text" class="comment_input" id="comment_input_desempenho"
-              placeholder="Escreva seu comentário...">
-          </div>
-        </div>
-        <!-- DELETAR COMENTARIO POR DATA -->
-        <div id="delete_date_container_desempenho" class="delete_date_comment">
-          <button id="delete_date_desempenho" class="botao btn-delete-date-comment">Deletar comentário</button>
-          <div id="date_options_desempenho" class="date_options_list" style="display: none; margin-top: 10px;"></div>
-          <button id="confirm_delete_desempenho" class="btn-confirm-delete">Ok</button>
-        </div>
-        <!-- COMENTARIO GERAL -->
-        <div class="gc_container" id="gc_container_desempenho">
-          <button id="open_gc_desempenho" class="botao">Comentário Geral</button>
-          <div class="gc_window" id="gc_window_desempenho">
-            <div class="gc_buttons_and_warning">
-                <div class="gc_buttons">
-                  <button id="edit_gc_desempenho" class="botao">Alterar</button>
-                  <button id="delete_gc_desempenho" class="botao">Excluir</button>
-                  <button id="save_gc_desempenho" class="botao">Salvar</button>
-                </div>
-                <p id="gc_warning_desempenho" class="gc_warning"></p>
-            </div>
-            <textarea class="gc_input" id="gc_input_desempenho" placeholder="Escreva seu comentário..."></textarea>
-          </div>
-        </div>
-      </div>
-      <!-- ENERGIA X COMPENSACAO -->
-      <div class="chart" id="chartEnergiaXCompensacao"></div>
-      <p class="loading_chart">Carregando gráfico...</p>
-      <div class="btn_container">
-        <div class="dropdown">
-          <button class="meses">Mês</button>
-          <div class="mes">
-            <button id="jan_exc" class="lista">Janeiro(2005)</button>
-            <button id="fev_exc" class="lista">Fevereiro(2004)</button>
-            <button id="fev_2005_exc" class="lista">Fevereiro(2005)</button>
-            <button id="mar_exc" class="lista">Março(2004)</button>
-            <button id="abr_exc" class="lista">Abril(2004)</button>
-            <button id="mai_exc" class="lista">Maio(2004)</button>
-            <button id="jun_exc" class="lista">Junho(2004)</button>
-            <button id="jul_exc" class="lista">Julho(2004)</button>
-            <button id="ago_exc" class="lista">Agosto(2004)</button>
-            <button id="set_exc" class="lista">Setembro(2004)</button>
-            <button id="out_exc" class="lista">Outubro(2004)</button>
-            <button id="nov_exc" class="lista">Novembro(2004)</button>
-            <button id="dez_exc" class="lista">Dezembro(2004)</button>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="meses">6M</button>
-          <div class="mes">
-            <button id="sem1_exc" class="lista">1 Semestre</button>
-            <button id="sem2_exc" class="lista">2 Semestre</button>
-          </div>
-        </div>
-        <div class="botao_1ano">
-          <button id="one_year_exc" class="botao">1A</button>
-        </div>
-        <!-- COMENTARIO POR DATA -->
-        <div class="date_comment">
-          <button id="select_date_energiaxcompensacao" class="botao btn-date-comment">Comentário por data</button>
-          <div class="comment_section" id="comment_section_energiaxcompensacao">
-            <input type="text" class="comment_input" id="comment_input_energiaxcompensacao"
-              placeholder="Escreva seu comentário...">
-          </div>
-        </div>
-        <!-- DELETAR COMENTARIO POR DATA -->
-        <div id="delete_date_container_energiaxcompensacao" class="delete_date_comment">
-          <button id="delete_date_energiaxcompensacao" class="botao btn-delete-date-comment">Deletar comentário</button>
-          <div id="date_options_energiaxcompensacao" class="date_options_list" style="display: none; margin-top: 10px;"></div>
-          <button id="confirm_delete_energiaxcompensacao" class="btn-confirm-delete">Ok</button>
-        </div>
-        <!-- COMENTARIO GERAL -->
-        <div class="gc_container" id="gc_container_energiaxcompensacao">
-          <button id="open_gc_energiaxcompensacao" class="botao">Comentário Geral</button>
-          <div class="gc_window" id="gc_window_energiaxcompensacao">
-            <div class="gc_buttons_and_warning">
-                <div class="gc_buttons">
-                  <button id="edit_gc_energiaxcompensacao" class="botao">Alterar</button>
-                  <button id="delete_gc_energiaxcompensacao" class="botao">Excluir</button>
-                  <button id="save_gc_energiaxcompensacao" class="botao">Salvar</button>
-                </div>
-                <p id="gc_warning_energiaxcompensacao" class="gc_warning"></p>
-            </div>
-            <textarea class="gc_input" id="gc_input_energiaxcompensacao"
-              placeholder="Escreva seu comentário..."></textarea>
-          </div>
-        </div>
-      </div>
 
-      <!------------ SEÇÃO BATERIA ------------>
-
-      <h2 style="padding-top: 100px;" id="Bateria">Bateria</h2>
-      <!-- BATERIA -->
-      <div class="chart" id="chartBateria" style="padding-top: 50px"></div>
-      <p class="loading_chart">Carregando gráfico...</p>
-      <div class="btn_container">
-        <div class="dropdown">
-          <button class="meses">Mês</button>
-          <div class="mes">
-            <button id="jan_bat" class="lista">Janeiro(2005)</button>
-            <button id="fev_bat" class="lista">Fevereiro(2004)</button>
-            <button id="fev_2005_bat" class="lista">Fevereiro(2005)</button>
-            <button id="mar_bat" class="lista">Março(2004)</button>
-            <button id="abr_bat" class="lista">Abril(2004)</button>
-            <button id="mai_bat" class="lista">Maio(2004)</button>
-            <button id="jun_bat" class="lista">Junho(2004)</button>
-            <button id="jul_bat" class="lista">Julho(2004)</button>
-            <button id="ago_bat" class="lista">Agosto(2004)</button>
-            <button id="set_bat" class="lista">Setembro(2004)</button>
-            <button id="out_bat" class="lista">Outubro(2004)</button>
-            <button id="nov_bat" class="lista">Novembro(2004)</button>
-            <button id="dez_bat" class="lista">Dezembro(2004)</button>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="meses">6M</button>
-          <div class="mes">
-            <button id="sem1_bat" class="lista">1 Semestre</button>
-            <button id="sem2_bat" class="lista">2 Semestre</button>
-          </div>
-        </div>
-        <div class="botao_1ano">
-          <button id="one_year_bat" class="botao">1A</button>
-        </div>
-        <!-- COMENTARIO POR DATA -->
-        <div class="date_comment">
-          <button id="select_date_bateria" class="botao btn-date-comment">Comentário por data</button>
-          <div class="comment_section" id="comment_section_bateria">
-            <input type="text" class="comment_input" id="comment_input_bateria" placeholder="Escreva seu comentário...">
-          </div>
-        </div>
-        <!-- DELETAR COMENTARIO POR DATA -->
-        <div id="delete_date_container_bateria" class="delete_date_comment">
-          <button id="delete_date_bateria" class="botao btn-delete-date-comment">Deletar comentário</button>
-          <div id="date_options_bateria" class="date_options_list" style="display: none; margin-top: 10px;"></div>
-          <button id="confirm_delete_bateria" class="btn-confirm-delete">Ok</button>
-        </div>
-        <!-- COMENTARIO GERAL -->
-        <div class="gc_container" id="gc_container_bateria">
-          <button id="open_gc_bateria" class="botao">Comentário Geral</button>
-          <div class="gc_window" id="gc_window_bateria">
-            <div class="gc_buttons_and_warning">
-                <div class="gc_buttons">
-                  <button id="edit_gc_bateria" class="botao">Alterar</button>
-                  <button id="delete_gc_bateria" class="botao">Excluir</button>
-                  <button id="save_gc_bateria" class="botao">Salvar</button>
+            <div class="chart" id="chartEolica"></div>
+            <p class="loading_chart">Carregando gráfico...</p>
+            <div class="btn_container">
+                <div class="grupo-btns">
+                    <div class="dropdown">
+                        <button class="meses">Mês</button>
+                        <div class="mes">
+                            <button id="fev_e" class="lista">Fevereiro(2004)</button>
+                            <button id="mar_e" class="lista">Março(2004)</button>
+                            <button id="abr_e" class="lista">Abril(2004)</button>
+                            <button id="mai_e" class="lista">Maio(2004)</button>
+                            <button id="jun_e" class="lista">Junho(2004)</button>
+                            <button id="jul_e" class="lista">Julho(2004)</button>
+                            <button id="ago_e" class="lista">Agosto(2004)</button>
+                            <button id="set_e" class="lista">Setembro(2004)</button>
+                            <button id="out_e" class="lista">Outubro(2004)</button>
+                            <button id="nov_e" class="lista">Novembro(2004)</button>
+                            <button id="dez_e" class="lista">Dezembro(2004)</button>
+                            <button id="jan_e" class="lista">Janeiro(2005)</button>
+                            <button id="fev_2005_e" class="lista">Fevereiro(2005)</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="meses">6M</button>
+                        <div class="mes">
+                            <button id="sem1_e" class="lista">1º Semestre</button>
+                            <button id="sem2_e" class="lista">2º Semestre</button>
+                        </div>
+                    </div>
+                    <div class="botao_1ano">
+                        <button id="one_year_e" class="botao">1A</button>
+                    </div>
                 </div>
-                <p id="gc_warning_bateria" class="gc_warning"></p>
-            </div>
-            <textarea class="gc_input" id="gc_input_bateria" placeholder="Escreva seu comentário..."></textarea>
-          </div>
-        </div>
-      </div>
 
-      <!------------ SEÇAO SERIE TEMPORAL ------------>
+                <div class="grupo-btns">
+                    <div class="date_comment">
+                        <button id="select_date_eolica" class="botao btn-date-comment">Comentário por data</button>
+                        <div class="comment_section" id="comment_section_eolica">
+                            <input type="text" class="comment_input" id="comment_input_eolica" placeholder="Escreva seu comentário...">
+                        </div>
+                    </div>
+                    <div id="delete_date_container_eolica" class="delete_date_comment">
+                        <button id="delete_date_eolica" class="botao btn-delete-date-comment">Deletar comentário</button>
+                        <div id="date_options_eolica" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="confirm_delete_eolica" class="btn-confirm-delete">Ok</button>
+                    </div>
+                    <div class="gc_container" id="gc_container_eolica">
+                        <button id="open_gc_eolica" class="botao">Comentário Geral</button>
+                    </div>
+                </div>
+                <div class="gc_window" id="gc_window_eolica">
+                    <div class="gc_buttons_and_warning">
+                        <div class="gc_buttons">
+                            <button id="save_gc_eolica" class="botao">Salvar</button>
+                            <button id="edit_gc_eolica" class="botao">Alterar</button>
+                            <button id="delete_gc_eolica" class="botao">Excluir</button>
+                        </div>
+                        <p id="gc_warning_eolica" class="gc_warning"></p>
+                    </div>
+                    <textarea class="gc_input" id="gc_input_eolica" placeholder="Escreva seu comentário..."></textarea>
+                </div>
+            </div>
 
-      <div class="chart" id="chart"></div>
-      <h2 style="padding-top: 100px;" id="SerieTemp">Série temporal</h2>
-      <!-- SERIE TEMPORAL SOLAR -->
-      <div class="chart" id="chartSTSolar" style="padding-top: 50px;"></div>
-      <p class="loading_chart">Carregando gráfico...</p>
-      <div class="btn_container">
-        <div class="dropdown">
-          <button class="meses">Mês</button>
-          <div class="mes">
-            <button id="jan_sts" class="lista">Janeiro(2005)</button>
-            <button id="fev_sts" class="lista">Fevereiro(2004)</button>
-            <button id="fev_2005_sts" class="lista">Fevereiro(2005)</button>
-            <button id="mar_sts" class="lista">Março(2004)</button>
-            <button id="abr_sts" class="lista">Abril(2004)</button>
-            <button id="mai_sts" class="lista">Maio(2004)</button>
-            <button id="jun_sts" class="lista">Junho(2004)</button>
-            <button id="jul_sts" class="lista">Julho(2004)</button>
-            <button id="ago_sts" class="lista">Agosto(2004)</button>
-            <button id="set_sts" class="lista">Setembro(2004)</button>
-            <button id="out_sts" class="lista">Outubro(2004)</button>
-            <button id="nov_sts" class="lista">Novembro(2004)</button>
-            <button id="dez_sts" class="lista">Dezembro(2004)</button>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="meses">6M</button>
-          <div class="mes">
-            <button id="sem1_sts" class="lista">1 Semestre</button>
-            <button id="sem2_sts" class="lista">2 Semestre</button>
-          </div>
-        </div>
-        <div class="botao_1ano">
-          <button id="one_year_sts" class="botao">1A</button>
-        </div>
-        <!-- COMENTARIO POR DATA -->
-        <div class="date_comment">
-          <button id="select_date_stsolar" class="botao btn-date-comment">Comentário por data</button>
-          <div class="comment_section" id="comment_section_stsolar">
-            <input type="text" class="comment_input" id="comment_input_stsolar" placeholder="Escreva seu comentário...">
-          </div>
-        </div>
-        <!-- DELETAR COMENTARIO POR DATA -->
-        <div id="delete_date_container_stsolar" class="delete_date_comment">
-          <button id="delete_date_stsolar" class="botao btn-delete-date-comment">Deletar comentário</button>
-          <div id="date_options_stsolar" class="date_options_list" style="display: none; margin-top: 10px;"></div>
-          <button id="confirm_delete_stsolar" class="btn-confirm-delete">Ok</button>
-        </div>
-        <!-- COMENTARIO GERAL -->
-        <div class="gc_container" id="gc_container_stsolar">
-          <button id="open_gc_stsolar" class="botao">Comentário Geral</button>
-          <div class="gc_window" id="gc_window_stsolar">
-            <div class="gc_buttons_and_warning">
-                <div class="gc_buttons">
-                  <button id="edit_gc_stsolar" class="botao">Alterar</button>
-                  <button id="delete_gc_stsolar" class="botao">Excluir</button>
-                  <button id="save_gc_stsolar" class="botao">Salvar</button>
+            <div class="chart" id="chartEnergiaXDemanda"></div>
+            <p class="loading_chart">Carregando gráfico...</p>
+            <div class="btn_container">
+                <div class="grupo-btns">
+                    <div class="dropdown">
+                        <button class="meses">Mês</button>
+                        <div class="mes">
+                            <button id="fev_exd" class="lista">Fevereiro(2004)</button>
+                            <button id="mar_exd" class="lista">Março(2004)</button>
+                            <button id="abr_exd" class="lista">Abril(2004)</button>
+                            <button id="mai_exd" class="lista">Maio(2004)</button>
+                            <button id="jun_exd" class="lista">Junho(2004)</button>
+                            <button id="jul_exd" class="lista">Julho(2004)</button>
+                            <button id="ago_exd" class="lista">Agosto(2004)</button>
+                            <button id="set_exd" class="lista">Setembro(2004)</button>
+                            <button id="out_exd" class="lista">Outubro(2004)</button>
+                            <button id="nov_exd" class="lista">Novembro(2004)</button>
+                            <button id="dez_exd" class="lista">Dezembro(2004)</button>
+                            <button id="jan_exd" class="lista">Janeiro(2005)</button>
+                            <button id="fev_2005_exd" class="lista">Fevereiro(2005)</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="meses">6M</button>
+                        <div class="mes">
+                            <button id="sem1_exd" class="lista">1º Semestre</button>
+                            <button id="sem2_exd" class="lista">2º Semestre</button>
+                        </div>
+                    </div>
+                    <div class="botao_1ano">
+                        <button id="one_year_exd" class="botao">1A</button>
+                    </div>
                 </div>
-                <p id="gc_warning_stsolar" class="gc_warning"></p>
-            </div>
-            <textarea class="gc_input" id="gc_input_stsolar" placeholder="Escreva seu comentário..."></textarea>
-          </div>
-        </div>
-      </div>
-      <!-- SERIE TEMPORAL VENTO -->
-      <div class="gVento"></div>
-      <div class="chart" id="chartSTVento"></div>
-      <p class="loading_chart">Carregando gráfico...</p>
-      <div class="btn_container">
-        <div class="dropdown">
-          <button class="meses">Mês</button>
-          <div class="mes">
-            <button id="jan_stv" class="lista">Janeiro(2005)</button>
-            <button id="fev_stv" class="lista">Fevereiro(2004)</button>
-            <button id="fev_2005_stv" class="lista">Fevereiro(2005)</button>
-            <button id="mar_stv" class="lista">Março(2004)</button>
-            <button id="abr_stv" class="lista">Abril(2004)</button>
-            <button id="mai_stv" class="lista">Maio(2004)</button>
-            <button id="jun_stv" class="lista">Junho(2004)</button>
-            <button id="jul_stv" class="lista">Julho(2004)</button>
-            <button id="ago_stv" class="lista">Agosto(2004)</button>
-            <button id="set_stv" class="lista">Setembro(2004)</button>
-            <button id="out_stv" class="lista">Outubro(2004)</button>
-            <button id="nov_stv" class="lista">Novembro(2004)</button>
-            <button id="dez_stv" class="lista">Dezembro(2004)</button>
-          </div>
-        </div>
-        <div class="dropdown">
-          <button class="meses">6M</button>
-          <div class="mes">
-            <button id="sem1_stv" class="lista">1 Semestre</button>
-            <button id="sem2_stv" class="lista">2 Semestre</button>
-          </div>
-        </div>
-        <div class="botao_1ano">
-          <button id="one_year_stv" class="botao">1A</button>
-        </div>
-        <!-- COMENTARIO POR DATA -->
-        <div class="date_comment">
-          <button id="select_date_stvento" class="botao btn-date-comment">Comentário por data</button>
-          <div class="comment_section" id="comment_section_stvento">
-            <input type="text" class="comment_input" id="comment_input_stvento" placeholder="Escreva seu comentário...">
-          </div>
-        </div>
-        <!-- DELETAR COMENTARIO POR DATA -->
-        <div id="delete_date_container_stvento" class="delete_date_comment">
-          <button id="delete_date_stvento" class="botao btn-delete-date-comment">Deletar comentário</button>
-          <div id="date_options_stvento" class="date_options_list" style="display: none; margin-top: 10px;"></div>
-          <button id="confirm_delete_stvento" class="btn-confirm-delete">Ok</button>
-        </div>
-        <!-- COMENTARIO GERAL -->
-        <div class="gc_container" id="gc_container_stvento">
-          <button id="open_gc_stvento" class="botao">Comentário Geral</button>
-          <div class="gc_window" id="gc_window_stvento">
-            <div class="gc_buttons_and_warning">
-                <div class="gc_buttons">
-                <button id="edit_gc_stvento" class="botao">Alterar</button>
-                  <button id="delete_gc_stvento" class="botao">Excluir</button>
-                  <button id="save_gc_stvento" class="botao">Salvar</button>
+
+                <div class="grupo-btns">
+                    <div class="date_comment">
+                        <button id="select_date_energiaxdemanda" class="botao btn-date-comment">Comentário por data</button>
+                        <div class="comment_section" id="comment_section_energiaxdemanda">
+                            <input type="text" class="comment_input" id="comment_input_energiaxdemanda" placeholder="Escreva seu comentário...">
+                        </div>
+                    </div>
+                    <div id="delete_date_container_energiaxdemanda" class="delete_date_comment">
+                        <button id="delete_date_energiaxdemanda" class="botao btn-delete-date-comment">Deletar comentário</button>
+                        <div id="date_options_energiaxdemanda" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="confirm_delete_energiaxdemanda" class="btn-confirm-delete">Ok</button>
+                    </div>
+                    <div class="gc_container" id="gc_container_energiaxdemanda">
+                        <button id="open_gc_energiaxdemanda" class="botao">Comentário Geral</button>
+                    </div>
                 </div>
-                <p id="gc_warning_stvento" class="gc_warning"></p>
+                <div class="gc_window" id="gc_window_energiaxdemanda">
+                    <div class="gc_buttons_and_warning">
+                        <div class="gc_buttons">
+                            <button id="save_gc_energiaxdemanda" class="botao">Salvar</button>
+                            <button id="edit_gc_energiaxdemanda" class="botao">Alterar</button>
+                            <button id="delete_gc_energiaxdemanda" class="botao">Excluir</button>
+                        </div>
+                        <p id="gc_warning_energiaxdemanda" class="gc_warning"></p>
+                    </div>
+                    <textarea class="gc_input" id="gc_input_energiaxdemanda" placeholder="Escreva seu comentário..."></textarea>
+                </div>
             </div>
-            <textarea class="gc_input" id="gc_input_stvento" placeholder="Escreva seu comentário..."></textarea>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-  <!--========== MAIN JS ==========-->
-  <script type="module" src="./scriptpesq.js"></script>
-  <script type="module" src="../../../db/firebase.js"></script>
-  <script type="module" src="../../../db/getters.js"></script>
-  <script type="module" src="../../../db/setters.js"></script>
+
+            <div class="chart" id="chartDesempenho"></div>
+            <p class="loading_chart">Carregando gráfico...</p>
+            <div class="btn_container">
+                <div class="grupo-btns">
+                    <div class="dropdown">
+                        <button class="meses">Mês</button>
+                        <div class="mes">
+                            <button id="fev_des" class="lista">Fevereiro(2004)</button>
+                            <button id="mar_des" class="lista">Março(2004)</button>
+                            <button id="abr_des" class="lista">Abril(2004)</button>
+                            <button id="mai_des" class="lista">Maio(2004)</button>
+                            <button id="jun_des" class="lista">Junho(2004)</button>
+                            <button id="jul_des" class="lista">Julho(2004)</button>
+                            <button id="ago_des" class="lista">Agosto(2004)</button>
+                            <button id="set_des" class="lista">Setembro(2004)</button>
+                            <button id="out_des" class="lista">Outubro(2004)</button>
+                            <button id="nov_des" class="lista">Novembro(2004)</button>
+                            <button id="dez_des" class="lista">Dezembro(2004)</button>
+                            <button id="jan_des" class="lista">Janeiro(2005)</button>
+                            <button id="fev_2005_des" class="lista">Fevereiro(2005)</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="meses">6M</button>
+                        <div class="mes">
+                            <button id="sem1_des" class="lista">1º Semestre</button>
+                            <button id="sem2_des" class="lista">2º Semestre</button>
+                        </div>
+                    </div>
+                    <div class="botao_1ano">
+                        <button id="one_year_des" class="botao">1A</button>
+                    </div>
+                </div>
+
+                <div class="grupo-btns">
+                    <div class="date_comment">
+                        <button id="select_date_desempenho" class="botao btn-date-comment">Comentário por data</button>
+                        <div class="comment_section" id="comment_section_desempenho">
+                            <input type="text" class="comment_input" id="comment_input_desempenho" placeholder="Escreva seu comentário...">
+                        </div>
+                    </div>
+                    <div id="delete_date_container_desempenho" class="delete_date_comment">
+                        <button id="delete_date_desempenho" class="botao btn-delete-date-comment">Deletar comentário</button>
+                        <div id="date_options_desempenho" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="confirm_delete_desempenho" class="btn-confirm-delete">Ok</button>
+                    </div>
+                    <div class="gc_container" id="gc_container_desempenho">
+                        <button id="open_gc_desempenho" class="botao">Comentário Geral</button>
+                    </div>
+                </div>
+                <div class="gc_window" id="gc_window_desempenho">
+                    <div class="gc_buttons_and_warning">
+                        <div class="gc_buttons">
+                            <button id="save_gc_desempenho" class="botao">Salvar</button>
+                            <button id="edit_gc_desempenho" class="botao">Alterar</button>
+                            <button id="delete_gc_desempenho" class="botao">Excluir</button>
+                        </div>
+                        <p id="gc_warning_desempenho" class="gc_warning"></p>
+                    </div>
+                    <textarea class="gc_input" id="gc_input_desempenho" placeholder="Escreva seu comentário..."></textarea>
+                </div>
+            </div>
+
+            <div class="chart" id="chartEnergiaXCompensacao"></div>
+            <p class="loading_chart">Carregando gráfico...</p>
+            <div class="btn_container">
+                <div class="grupo-btns">
+                    <div class="dropdown">
+                        <button class="meses">Mês</button>
+                        <div class="mes">
+                            <button id="fev_exc" class="lista">Fevereiro(2004)</button>
+                            <button id="mar_exc" class="lista">Março(2004)</button>
+                            <button id="abr_exc" class="lista">Abril(2004)</button>
+                            <button id="mai_exc" class="lista">Maio(2004)</button>
+                            <button id="jun_exc" class="lista">Junho(2004)</button>
+                            <button id="jul_exc" class="lista">Julho(2004)</button>
+                            <button id="ago_exc" class="lista">Agosto(2004)</button>
+                            <button id="set_exc" class="lista">Setembro(2004)</button>
+                            <button id="out_exc" class="lista">Outubro(2004)</button>
+                            <button id="nov_exc" class="lista">Novembro(2004)</button>
+                            <button id="dez_exc" class="lista">Dezembro(2004)</button>
+                            <button id="jan_exc" class="lista">Janeiro(2005)</button>
+                            <button id="fev_2005_exc" class="lista">Fevereiro(2005)</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="meses">6M</button>
+                        <div class="mes">
+                            <button id="sem1_exc" class="lista">1º Semestre</button>
+                            <button id="sem2_exc" class="lista">2º Semestre</button>
+                        </div>
+                    </div>
+                    <div class="botao_1ano">
+                        <button id="one_year_exc" class="botao">1A</button>
+                    </div>
+                </div>
+
+                <div class="grupo-btns">
+                    <div class="date_comment">
+                        <button id="select_date_energiaxcompensacao" class="botao btn-date-comment">Comentário por data</button>
+                        <div class="comment_section" id="comment_section_energiaxcompensacao">
+                            <input type="text" class="comment_input" id="comment_input_energiaxcompensacao" placeholder="Escreva seu comentário...">
+                        </div>
+                    </div>
+                    <div id="delete_date_container_energiaxcompensacao" class="delete_date_comment">
+                        <button id="delete_date_energiaxcompensacao" class="botao btn-delete-date-comment">Deletar comentário</button>
+                        <div id="date_options_energiaxcompensacao" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="confirm_delete_energiaxcompensacao" class="btn-confirm-delete">Ok</button>
+                    </div>
+                    <div class="gc_container" id="gc_container_energiaxcompensacao">
+                        <button id="open_gc_energiaxcompensacao" class="botao">Comentário Geral</button>
+                    </div>
+                </div>
+                <div class="gc_window" id="gc_window_energiaxcompensacao">
+                    <div class="gc_buttons_and_warning">
+                        <div class="gc_buttons">
+                            <button id="save_gc_energiaxcompensacao" class="botao">Salvar</button>
+                            <button id="edit_gc_energiaxcompensacao" class="botao">Alterar</button>
+                            <button id="delete_gc_energiaxcompensacao" class="botao">Excluir</button>
+                        </div>
+                        <p id="gc_warning_energiaxcompensacao" class="gc_warning"></p>
+                    </div>
+                    <textarea class="gc_input" id="gc_input_energiaxcompensacao" placeholder="Escreva seu comentário..."></textarea>
+                </div>
+            </div>
+
+            <h2 style="padding-top: 100px;" id="Bateria">Bateria</h2>
+            <div class="chart" id="chartBateria" style="padding-top: 50px"></div>
+            <p class="loading_chart">Carregando gráfico...</p>
+            <div class="btn_container">
+                <div class="grupo-btns">
+                    <div class="dropdown">
+                        <button class="meses">Mês</button>
+                        <div class="mes">
+                            <button id="fev_bat" class="lista">Fevereiro(2004)</button>
+                            <button id="mar_bat" class="lista">Março(2004)</button>
+                            <button id="abr_bat" class="lista">Abril(2004)</button>
+                            <button id="mai_bat" class="lista">Maio(2004)</button>
+                            <button id="jun_bat" class="lista">Junho(2004)</button>
+                            <button id="jul_bat" class="lista">Julho(2004)</button>
+                            <button id="ago_bat" class="lista">Agosto(2004)</button>
+                            <button id="set_bat" class="lista">Setembro(2004)</button>
+                            <button id="out_bat" class="lista">Outubro(2004)</button>
+                            <button id="nov_bat" class="lista">Novembro(2004)</button>
+                            <button id="dez_bat" class="lista">Dezembro(2004)</button>
+                            <button id="jan_bat" class="lista">Janeiro(2005)</button>
+                            <button id="fev_2005_bat" class="lista">Fevereiro(2005)</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="meses">6M</button>
+                        <div class="mes">
+                            <button id="sem1_bat" class="lista">1º Semestre</button>
+                            <button id="sem2_bat" class="lista">2º Semestre</button>
+                        </div>
+                    </div>
+                    <div class="botao_1ano">
+                        <button id="one_year_bat" class="botao">1A</button>
+                    </div>
+                </div>
+
+                <div class="grupo-btns">
+                    <div class="date_comment">
+                        <button id="select_date_bateria" class="botao btn-date-comment">Comentário por data</button>
+                        <div class="comment_section" id="comment_section_bateria">
+                            <input type="text" class="comment_input" id="comment_input_bateria" placeholder="Escreva seu comentário...">
+                        </div>
+                    </div>
+                    <div id="delete_date_container_bateria" class="delete_date_comment">
+                        <button id="delete_date_bateria" class="botao btn-delete-date-comment">Deletar comentário</button>
+                        <div id="date_options_bateria" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="confirm_delete_bateria" class="btn-confirm-delete">Ok</button>
+                    </div>
+                    <div class="gc_container" id="gc_container_bateria">
+                        <button id="open_gc_bateria" class="botao">Comentário Geral</button>
+                    </div>
+                </div>
+                <div class="gc_window" id="gc_window_bateria">
+                    <div class="gc_buttons_and_warning">
+                        <div class="gc_buttons">
+                            <button id="save_gc_bateria" class="botao">Salvar</button>
+                            <button id="edit_gc_bateria" class="botao">Alterar</button>
+                            <button id="delete_gc_bateria" class="botao">Excluir</button>
+                        </div>
+                        <p id="gc_warning_bateria" class="gc_warning"></p>
+                    </div>
+                    <textarea class="gc_input" id="gc_input_bateria" placeholder="Escreva seu comentário..."></textarea>
+                </div>
+            </div>
+
+            <div class="chart" id="chart"></div>
+            <h2 style="padding-top: 100px;" id="SerieTemp">Série temporal</h2>
+            
+            <div class="chart" id="chartSTSolar" style="padding-top: 50px;"></div>
+            <p class="loading_chart">Carregando gráfico...</p>
+            <div class="btn_container">
+                <div class="grupo-btns">
+                    <div class="dropdown">
+                        <button class="meses">Mês</button>
+                        <div class="mes">
+                            <button id="fev_sts" class="lista">Fevereiro(2004)</button>
+                            <button id="mar_sts" class="lista">Março(2004)</button>
+                            <button id="abr_sts" class="lista">Abril(2004)</button>
+                            <button id="mai_sts" class="lista">Maio(2004)</button>
+                            <button id="jun_sts" class="lista">Junho(2004)</button>
+                            <button id="jul_sts" class="lista">Julho(2004)</button>
+                            <button id="ago_sts" class="lista">Agosto(2004)</button>
+                            <button id="set_sts" class="lista">Setembro(2004)</button>
+                            <button id="out_sts" class="lista">Outubro(2004)</button>
+                            <button id="nov_sts" class="lista">Novembro(2004)</button>
+                            <button id="dez_sts" class="lista">Dezembro(2004)</button>
+                            <button id="jan_sts" class="lista">Janeiro(2005)</button>
+                            <button id="fev_2005_sts" class="lista">Fevereiro(2005)</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="meses">6M</button>
+                        <div class="mes">
+                            <button id="sem1_sts" class="lista">1º Semestre</button>
+                            <button id="sem2_sts" class="lista">2º Semestre</button>
+                        </div>
+                    </div>
+                    <div class="botao_1ano">
+                        <button id="one_year_sts" class="botao">1A</button>
+                    </div>
+                </div>
+
+                <div class="grupo-btns">
+                    <div class="date_comment">
+                        <button id="select_date_stsolar" class="botao btn-date-comment">Comentário por data</button>
+                        <div class="comment_section" id="comment_section_stsolar">
+                            <input type="text" class="comment_input" id="comment_input_stsolar" placeholder="Escreva seu comentário...">
+                        </div>
+                    </div>
+                    <div id="delete_date_container_stsolar" class="delete_date_comment">
+                        <button id="delete_date_stsolar" class="botao btn-delete-date-comment">Deletar comentário</button>
+                        <div id="date_options_stsolar" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="confirm_delete_stsolar" class="btn-confirm-delete">Ok</button>
+                    </div>
+                    <div class="gc_container" id="gc_container_stsolar">
+                        <button id="open_gc_stsolar" class="botao">Comentário Geral</button>
+                    </div>
+                </div>
+                <div class="gc_window" id="gc_window_stsolar">
+                    <div class="gc_buttons_and_warning">
+                        <div class="gc_buttons">
+                            <button id="save_gc_stsolar" class="botao">Salvar</button>
+                            <button id="edit_gc_stsolar" class="botao">Alterar</button>
+                            <button id="delete_gc_stsolar" class="botao">Excluir</button>
+                        </div>
+                        <p id="gc_warning_stsolar" class="gc_warning"></p>
+                    </div>
+                    <textarea class="gc_input" id="gc_input_stsolar" placeholder="Escreva seu comentário..."></textarea>
+                </div>
+            </div>
+
+            <div class="gVento"></div>
+            <div class="chart" id="chartSTVento"></div>
+            <p class="loading_chart">Carregando gráfico...</p>
+            <div class="btn_container">
+                <div class="grupo-btns">
+                    <div class="dropdown">
+                        <button class="meses">Mês</button>
+                        <div class="mes">
+                            <button id="fev_stv" class="lista">Fevereiro(2004)</button>
+                            <button id="mar_stv" class="lista">Março(2004)</button>
+                            <button id="abr_stv" class="lista">Abril(2004)</button>
+                            <button id="mai_stv" class="lista">Maio(2004)</button>
+                            <button id="jun_stv" class="lista">Junho(2004)</button>
+                            <button id="jul_stv" class="lista">Julho(2004)</button>
+                            <button id="ago_stv" class="lista">Agosto(2004)</button>
+                            <button id="set_stv" class="lista">Setembro(2004)</button>
+                            <button id="out_stv" class="lista">Outubro(2004)</button>
+                            <button id="nov_stv" class="lista">Novembro(2004)</button>
+                            <button id="dez_stv" class="lista">Dezembro(2004)</button>
+                            <button id="jan_stv" class="lista">Janeiro(2005)</button>
+                            <button id="fev_2005_stv" class="lista">Fevereiro(2005)</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="meses">6M</button>
+                        <div class="mes">
+                            <button id="sem1_stv" class="lista">1º Semestre</button>
+                            <button id="sem2_stv" class="lista">2º Semestre</button>
+                        </div>
+                    </div>
+                    <div class="botao_1ano">
+                        <button id="one_year_stv" class="botao">1A</button>
+                    </div>
+                </div>
+
+                <div class="grupo-btns">
+                    <div class="date_comment">
+                        <button id="select_date_stvento" class="botao btn-date-comment">Comentário por data</button>
+                        <div class="comment_section" id="comment_section_stvento">
+                            <input type="text" class="comment_input" id="comment_input_stvento" placeholder="Escreva seu comentário...">
+                        </div>
+                    </div>
+                    <div id="delete_date_container_stvento" class="delete_date_comment">
+                        <button id="delete_date_stvento" class="botao btn-delete-date-comment">Deletar comentário</button>
+                        <div id="date_options_stvento" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="confirm_delete_stvento" class="btn-confirm-delete">Ok</button>
+                    </div>
+                    <div class="gc_container" id="gc_container_stvento">
+                        <button id="open_gc_stvento" class="botao">Comentário Geral</button>
+                    </div>
+                </div>
+                <div class="gc_window" id="gc_window_stvento">
+                    <div class="gc_buttons_and_warning">
+                        <div class="gc_buttons">
+                            <button id="save_gc_stvento" class="botao">Salvar</button>
+                            <button id="edit_gc_stvento" class="botao">Alterar</button>
+                            <button id="delete_gc_stvento" class="botao">Excluir</button>
+                        </div>
+                        <p id="gc_warning_stvento" class="gc_warning"></p>
+                    </div>
+                    <textarea class="gc_input" id="gc_input_stvento" placeholder="Escreva seu comentário..."></textarea>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script type="module" src="./scriptpesq.js"></script>
+    <script type="module" src="../../../db/firebase.js"></script>
+    <script type="module" src="../../../db/getters.js"></script>
+    <script type="module" src="../../../db/setters.js"></script>
 </body>
 
 </html>
