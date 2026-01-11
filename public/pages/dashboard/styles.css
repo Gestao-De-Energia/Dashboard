@@ -11,6 +11,13 @@
     z-index: var(--z-fixed);
 }
 
+.header-toggle {
+    color: var(--first-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none; /* Escondido no desktop por padrão */
+}
+
 .header-profile {
     height: 80px;
     position: relative;
@@ -25,10 +32,6 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-}
-
-.user-container:hover .dropdown-menu {
-    display: flex;
 }
 
 .header-img {
@@ -92,6 +95,17 @@
     padding-bottom: 3rem;
     overflow: auto;
     scrollbar-width: none; /* For mozilla */
+}
+
+/* Botão de Fechar dentro da Nav (Padrão: oculto no desktop) */
+.nav-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    color: var(--title-color);
+    cursor: pointer;
+    display: none;
 }
 
 /* For Google Chrome and others */
@@ -171,32 +185,6 @@
 
 .nav-dropdown:hover {
     max-height: 100rem;
-}
-
-/* Navbar expanded */
-.nav:hover {
-    width: var(--nav-width);
-}
-
-.nav:hover + main {
-    margin-left: 10rem;
-}
-
-/* Visible elements */
-.nav:hover .nav-logo-name {
-    opacity: 1;
-}
-
-.nav:hover .nav-subtitle {
-    opacity: 1;
-}
-
-.nav:hover .nav-name {
-    opacity: 1;
-}
-
-.nav:hover .nav-dropdown-icon {
-    opacity: 1;
 }
 
 /* Element opacity */
@@ -650,10 +638,87 @@ main {
     }
 }
 
+/* =========================================
+   COMPORTAMENTO DESKTOP (Min-width: 1025px)
+   Aplica o efeito de Hover APENAS em telas grandes
+   ========================================= */
+
+@media screen and (min-width: 1025px) {
+    .nav:hover {
+        width: var(--nav-width);
+    }
+
+    .nav:hover + main {
+        margin-left: 10rem; /* Ajuste conforme sua var(--nav-width) */
+    }
+
+    /* Mostrar textos e ícones no hover apenas no desktop */
+    .nav:hover .nav-logo-name,
+    .nav:hover .nav-subtitle,
+    .nav:hover .nav-name,
+    .nav:hover .nav-dropdown-icon {
+        opacity: 1;
+    }
+
+    /* Mostrar "desconectar-se" ao passar o mouse em cima do perfil */
+    .user-container:hover .dropdown-menu {
+        display: flex;
+    }
+}
+
 /* --- Tablets e Telas Médias (até 1024px) --- */
 @media screen and (max-width: 1024px) {
     .header {
-        padding: 0 2rem; /* Reduz padding do header */
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-toggle {
+        display: block;
+    }
+
+    /* Sidebar Escondida por padrão */
+    .nav {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        padding: 2rem 1rem;
+        z-index: 200;
+        transition: 0.4s;
+        box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-close {
+        display: block;
+    }
+
+    .show-menu {
+        left: 0;
+    }
+
+    .nav.show-menu .nav-logo-name,
+    .nav.show-menu .nav-name,
+    .nav.show-menu .nav-subtitle,
+    .nav.show-menu .nav-dropdown-icon {
+        opacity: 1;
+    }
+
+    .nav:hover + main {
+        margin-left: 0;
+    }
+
+    .nav-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dropdown-menu.show-profile {
+        display: flex;
     }
 
     /* Reduz métricas para 2 colunas */
@@ -703,18 +768,15 @@ main {
 
     .gc_container {
         flex-direction: column;
-        align-items: start;   
-        width: auto;    
+        align-items: start;
+        width: auto;
     }
 
     /* --- Celulares (até 768px) --- */
     @media screen and (max-width: 768px) {
         /* Ajuste da Navegação Lateral para Mobile (Ícones na parte inferior ou lateral fina) */
         .nav {
-            width: 68px;
-            left: -68px; /* Esconde a sidebar por padrão no mobile (opcional) ou mantém fina */
-            left: 0;
-            z-index: 1000;
+            width: 85%;
         }
 
         /* Ajusta o padding do Header */
@@ -763,7 +825,6 @@ main {
         .botao {
             margin-bottom: 5px;
         }
-
 
         .gc_window {
             flex-direction: column;

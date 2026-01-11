@@ -9,7 +9,9 @@
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="../../../styles.css"> <link rel="stylesheet" href="../styles.css"> <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="../../../styles.css">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -21,6 +23,9 @@
 
 <body>
     <header class="header">
+        <div class="header-toggle">
+            <i class="fa-solid fa-bars" id="header-toggle"></i>
+        </div>
         <div class="header-profile">
             <div class="user-container">
                 <img id="profile-img" alt="Perfil" class="header-img">
@@ -34,6 +39,10 @@
 
     <div class="nav" id="navbar">
         <nav class="nav-container">
+            <div class="nav-close" id="nav-close">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+
             <div>
                 <a href="#" class="nav-link nav-logo">
                     <i class='bx bxs-disc nav-icon'></i>
@@ -53,11 +62,13 @@
                             </a>
                             <div class="nav-dropdown-collapse">
                                 <div class="nav-dropdown-content">
-                                    <a href="#chartFotovoltaica" class="nav-dropdown-item">Produção de Energia Fotovoltáica</a>
+                                    <a href="#chartFotovoltaica" class="nav-dropdown-item">Produção de Energia
+                                        Fotovoltáica</a>
                                     <a href="#chartEolica" class="nav-dropdown-item">Produção de Energia Eólica</a>
                                     <a href="#chartEnergiaXDemanda" class="nav-dropdown-item">Produção x Demanda</a>
                                     <a href="#chartDesempenho" class="nav-dropdown-item">Desempenho</a>
-                                    <a href="#chartEnergiaXCompensacao" class="nav-dropdown-item">Produção x Compensação</a>
+                                    <a href="#chartEnergiaXCompensacao" class="nav-dropdown-item">Produção x
+                                        Compensação</a>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +112,8 @@
                             <div class="metrica-texto">
                                 <div class="valor-container">
                                     <h3 class="valor">-</h3>
-                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..."
+                                        style="display: none; width: 30px;">
                                 </div>
                                 <h3 class="legenda">Média Fator Renovável</h3>
                             </div>
@@ -113,7 +125,8 @@
                             <div class="metrica-texto">
                                 <div class="valor-container">
                                     <h3 class="valor">-</h3>
-                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..."
+                                        style="display: none; width: 30px;">
                                 </div>
                                 <h3 class="legenda">Perda de carga no grid</h3>
                             </div>
@@ -125,7 +138,8 @@
                             <div class="metrica-texto">
                                 <div class="valor-container">
                                     <h3 class="valor">-</h3>
-                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..."
+                                        style="display: none; width: 30px;">
                                 </div>
                                 <h3 class="legenda">Custo de energia elétrica</h3>
                             </div>
@@ -139,8 +153,10 @@
                             <div class="metrica-texto">
                                 <div class="valor-container">
                                     <h3 class="valor">-</h3>
-                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-                                    <img id="fixedHouses" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..."
+                                        style="display: none; width: 30px;">
+                                    <img id="fixedHouses" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado"
+                                        style="display: none; width: 30px; margin-left: 5px">
                                 </div>
                                 <h3 class="legenda">Número de Casas</h3>
                             </div>
@@ -152,8 +168,10 @@
                             <div class="metrica-texto">
                                 <div class="valor-container">
                                     <h3 class="valor">-</h3>
-                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-                                    <img id="fixedTurbines" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..."
+                                        style="display: none; width: 30px;">
+                                    <img id="fixedTurbines" class="fixedIcon" src="../../../assets/fixed.svg"
+                                        alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
                                 </div>
                                 <h3 class="legenda">Turbinas eólicas</h3>
                             </div>
@@ -165,8 +183,10 @@
                             <div class="metrica-texto">
                                 <div class="valor-container">
                                     <h3 class="valor">-</h3>
-                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..." style="display: none; width: 30px;">
-                                    <img id="fixedPanelGen" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
+                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..."
+                                        style="display: none; width: 30px;">
+                                    <img id="fixedPanelGen" class="fixedIcon" src="../../../assets/fixed.svg"
+                                        alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
                                 </div>
                                 <h3 class="legenda">Geração Máxima dos panéis</h3>
                             </div>
@@ -209,7 +229,7 @@
             </div>
 
             <h2 style="padding-top: 80px;" id="Energia">Energia</h2>
-            
+
             <div class="chart" id="chartFotovoltaica" style="padding-top: 50px"></div>
             <p class="loading_chart">Carregando gráfico...</p>
             <div class="btn_container">
@@ -246,14 +266,18 @@
 
                 <div class="grupo-btns">
                     <div class="date_comment">
-                        <button id="select_date_fotovoltaica" class="botao btn-date-comment">Comentário por data</button>
+                        <button id="select_date_fotovoltaica" class="botao btn-date-comment">Comentário por
+                            data</button>
                         <div class="comment_section" id="comment_section_fotovoltaica">
-                            <input type="text" class="comment_input" id="comment_input_fotovoltaica" placeholder="Escreva seu comentário...">
+                            <input type="text" class="comment_input" id="comment_input_fotovoltaica"
+                                placeholder="Escreva seu comentário...">
                         </div>
                     </div>
                     <div id="delete_date_container_fotovoltaica" class="delete_date_comment">
-                        <button id="delete_date_fotovoltaica" class="botao btn-delete-date-comment">Deletar comentário</button>
-                        <div id="date_options_fotovoltaica" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="delete_date_fotovoltaica" class="botao btn-delete-date-comment">Deletar
+                            comentário</button>
+                        <div id="date_options_fotovoltaica" class="date_options_list"
+                            style="display: none; margin-top: 10px;"></div>
                         <button id="confirm_delete_fotovoltaica" class="btn-confirm-delete">Confirmar</button>
                     </div>
                     <div class="gc_container" id="gc_container_fotovoltaica">
@@ -269,7 +293,8 @@
                         </div>
                         <p id="gc_warning_fotovoltaica" class="gc_warning"></p>
                     </div>
-                    <textarea class="gc_input" id="gc_input_fotovoltaica" placeholder="Escreva seu comentário..."></textarea>
+                    <textarea class="gc_input" id="gc_input_fotovoltaica"
+                        placeholder="Escreva seu comentário..."></textarea>
                 </div>
             </div>
 
@@ -311,12 +336,15 @@
                     <div class="date_comment">
                         <button id="select_date_eolica" class="botao btn-date-comment">Comentário por data</button>
                         <div class="comment_section" id="comment_section_eolica">
-                            <input type="text" class="comment_input" id="comment_input_eolica" placeholder="Escreva seu comentário...">
+                            <input type="text" class="comment_input" id="comment_input_eolica"
+                                placeholder="Escreva seu comentário...">
                         </div>
                     </div>
                     <div id="delete_date_container_eolica" class="delete_date_comment">
-                        <button id="delete_date_eolica" class="botao btn-delete-date-comment">Deletar comentário</button>
-                        <div id="date_options_eolica" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="delete_date_eolica" class="botao btn-delete-date-comment">Deletar
+                            comentário</button>
+                        <div id="date_options_eolica" class="date_options_list"
+                            style="display: none; margin-top: 10px;"></div>
                         <button id="confirm_delete_eolica" class="btn-confirm-delete">Ok</button>
                     </div>
                     <div class="gc_container" id="gc_container_eolica">
@@ -372,14 +400,18 @@
 
                 <div class="grupo-btns">
                     <div class="date_comment">
-                        <button id="select_date_energiaxdemanda" class="botao btn-date-comment">Comentário por data</button>
+                        <button id="select_date_energiaxdemanda" class="botao btn-date-comment">Comentário por
+                            data</button>
                         <div class="comment_section" id="comment_section_energiaxdemanda">
-                            <input type="text" class="comment_input" id="comment_input_energiaxdemanda" placeholder="Escreva seu comentário...">
+                            <input type="text" class="comment_input" id="comment_input_energiaxdemanda"
+                                placeholder="Escreva seu comentário...">
                         </div>
                     </div>
                     <div id="delete_date_container_energiaxdemanda" class="delete_date_comment">
-                        <button id="delete_date_energiaxdemanda" class="botao btn-delete-date-comment">Deletar comentário</button>
-                        <div id="date_options_energiaxdemanda" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="delete_date_energiaxdemanda" class="botao btn-delete-date-comment">Deletar
+                            comentário</button>
+                        <div id="date_options_energiaxdemanda" class="date_options_list"
+                            style="display: none; margin-top: 10px;"></div>
                         <button id="confirm_delete_energiaxdemanda" class="btn-confirm-delete">Ok</button>
                     </div>
                     <div class="gc_container" id="gc_container_energiaxdemanda">
@@ -395,7 +427,8 @@
                         </div>
                         <p id="gc_warning_energiaxdemanda" class="gc_warning"></p>
                     </div>
-                    <textarea class="gc_input" id="gc_input_energiaxdemanda" placeholder="Escreva seu comentário..."></textarea>
+                    <textarea class="gc_input" id="gc_input_energiaxdemanda"
+                        placeholder="Escreva seu comentário..."></textarea>
                 </div>
             </div>
 
@@ -437,12 +470,15 @@
                     <div class="date_comment">
                         <button id="select_date_desempenho" class="botao btn-date-comment">Comentário por data</button>
                         <div class="comment_section" id="comment_section_desempenho">
-                            <input type="text" class="comment_input" id="comment_input_desempenho" placeholder="Escreva seu comentário...">
+                            <input type="text" class="comment_input" id="comment_input_desempenho"
+                                placeholder="Escreva seu comentário...">
                         </div>
                     </div>
                     <div id="delete_date_container_desempenho" class="delete_date_comment">
-                        <button id="delete_date_desempenho" class="botao btn-delete-date-comment">Deletar comentário</button>
-                        <div id="date_options_desempenho" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="delete_date_desempenho" class="botao btn-delete-date-comment">Deletar
+                            comentário</button>
+                        <div id="date_options_desempenho" class="date_options_list"
+                            style="display: none; margin-top: 10px;"></div>
                         <button id="confirm_delete_desempenho" class="btn-confirm-delete">Ok</button>
                     </div>
                     <div class="gc_container" id="gc_container_desempenho">
@@ -458,7 +494,8 @@
                         </div>
                         <p id="gc_warning_desempenho" class="gc_warning"></p>
                     </div>
-                    <textarea class="gc_input" id="gc_input_desempenho" placeholder="Escreva seu comentário..."></textarea>
+                    <textarea class="gc_input" id="gc_input_desempenho"
+                        placeholder="Escreva seu comentário..."></textarea>
                 </div>
             </div>
 
@@ -498,14 +535,18 @@
 
                 <div class="grupo-btns">
                     <div class="date_comment">
-                        <button id="select_date_energiaxcompensacao" class="botao btn-date-comment">Comentário por data</button>
+                        <button id="select_date_energiaxcompensacao" class="botao btn-date-comment">Comentário por
+                            data</button>
                         <div class="comment_section" id="comment_section_energiaxcompensacao">
-                            <input type="text" class="comment_input" id="comment_input_energiaxcompensacao" placeholder="Escreva seu comentário...">
+                            <input type="text" class="comment_input" id="comment_input_energiaxcompensacao"
+                                placeholder="Escreva seu comentário...">
                         </div>
                     </div>
                     <div id="delete_date_container_energiaxcompensacao" class="delete_date_comment">
-                        <button id="delete_date_energiaxcompensacao" class="botao btn-delete-date-comment">Deletar comentário</button>
-                        <div id="date_options_energiaxcompensacao" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="delete_date_energiaxcompensacao" class="botao btn-delete-date-comment">Deletar
+                            comentário</button>
+                        <div id="date_options_energiaxcompensacao" class="date_options_list"
+                            style="display: none; margin-top: 10px;"></div>
                         <button id="confirm_delete_energiaxcompensacao" class="btn-confirm-delete">Ok</button>
                     </div>
                     <div class="gc_container" id="gc_container_energiaxcompensacao">
@@ -521,7 +562,8 @@
                         </div>
                         <p id="gc_warning_energiaxcompensacao" class="gc_warning"></p>
                     </div>
-                    <textarea class="gc_input" id="gc_input_energiaxcompensacao" placeholder="Escreva seu comentário..."></textarea>
+                    <textarea class="gc_input" id="gc_input_energiaxcompensacao"
+                        placeholder="Escreva seu comentário..."></textarea>
                 </div>
             </div>
 
@@ -564,12 +606,15 @@
                     <div class="date_comment">
                         <button id="select_date_bateria" class="botao btn-date-comment">Comentário por data</button>
                         <div class="comment_section" id="comment_section_bateria">
-                            <input type="text" class="comment_input" id="comment_input_bateria" placeholder="Escreva seu comentário...">
+                            <input type="text" class="comment_input" id="comment_input_bateria"
+                                placeholder="Escreva seu comentário...">
                         </div>
                     </div>
                     <div id="delete_date_container_bateria" class="delete_date_comment">
-                        <button id="delete_date_bateria" class="botao btn-delete-date-comment">Deletar comentário</button>
-                        <div id="date_options_bateria" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="delete_date_bateria" class="botao btn-delete-date-comment">Deletar
+                            comentário</button>
+                        <div id="date_options_bateria" class="date_options_list"
+                            style="display: none; margin-top: 10px;"></div>
                         <button id="confirm_delete_bateria" class="btn-confirm-delete">Ok</button>
                     </div>
                     <div class="gc_container" id="gc_container_bateria">
@@ -591,7 +636,7 @@
 
             <div class="chart" id="chart"></div>
             <h2 style="padding-top: 100px;" id="SerieTemp">Série temporal</h2>
-            
+
             <div class="chart" id="chartSTSolar" style="padding-top: 50px;"></div>
             <p class="loading_chart">Carregando gráfico...</p>
             <div class="btn_container">
@@ -630,12 +675,15 @@
                     <div class="date_comment">
                         <button id="select_date_stsolar" class="botao btn-date-comment">Comentário por data</button>
                         <div class="comment_section" id="comment_section_stsolar">
-                            <input type="text" class="comment_input" id="comment_input_stsolar" placeholder="Escreva seu comentário...">
+                            <input type="text" class="comment_input" id="comment_input_stsolar"
+                                placeholder="Escreva seu comentário...">
                         </div>
                     </div>
                     <div id="delete_date_container_stsolar" class="delete_date_comment">
-                        <button id="delete_date_stsolar" class="botao btn-delete-date-comment">Deletar comentário</button>
-                        <div id="date_options_stsolar" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="delete_date_stsolar" class="botao btn-delete-date-comment">Deletar
+                            comentário</button>
+                        <div id="date_options_stsolar" class="date_options_list"
+                            style="display: none; margin-top: 10px;"></div>
                         <button id="confirm_delete_stsolar" class="btn-confirm-delete">Ok</button>
                     </div>
                     <div class="gc_container" id="gc_container_stsolar">
@@ -694,12 +742,15 @@
                     <div class="date_comment">
                         <button id="select_date_stvento" class="botao btn-date-comment">Comentário por data</button>
                         <div class="comment_section" id="comment_section_stvento">
-                            <input type="text" class="comment_input" id="comment_input_stvento" placeholder="Escreva seu comentário...">
+                            <input type="text" class="comment_input" id="comment_input_stvento"
+                                placeholder="Escreva seu comentário...">
                         </div>
                     </div>
                     <div id="delete_date_container_stvento" class="delete_date_comment">
-                        <button id="delete_date_stvento" class="botao btn-delete-date-comment">Deletar comentário</button>
-                        <div id="date_options_stvento" class="date_options_list" style="display: none; margin-top: 10px;"></div>
+                        <button id="delete_date_stvento" class="botao btn-delete-date-comment">Deletar
+                            comentário</button>
+                        <div id="date_options_stvento" class="date_options_list"
+                            style="display: none; margin-top: 10px;"></div>
                         <button id="confirm_delete_stvento" class="btn-confirm-delete">Ok</button>
                     </div>
                     <div class="gc_container" id="gc_container_stvento">
