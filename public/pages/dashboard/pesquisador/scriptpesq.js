@@ -1585,13 +1585,7 @@ async function loadData() {
                     breakpoint: 768,
                     options: {
                         chart: {
-                            height: 300, // Gráfico um pouco menor no mobile
-                            zoom: {
-                                enabled: false
-                            },
-                            selection: {
-                                enabled: false
-                            }
+                            height: 300,
                         },
                         legend: {
                             position: "bottom",
