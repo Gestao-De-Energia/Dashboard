@@ -1586,6 +1586,12 @@ async function loadData() {
                     options: {
                         chart: {
                             height: 300, // Gráfico um pouco menor no mobile
+                            zoom: {
+                                enabled: false
+                            },
+                            selection: {
+                                enabled: false
+                            }
                         },
                         legend: {
                             position: "bottom",
