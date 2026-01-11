@@ -1,11 +1,14 @@
 .modo, .titulo{
   font-family: 'Poppins', sans-serif;
+  text-align: center;
   flex-direction: row;
   display: flex;
   justify-content: center;
   align-items: center;
   padding-top: 20px;
   font-size: 36px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .modo_button {
@@ -15,7 +18,6 @@
   background-color: #a47ae9ad; 
   border: none; 
   cursor: pointer; 
-  margin-right: 30px;
 }
 
 .modo_button:hover {

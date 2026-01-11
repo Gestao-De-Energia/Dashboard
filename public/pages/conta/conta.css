@@ -13,6 +13,7 @@ body{
     align-items:center;
     justify-content: center;
     background-color: #6923D0;
+    padding: 20px;
 }
 
 .container{
@@ -22,6 +23,7 @@ body{
     background-color: #fff;
     box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     border-radius: 15px;
+    overflow: hidden;
 }
 
 .container .active .login{
@@ -32,8 +34,7 @@ body{
 .container .forms{
     display: flex;
     align-items: center;
-    width: 200%;
-    height: 430px; 
+    width: 100%;
     transition: height 0.2s ease-in-out; 
 }
 
@@ -42,7 +43,7 @@ body{
 }
 
 .container .form{
-    width: 50%;
+    width: 100%;
     padding: 30px;
     background-color: #fff;
     transition: margin-left 0.18s ease;

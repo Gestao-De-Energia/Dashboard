@@ -79,7 +79,7 @@ function validateFormData(user) {
 
 /* Já cria uma instância no banco de dados de um usuário e salva os dados para completar o cadastro depois */
 async function handlePartialSignup(){
-    const partialUser = await getFormData();
+    let partialUser = await getFormData();
     let { nome, email, senha, pesquisador, consumidor } = partialUser;
 
     if (!validateFormData(partialUser)) {
