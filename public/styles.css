@@ -44,12 +44,17 @@
 
 body {
   margin: var(--header-height) 0 0 0;
-  padding: 1rem 3rem 0 8rem;
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
   background-color: var(--body-color);
   color: var(--text-color);
   margin-bottom: 150px;
+}
+
+@media screen and (min-width: 1025px) {
+    body {
+        padding: 1rem 3rem 0 8rem;
+    }
 }
 
 main {
