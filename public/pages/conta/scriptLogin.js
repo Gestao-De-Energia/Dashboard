@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Volta o texto do botão para "Login"
         function stopLoadingAnimation() {
             clearInterval(intervalId);
-            loginButton.textContent = "Login";
+            loginButton.value = "Login";
         }
 
         // Faz login com email e senha passados no input
