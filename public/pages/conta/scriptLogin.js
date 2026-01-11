@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Faz login com email e senha passados no input
         try {
+            startLoadingAnimation("Autenticando");
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             console.log("Usuário autenticado:", user);
@@ -113,6 +114,8 @@ document.addEventListener("DOMContentLoaded", () => {
             loginWarning.style.display = "flex";
             stopLoadingAnimation();
             loginWarning.textContent = "Erro no email ou senha.";
+        } finally {
+            stopLoadingAnimation();
         }
     };
 
