@@ -30,6 +30,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 userNameElement.textContent = userData.nome;
                 profileImg.src =
                     userData.photoURL || "../../../assets/perfil.png";
+            } else {
+                userNameElement.textContent = "Convidado";
+                profileImg.src = "../../../assets/perfil.png";
             }
         } else {
             userNameElement.textContent = "Convidado";
