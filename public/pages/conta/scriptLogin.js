@@ -5,6 +5,12 @@ import { signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.
 const pwShowHide = document.querySelectorAll(".showHidePw");
 const pwFields = document.querySelectorAll(".password-input");
 
+const defaultPaths = {
+    pesquisador_consumidor: "/pages/home/home.html",
+    pesquisador: "/pages/dashboard/pesquisador/pesq.html",
+    consumidor: "/pages/dashboard/consumidor/cons.html"
+};
+
 /* Troca entre olho riscado/não-riscado no campo Senha */
 pwShowHide.forEach((eyeIcon) => {
     eyeIcon.addEventListener("click", () => {
@@ -91,12 +97,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             
             // Muda de tela de acordo com o perfil do user
+            // Se der erro ao rodar localmente, tenha certeza que o live server tem como raiz "/public" e não "/"
             if (userData.pesquisador && userData.consumidor) {
-                window.location.href = "/pages/home/home.html"; // path em desenvolvimento: "/public/pages/home/home.html" ---- path em produção: "/pages/home/home.html"
+                window.location.href = defaultPaths.pesquisador_consumidor;
             } else if (userData.pesquisador) {
-                window.location.href = "/pages/dashboard/pesquisador/pesq.html"; // path em desenvolvimento: "/public/pages/dashboard/pesquisador/pesq.html" ---- path em produção: "/pages/dashboard/pesquisador/pesq.html"
+                window.location.href = defaultPaths.pesquisador;
             } else if (userData.consumidor) {
-                window.location.href = "/pages/dashboard/consumidor/cons.html"; // path em desenvolvimento: "/public/pages/dashboard/consumidor/cons.html" ---- path em produção: "/pages/dashboard/consumidor/cons.html"
+                window.location.href = defaultPaths.consumidor;
             } else {
                 loginWarning.style.display = "flex";
                 loginWarning.textContent = "Erro: Perfil do usuário não definido.";
