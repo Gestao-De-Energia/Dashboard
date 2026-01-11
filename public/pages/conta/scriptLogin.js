@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
             startLoadingAnimation("Autenticando");
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            console.log("Usuário autenticado:", user);
+            //console.log("Usuário autenticado:", user);
 
             startLoadingAnimation("Entrando");
 
