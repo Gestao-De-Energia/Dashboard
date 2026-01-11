@@ -183,8 +183,9 @@
     color: var(--first-color);
 }
 
-.nav-dropdown:hover {
-    max-height: 100rem;
+.nav-dropdown:hover,
+.nav-dropdown.expanded {
+    max-height: 100%;
 }
 
 /* Element opacity */
@@ -869,8 +870,17 @@ main {
 
         #Energia,
         #Bateria,
-        #SerieTemp {
+        #SerieTemp,
+        #chartFotovoltaica,
+        #chartEolica,
+        #chartEnergiaXDemanda,
+        #chartDesempenho,
+        #chartEnergiaXCompensacao,
+        #chartBateria,
+        #chartSTSolar,
+        #chartSTVento {
             padding-top: 0;
+            scroll-margin-top: 100px;
         }
 
         .chartFotovoltaica,

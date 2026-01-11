@@ -96,9 +96,53 @@ if (navClose) {
 const navLink = document.querySelectorAll(".nav-link");
 
 function linkAction() {
+    if(this.parentNode.classList.contains('nav-dropdown')){
+        return;
+    }
     navMenu.classList.remove("show-menu");
 }
 navLink.forEach((n) => n.addEventListener("click", linkAction));
+
+/*==================== FECHAR SIDEBAR AO CLICAR NO SUB-ITEM ====================*/
+// Seleciona todos os links que estão DENTRO dos dropdowns
+const dropdownSubItems = document.querySelectorAll('.nav-dropdown-item');
+
+dropdownSubItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const navMenu = document.getElementById('navbar');
+        
+        if(navMenu) {
+            navMenu.classList.remove('show-menu');
+        }
+    });
+});
+
+/*==================== RESPONSIVIDADE DROPDOWN (MOBILE/TABLET) ====================*/
+// Seleciona todos os dropdowns da sidebar
+const navDropdowns = document.querySelectorAll('.nav-dropdown');
+
+navDropdowns.forEach(dropdown => {
+    // Seleciona o link principal (ex: Energia, Bateria)
+    const dropdownLink = dropdown.querySelector('.nav-link');
+    
+    dropdownLink.addEventListener('click', (e) => {
+        // Verifica se é um dispositivo móvel/tablet (largura <= 1024px conforme seu CSS)
+        if (window.innerWidth <= 1024) {
+            // Previne o comportamento padrão (pular para a âncora) se preferir que apenas abra o menu
+            // e.preventDefault(); 
+            
+            // Alterna a classe 'expanded' para abrir/fechar
+            dropdown.classList.toggle('expanded');
+            
+            // Opcional: Fechar outros dropdowns abertos para focar apenas neste
+            navDropdowns.forEach(otherDropdown => {
+                if (otherDropdown !== dropdown) {
+                    otherDropdown.classList.remove('expanded');
+                }
+            });
+        }
+    });
+});
 
 /*==================== RODANDO SIMULAÇÃO ====================*/
 
