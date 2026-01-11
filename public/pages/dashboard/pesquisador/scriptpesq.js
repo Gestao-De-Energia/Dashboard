@@ -408,7 +408,7 @@ window.addEventListener("load", () => {
 document.addEventListener("DOMContentLoaded", () => {
     const dropdownButtons = document.querySelectorAll(".meses");
 
-    dropdownButtons.forEach(btn => {
+    dropdownButtons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
 
@@ -423,14 +423,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     window.addEventListener("click", (e) => {
-        if (!e.target.matches('.meses')) {
+        if (!e.target.matches(".meses")) {
             closeAllChartDropdowns(null);
         }
     });
 
     function closeAllChartDropdowns(exceptThisOne) {
         const allDropdowns = document.querySelectorAll(".mes");
-        allDropdowns.forEach(dropdown => {
+        allDropdowns.forEach((dropdown) => {
             if (dropdown !== exceptThisOne) {
                 dropdown.classList.remove("show");
             }
@@ -473,6 +473,7 @@ function addAnnotationToChart(xDate, comment, chart, options) {
     });
 }
 
+/* ==================== COMENTÁRIO POR DATA ==================== */
 document.addEventListener("DOMContentLoaded", async function () {
     try {
         await loadData();
@@ -485,17 +486,29 @@ document.addEventListener("DOMContentLoaded", async function () {
             name
         ) {
             var selectedDate = null;
+            const buttonElement = document.querySelector(buttonId);
+            const commentSection = document.querySelector(commentSectionId);
+            const commentInput = document.querySelector(commentInputId);
 
             // inicializar flatpickr no botão específico
-            flatpickr(buttonId, {
+            const calendar = flatpickr(buttonId, {
                 minDate: "2004-02-01", // data mínima
                 maxDate: "2005-02-03", // data máxima
                 position: "above", // exibir calendário sobre o botão
+                clickOpens: false, // tirando a abertura automática porque o clique no botão pode ser pra fechar a caixa de comentário
                 disable: [
                     function (date) {
                         return !(date.getDate() % 31); // desabilitar dias 31
                     },
                 ],
+                onOpen: function (selectedDates, dateStr, instance) {
+                    if (commentSection.style.display === "flex") {
+                        commentSection.style.display = "none";
+                        instance.close();
+                        commentInput.value = "";
+                        calendar = instance;
+                    }
+                },
                 onChange: function (selectedDates) {
                     selectedDate = selectedDates[0].toISOString().split("T")[0]; // armazenar a data selecionada em formato YYYY-MM-DD
                     const commentSection =
@@ -507,7 +520,18 @@ document.addEventListener("DOMContentLoaded", async function () {
                 },
             });
 
-            const commentInput = document.querySelector(commentInputId);
+            buttonElement.addEventListener("click", function (e) {
+                e.stopPropagation();
+
+                // Se a caixa de texto estiver visível, fecha ela e NÃO abre o calendário
+                if (commentSection.style.display === "flex") {
+                    commentSection.style.display = "none";
+                    commentInput.value = "";
+                } else {
+                    // Se a caixa estiver fechada, abre o calendário manualmente
+                    calendar.open();
+                }
+            });
 
             async function handleKeyDown(event) {
                 if (event.key === "Enter" && selectedDate) {
@@ -543,7 +567,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }
                 }
             }
-
             commentInput.addEventListener("keydown", handleKeyDown);
         }
 
@@ -1801,7 +1824,7 @@ await loadData();
 
 const THIRD_BREAKPOINT = 500;
 const SECOND_BREAKPOINT = 768;
-const FIRST_BREAKPOINT = 1024
+const FIRST_BREAKPOINT = 1024;
 
 function aplicarZoomMobile(chart) {
     if (window.innerWidth <= FIRST_BREAKPOINT) {
