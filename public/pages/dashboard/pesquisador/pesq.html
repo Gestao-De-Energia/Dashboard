@@ -128,7 +128,7 @@
                                     <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..."
                                         style="display: none; width: 30px;">
                                 </div>
-                                <h3 class="legenda">Perda de carga no grid</h3>
+                                <h3 class="legenda">Fator de excesso de energia no grid</h3>
                             </div>
                         </div>
                     </div>
@@ -149,21 +149,6 @@
                 <div class="metricas-baixo">
                     <div class="metrica4">
                         <div class="left">
-                            <img src="../../../assets/icons/numeroCasas.png" alt="Ícone" class="icone-metrica">
-                            <div class="metrica-texto">
-                                <div class="valor-container">
-                                    <h3 class="valor">-</h3>
-                                    <img class="loadingGif" src="../../../assets/loading.gif" alt="Carregando..."
-                                        style="display: none; width: 30px;">
-                                    <img id="fixedHouses" class="fixedIcon" src="../../../assets/fixed.svg" alt="Fixado"
-                                        style="display: none; width: 30px; margin-left: 5px">
-                                </div>
-                                <h3 class="legenda">Número de Casas</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="metrica5">
-                        <div class="left">
                             <img src="../../../assets/icons/turbinasEolicas.png" alt="Ícone" class="icone-metrica">
                             <div class="metrica-texto">
                                 <div class="valor-container">
@@ -173,11 +158,11 @@
                                     <img id="fixedTurbines" class="fixedIcon" src="../../../assets/fixed.svg"
                                         alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
                                 </div>
-                                <h3 class="legenda">Turbinas eólicas</h3>
+                                <h3 class="legenda">Geração máxima das turbinas</h3>
                             </div>
                         </div>
                     </div>
-                    <div class="metrica6">
+                    <div class="metrica5">
                         <div class="left">
                             <img src="../../../assets/icons/geracaoMaxima.png" alt="Ícone" class="icone-metrica">
                             <div class="metrica-texto">
@@ -189,6 +174,46 @@
                                         alt="Fixado" style="display: none; width: 30px; margin-left: 5px">
                                 </div>
                                 <h3 class="legenda">Geração Máxima dos panéis</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metrica6">
+                        <div class="left">
+                            <img src="../../../assets/icons/bateria.png" alt="Ícone" class="icone-metrica">
+                            <div class="metrica-texto">
+                                <div class="valor-container dropdown_sim" style="position: relative;">
+                                    <button id="battery_button" class="battery-button">LAG AGM</button>
+                                    <div class="dropdown_content" id="battery_dropdown"
+                                        style="top: 100%; max-height: 150px; overflow-y: auto;">
+                                        <button class="dropdown_item" data-value="0" style="color: black;">LAG
+                                            AGM</button>
+                                        <button class="dropdown_item" data-value="1"
+                                            style="color: black;">Li4Ti5O12</button>
+                                        <button class="dropdown_item" data-value="2"
+                                            style="color: black;">LiCoO2</button>
+                                        <button class="dropdown_item" data-value="3"
+                                            style="color: black;">LiFePO4</button>
+                                        <button class="dropdown_item" data-value="4"
+                                            style="color: black;">LiMnO2</button>
+                                        <button class="dropdown_item" data-value="5"
+                                            style="color: black;">LiNiCoMnO2</button>
+                                        <button class="dropdown_item" data-value="6"
+                                            style="color: black;">LiNiCoAlO2</button>
+                                        <button class="dropdown_item" data-value="7"
+                                            style="color: black;">LiPoly</button>
+                                        <button class="dropdown_item" data-value="8"
+                                            style="color: black;">NaNiCl</button>
+                                        <button class="dropdown_item" data-value="9" style="color: black;">NaS</button>
+                                        <button class="dropdown_item" data-value="10"
+                                            style="color: black;">NiCd</button>
+                                        <button class="dropdown_item" data-value="11"
+                                            style="color: black;">NiMH</button>
+                                        <button class="dropdown_item" data-value="12" style="color: black;">RFV</button>
+                                        <button class="dropdown_item" data-value="13" style="color: black;">Zn/Br
+                                            Redox</button>
+                                    </div>
+                                </div>
+                                <h3 class="legenda">Tipo de Bateria</h3>
                             </div>
                         </div>
                     </div>
@@ -568,7 +593,7 @@
             </div>
 
             <h2 id="Bateria">Bateria</h2>
-            <div class="chart" id="chartBateria" ></div>
+            <div class="chart" id="chartBateria"></div>
             <p class="loading_chart">Carregando gráfico...</p>
             <div class="btn_container">
                 <div class="grupo-btns">

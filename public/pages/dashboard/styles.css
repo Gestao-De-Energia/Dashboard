@@ -387,6 +387,49 @@ div .valor {
     border: 1px solid #ccc;
 }
 
+.battery-button {
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 6px 16px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+    width: 190px;
+    text-align: center;
+}
+
+.battery-button::after {
+    content: "▼";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+}
+
+.battery-button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.battery-button.running {
+    border-color: transparent;
+    cursor: not-allowed;
+}
+
+.battery-button.running::after {
+    display: none;
+}
+
+.battery-button.running:hover {
+    background-color: transparent;
+    box-shadow: none;
+}
+
 .dropdown_sim {
     position: relative;
 }

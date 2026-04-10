@@ -8,7 +8,7 @@ import {
     signOut,
     onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import CDEEPSO from "../../../js/CDEEPSO.js";
+import runMicrogrid from "../../../js/run_microgrid.js";
 import {
     deleteGeneralUserComment,
     deleteUserCommentByDate,
@@ -96,7 +96,7 @@ if (navClose) {
 const navLink = document.querySelectorAll(".nav-link");
 
 function linkAction() {
-    if(this.parentNode.classList.contains('nav-dropdown')){
+    if (this.parentNode.classList.contains("nav-dropdown")) {
         return;
     }
     navMenu.classList.remove("show-menu");
@@ -105,39 +105,39 @@ navLink.forEach((n) => n.addEventListener("click", linkAction));
 
 /*==================== FECHAR SIDEBAR AO CLICAR NO SUB-ITEM ====================*/
 // Seleciona todos os links que estão DENTRO dos dropdowns
-const dropdownSubItems = document.querySelectorAll('.nav-dropdown-item');
+const dropdownSubItems = document.querySelectorAll(".nav-dropdown-item");
 
-dropdownSubItems.forEach(item => {
-    item.addEventListener('click', () => {
-        const navMenu = document.getElementById('navbar');
-        
-        if(navMenu) {
-            navMenu.classList.remove('show-menu');
+dropdownSubItems.forEach((item) => {
+    item.addEventListener("click", () => {
+        const navMenu = document.getElementById("navbar");
+
+        if (navMenu) {
+            navMenu.classList.remove("show-menu");
         }
     });
 });
 
 /*==================== RESPONSIVIDADE DROPDOWN (MOBILE/TABLET) ====================*/
 // Seleciona todos os dropdowns da sidebar
-const navDropdowns = document.querySelectorAll('.nav-dropdown');
+const navDropdowns = document.querySelectorAll(".nav-dropdown");
 
-navDropdowns.forEach(dropdown => {
+navDropdowns.forEach((dropdown) => {
     // Seleciona o link principal (ex: Energia, Bateria)
-    const dropdownLink = dropdown.querySelector('.nav-link');
-    
-    dropdownLink.addEventListener('click', (e) => {
+    const dropdownLink = dropdown.querySelector(".nav-link");
+
+    dropdownLink.addEventListener("click", (e) => {
         // Verifica se é um dispositivo móvel/tablet (largura <= 1024px conforme seu CSS)
         if (window.innerWidth <= 1024) {
             // Previne o comportamento padrão (pular para a âncora) se preferir que apenas abra o menu
-            // e.preventDefault(); 
-            
+            // e.preventDefault();
+
             // Alterna a classe 'expanded' para abrir/fechar
-            dropdown.classList.toggle('expanded');
-            
+            dropdown.classList.toggle("expanded");
+
             // Opcional: Fechar outros dropdowns abertos para focar apenas neste
-            navDropdowns.forEach(otherDropdown => {
+            navDropdowns.forEach((otherDropdown) => {
                 if (otherDropdown !== dropdown) {
-                    otherDropdown.classList.remove('expanded');
+                    otherDropdown.classList.remove("expanded");
                 }
             });
         }
@@ -152,19 +152,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const configButtons = document.querySelector(".config_buttons");
     const confirmButton = document.getElementById("confirm_button");
     const pauseButton = document.getElementById("pause_button");
+    const runningSimStatus = document.getElementById("running_sim_status");
     const valorContainer = document.querySelectorAll(".valor-container");
+    const batteryButton = document.getElementById("battery_button");
 
-    let fixedValues = { houses: null, turbines: null, generation: null };
-    let valuesBeforePause = { houses: null, turbines: null, generation: null };
+    let fixedValues = { turbines: null, panels: null };
+    let valuesBeforePause = { turbines: null, panels: null };
     const fixedIcons = {
-        houses: document.getElementById("fixedHouses"),
         turbines: document.getElementById("fixedTurbines"),
-        generation: document.getElementById("fixedPanelGen"),
+        panels: document.getElementById("fixedPanelGen"),
     };
 
     let isPaused = false;
+    let isRunning = false;
     let selectedIteration = 10;
     let selectedPeriod = 8640; // 12 meses (8640 horas)
+    let selectedBattery = 0; // LAG AGM (0)
 
     const periodMapping = {
         "1 semana": 168,
@@ -183,6 +186,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function toggleDropdown(event) {
             event.stopPropagation();
+            if (buttonId === "battery_button" && isRunning && !isPaused) {
+                return;
+            }
             dropdown.style.display =
                 dropdown.style.display === "block" ? "none" : "block";
         }
@@ -207,16 +213,22 @@ document.addEventListener("DOMContentLoaded", function () {
         dropdown.querySelectorAll(".dropdown_item").forEach((item) => {
             item.addEventListener("click", function () {
                 const newValue = item.dataset.value;
-                button.innerText =
-                    button.innerText.split(":")[0] + ": " + newValue + " ▼";
-                dropdown.style.display = "none";
 
-                // Atualiza a variável global com o valor selecionado
-                if (buttonId === "iterations_button") {
-                    selectedIteration = parseInt(newValue);
+                if (buttonId === "battery_button") {
+                    button.innerText = item.innerText;
+                    selectedBattery = parseInt(newValue);
                 } else {
-                    selectedPeriod = periodMapping[newValue];
+                    button.innerText =
+                        button.innerText.split(":")[0] + ": " + newValue + " ▼";
+
+                    if (buttonId === "iterations_button") {
+                        selectedIteration = parseInt(newValue);
+                    } else {
+                        selectedPeriod = periodMapping[newValue];
+                    }
                 }
+
+                dropdown.style.display = "none";
             });
         });
     }
@@ -224,6 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Configura os dropdowns apenas uma vez
     setupDropdown("iterations_button", "iterations_dropdown");
     setupDropdown("period_button", "period_dropdown");
+    setupDropdown("battery_button", "battery_dropdown");
 
     runButton.addEventListener("click", function () {
         configButtons.style.display =
@@ -233,10 +246,10 @@ document.addEventListener("DOMContentLoaded", function () {
     confirmButton.addEventListener("click", function () {
         configButtons.style.display = "none";
         pauseButton.style.display = "flex";
-        fixedValues = { houses: null, turbines: null, generation: null };
-        valuesBeforePause = { houses: null, turbines: null, generation: null };
+        fixedValues = { turbines: null, panels: null };
+        valuesBeforePause = { turbines: null, panels: null };
         Object.values(fixedIcons).forEach(
-            (icon) => (icon.style.display = "none")
+            (icon) => (icon.style.display = "none"),
         );
         runSimulation();
     });
@@ -249,89 +262,95 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isPaused) {
             // Ao pausar
             pauseButton.innerHTML = "<h3>Continuar</h3>";
+            runButtonText.innerHTML = "Simulação pausada";
             gifs.forEach((gif) => (gif.style.display = "none"));
+            batteryButton.classList.remove("running");
 
-            // Esconde os ícones de fixado ao pausar
-            Object.values(fixedIcons).forEach(
-                (icon) => (icon.style.display = "none")
-            );
+            // Mantém os ícones de fixado visíveis se o valor já estiver fixado
+            Object.keys(fixedValues).forEach((key) => {
+                if (fixedValues[key] === null) {
+                    fixedIcons[key].style.display = "none";
+                } else {
+                    fixedIcons[key].style.display = "inline";
+                }
+            });
 
             // Salva os valores exatos que estão na tela antes de torná-los editáveis
-            valuesBeforePause.houses = metricas[3].innerText.trim();
-            valuesBeforePause.turbines = metricas[4].innerText.trim();
-            valuesBeforePause.generation = metricas[5].innerText
+            valuesBeforePause.turbines = metricas[3].innerText
                 .trim()
-                .replace(/\s*kWh$/, "");
+                .replace(/\s*kW$/, "");
+            valuesBeforePause.panels = metricas[4].innerText
+                .trim()
+                .replace(/\s*kW$/, "");
 
-            // Torna todos os 3 campos editáveis
-            [3, 4, 5].forEach((i) => {
-                const valorAtual = metricas[i].innerText.trim().split(" ")[0];
-                metricas[i].innerHTML =
-                    `<span class="editavel-numero" contenteditable="true">${valorAtual}</span>` +
-                    (i === 5 ? ' <span class="sufixo-unidade">kWh</span>' : "");
+            // Torna editáveis apenas se não estiverem fixos
+            [3, 4].forEach((i) => {
+                const key = i === 3 ? "turbines" : "panels";
+                if (fixedValues[key] === null) {
+                    const valorAtual = metricas[i].innerText
+                        .trim()
+                        .split(" ")[0];
+                    metricas[i].innerHTML =
+                        `<span class="editavel-numero" contenteditable="true">${valorAtual}</span>` +
+                        ' <span class="sufixo-unidade">kW</span>';
+                }
             });
         } else {
             // Ao despausar
             pauseButton.innerHTML = "<h3>Pausar</h3>";
+            batteryButton.classList.add("running");
 
             // Para cada campo, verifica se o valor foi alterado pelo usuário
             // Se foi alterado, atualiza o 'fixedValues'. Se não, não faz nada.
 
-            // CASAS (índice 3)
-            const casasSpan = metricas[3].querySelector(".editavel-numero");
-            if (casasSpan) {
-                const novoValorStr = casasSpan.innerText.trim();
-                // Apenas fixa se o valor mudou
-                if (novoValorStr !== valuesBeforePause.houses) {
-                    const novoValorNum = parseInt(
-                        novoValorStr.replace(/[^\d]/g, "")
-                    );
-                    if (!isNaN(novoValorNum)) {
-                        fixedValues.houses = novoValorNum;
+            // TURBINAS (índice 3)
+            if (fixedValues.turbines === null) {
+                const turbinasSpan =
+                    metricas[3].querySelector(".editavel-numero");
+                if (turbinasSpan) {
+                    const novoValorStr = turbinasSpan.innerText.trim();
+                    if (novoValorStr !== valuesBeforePause.turbines) {
+                        const novoValorNum = parseInt(
+                            novoValorStr.replace(/[^\d]/g, ""),
+                        );
+                        if (!isNaN(novoValorNum)) {
+                            fixedValues.turbines = Math.max(
+                                10,
+                                Math.min(150, novoValorNum),
+                            );
+                        }
                     }
+                    const valorFinal =
+                        fixedValues.turbines !== null
+                            ? fixedValues.turbines
+                            : novoValorStr;
+                    metricas[3].innerText = valorFinal + " kW";
                 }
-                // Atualiza a tela com o valor (seja o novo fixo ou o antigo)
-                metricas[3].innerText =
-                    fixedValues.houses !== null
-                        ? fixedValues.houses
-                        : novoValorStr;
             }
 
-            // TURBINAS (índice 4)
-            const turbinasSpan = metricas[4].querySelector(".editavel-numero");
-            if (turbinasSpan) {
-                const novoValorStr = turbinasSpan.innerText.trim();
-                if (novoValorStr !== valuesBeforePause.turbines) {
-                    const novoValorNum = parseInt(
-                        novoValorStr.replace(/[^\d]/g, "")
-                    );
-                    if (!isNaN(novoValorNum)) {
-                        fixedValues.turbines = novoValorNum;
+            // GERAÇÃO (índice 4)
+            if (fixedValues.panels === null) {
+                const geracaoSpan =
+                    metricas[4].querySelector(".editavel-numero");
+                if (geracaoSpan) {
+                    const novoValorStr = geracaoSpan.innerText.trim();
+                    if (novoValorStr !== valuesBeforePause.panels) {
+                        const novoValorNum = parseInt(
+                            novoValorStr.replace(/[^\d]/g, ""),
+                        );
+                        if (!isNaN(novoValorNum)) {
+                            fixedValues.panels = Math.max(
+                                10,
+                                Math.min(150, novoValorNum),
+                            );
+                        }
                     }
+                    const valorFinal =
+                        fixedValues.panels !== null
+                            ? fixedValues.panels
+                            : novoValorStr;
+                    metricas[4].innerText = valorFinal + " kW";
                 }
-                metricas[4].innerText =
-                    fixedValues.turbines !== null
-                        ? fixedValues.turbines
-                        : novoValorStr;
-            }
-
-            // GERAÇÃO (índice 5)
-            const geracaoSpan = metricas[5].querySelector(".editavel-numero");
-            if (geracaoSpan) {
-                const novoValorStr = geracaoSpan.innerText.trim();
-                if (novoValorStr !== valuesBeforePause.generation) {
-                    const novoValorNum = parseInt(
-                        novoValorStr.replace(/[^\d]/g, "")
-                    );
-                    if (!isNaN(novoValorNum)) {
-                        fixedValues.generation = novoValorNum;
-                    }
-                }
-                const valorFinal =
-                    fixedValues.generation !== null
-                        ? fixedValues.generation
-                        : novoValorStr;
-                metricas[5].innerText = valorFinal + " kWh";
             }
 
             // Atualiza a visibilidade dos ícones de "fixado" e dos GIFs
@@ -345,9 +364,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             gifs.forEach((gif, index) => {
                 const isFixed =
-                    (index === 3 && fixedValues.houses !== null) ||
-                    (index === 4 && fixedValues.turbines !== null) ||
-                    (index === 5 && fixedValues.generation !== null);
+                    (index === 3 && fixedValues.turbines !== null) ||
+                    (index === 4 && fixedValues.panels !== null);
                 if (index < 3 || !isFixed) {
                     gif.style.display = "inline";
                 }
@@ -357,6 +375,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Roda a simulação: Chama o CDEEPSO e preenche os cards das métricas após a execução
     async function runSimulation() {
+        isRunning = true;
         let metricas = document.querySelectorAll(".metrica-texto .valor");
         let gifs = document.querySelectorAll(".loadingGif");
 
@@ -379,11 +398,17 @@ document.addEventListener("DOMContentLoaded", function () {
             runButton.disabled = true;
             runButton.style.opacity = "0.5";
             runButton.style.cursor = "not-allowed";
+            batteryButton.classList.add("running");
 
             // Animação do botão
+            runningSimStatus.innerText = `Rodando iteração 1/${selectedIteration}`;
             interval = setInterval(() => {
-                runButtonText.innerHTML = texts[textIndex];
-                textIndex = (textIndex + 1) % texts.length;
+                if (isPaused) {
+                    runButtonText.innerHTML = "Simulação pausada";
+                } else {
+                    runButtonText.innerHTML = texts[textIndex];
+                    textIndex = (textIndex + 1) % texts.length;
+                }
             }, 500);
 
             // Esconde os valores e mostra GIFs de carregamento
@@ -391,38 +416,60 @@ document.addEventListener("DOMContentLoaded", function () {
             metricas.forEach((el) => el.classList.remove("temp")); // limpa antes
             gifs.forEach((gif) => (gif.style.display = "inline"));
 
-            let currentIteration = 0;
-            let resultado;
+            // Dá tempo ao navegador para renderizar os GIFs na tela antes de iniciar o processamento pesado
+            await new Promise((resolve) => setTimeout(resolve, 10));
 
-            while (currentIteration < selectedIteration) {
-                resultado = await CDEEPSO(
-                    selectedIteration,
-                    selectedPeriod,
-                    () => isPaused,
-                    fixedValues,
-                    currentIteration
-                );
-
-                if (resultado?.pausedAtIteration !== undefined) {
-                    // simulação pausada no meio de uma iteração
-                    currentIteration = resultado.pausedAtIteration;
-
-                    // espera até despausar
-                    while (isPaused) {
-                        await new Promise((resolve) =>
-                            setTimeout(resolve, 100)
-                        );
-                    }
-                } else {
-                    // terminou tudo normalmente
-                    break;
-                }
-            }
+            let resultado = await runMicrogrid(
+                selectedIteration,
+                selectedBattery,
+                () => isPaused,
+                () => fixedValues,
+                () => selectedBattery,
+                (data) => {
+                    runningSimStatus.innerText = `Rodando iteração ${Math.min(data.iteration + 2, selectedIteration)}/${selectedIteration}`;
+                    let valores = [
+                        (data.rf * 100).toFixed(2).replace(".", ",") + "%",
+                        (data.meef * 100).toFixed(2).replace(".", ",") + "%",
+                        "R$" + data.lcoe.toFixed(3).replace(".", ",") + "/kWh",
+                        data.max_wind + " kW",
+                        data.max_pan + " kW",
+                    ];
+                    metricas.forEach((el, index) => {
+                        if (
+                            isPaused &&
+                            (index === 3 || index === 4) &&
+                            fixedValues[index === 3 ? "turbines" : "panels"] ===
+                                null
+                        ) {
+                            return; // Se estiver pausado e não fixado, não sobrescreve a edição
+                        }
+                        el.style.display = "inline";
+                        if (index === 3 && fixedValues.turbines !== null) {
+                            el.innerText = fixedValues.turbines + " kW";
+                        } else if (index === 4 && fixedValues.panels !== null) {
+                            el.innerText = fixedValues.panels + " kW";
+                        } else {
+                            el.innerText = valores[index];
+                        }
+                        el.classList.remove("temp");
+                    });
+                    gifs.forEach((gif, index) => {
+                        if (index === 3 && fixedValues.turbines !== null) {
+                            gif.style.display = "none";
+                        }
+                        if (index === 4 && fixedValues.panels !== null) {
+                            gif.style.display = "none";
+                        }
+                    });
+                },
+            );
+            localStorage.setItem("simulationData", JSON.stringify(resultado));
         } catch (error) {
             console.error("Erro ao rodar a simulação:", error);
             localStorage.clear();
             metricas.forEach((el) => (el.innerText = "Erro"));
         } finally {
+            isRunning = false;
             clearInterval(interval);
 
             valorContainer.forEach((container) => {
@@ -430,39 +477,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 container.style.boxShadow = "none";
             });
             pauseButton.style.display = "none";
+            runningSimStatus.innerText = "";
             runButtonText.innerHTML = "Rodar simulação";
             runButton.disabled = false;
             runButton.style.opacity = "1";
             runButton.style.cursor = "pointer";
+            batteryButton.classList.remove("running");
 
             gifs.forEach((gif) => (gif.style.display = "none"));
 
             // Esconde os ícones de "fixado" no final da simulação
             Object.values(fixedIcons).forEach(
-                (icon) => (icon.style.display = "none")
+                (icon) => (icon.style.display = "none"),
             );
 
             let simulationData = JSON.parse(
-                localStorage.getItem("simulationData")
+                localStorage.getItem("simulationData"),
             );
 
             // Preenche cards de métricas
             if (simulationData) {
                 let valores = [
-                    (simulationData.renewable_factor * 100)
-                        .toFixed(2)
-                        .replace(".", ",") + "%",
-                    (simulationData.loss_load_probability * 100)
-                        .toFixed(2)
-                        .replace(".", ",") + "%",
+                    (simulationData.rf * 100).toFixed(2).replace(".", ",") +
+                        "%",
+                    (simulationData.meef * 100).toFixed(2).replace(".", ",") +
+                        "%",
                     "R$" +
-                        simulationData.price_electricity
-                            .toFixed(3)
-                            .replace(".", ",") +
+                        simulationData.lcoe.toFixed(3).replace(".", ",") +
                         "/kWh",
-                    simulationData.houses,
-                    simulationData.num_wind_turbines,
-                    simulationData.max_generation + " kWh",
+                    simulationData.max_wind + " kW",
+                    simulationData.max_pan + " kW",
                 ];
 
                 metricas.forEach((el, index) => {
@@ -483,19 +527,13 @@ window.addEventListener("load", () => {
     let metricas = document.querySelectorAll(".metrica-texto .valor");
     if (savedData) {
         metricas[0].innerText =
-            (savedData.renewable_factor * 100).toFixed(2).replace(".", ",") +
-            "%";
+            (savedData.rf * 100).toFixed(2).replace(".", ",") + "%";
         metricas[1].innerText =
-            (savedData.loss_load_probability * 100)
-                .toFixed(2)
-                .replace(".", ",") + "%";
+            (savedData.meef * 100).toFixed(2).replace(".", ",") + "%";
         metricas[2].innerText =
-            "$" +
-            savedData.price_electricity.toFixed(3).replace(".", ",") +
-            "/kWh";
-        metricas[3].innerText = savedData.houses;
-        metricas[4].innerText = savedData.num_wind_turbines;
-        metricas[5].innerText = savedData.max_generation + " kWh";
+            "R$" + savedData.lcoe.toFixed(3).replace(".", ",") + "/kWh";
+        metricas[3].innerText = savedData.max_wind + " kW";
+        metricas[4].innerText = savedData.max_pan + " kW";
     }
 });
 
@@ -548,7 +586,7 @@ function addAnnotationToChart(xDate, comment, chart, options) {
                 ? index
                 : prevIndex;
         },
-        0
+        0,
     );
 
     // adicionar anotação no ponto exato do gráfico correspondente
@@ -579,7 +617,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             commentInputId,
             chart,
             options,
-            name
+            name,
         ) {
             var selectedDate = null;
             const buttonElement = document.querySelector(buttonId);
@@ -641,21 +679,21 @@ document.addEventListener("DOMContentLoaded", async function () {
                             selectedDate,
                             comment,
                             chart,
-                            options
+                            options,
                         );
 
                         // salvar o comentário no firestore
                         await saveUserCommentByDate(
                             commentSectionId,
                             comment,
-                            selectedDate
+                            selectedDate,
                         );
 
                         document.getElementById(
-                            `delete_date_container_${name}`
+                            `delete_date_container_${name}`,
                         ).style.display = "flex";
                         document.getElementById(
-                            `delete_date_${name}`
+                            `delete_date_${name}`,
                         ).style.display = "block";
                         document.querySelector(commentSectionId).style.display =
                             "none";
@@ -748,9 +786,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                     commentInputId,
                     chart,
                     options,
-                    name
+                    name,
                 );
-            }
+            },
         );
     } catch (error) {
         console.error("Erro ao carregar dados:", error);
@@ -813,7 +851,7 @@ document.addEventListener("DOMContentLoaded", function () {
         deleteButton.addEventListener("click", async function () {
             if (textarea.value) {
                 const confirmDelete = confirm(
-                    "Tem certeza que deseja deletar o texto?"
+                    "Tem certeza que deseja deletar o texto?",
                 );
                 if (confirmDelete) {
                     textarea.value = "";
@@ -894,7 +932,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 setupDeleteCommentForSection(
                     section,
                     userCommentsByDate,
-                    firebaseNames[index]
+                    firebaseNames[index],
                 );
             });
         }
@@ -1075,7 +1113,7 @@ function setupDeleteCommentForSection(section, userComments, name) {
             if (userComments[section].length === 0) {
                 deleteBtn.style.display = "none";
                 const deleteContainer = document.getElementById(
-                    `delete_date_container_${section}`
+                    `delete_date_container_${section}`,
                 );
                 if (deleteContainer) deleteContainer.style.display = "none";
             }
@@ -2016,7 +2054,7 @@ function aplicarZoomMobile(chart) {
 /* ========== GRÁFICO ENERGIA FOTOVOLTAICA ========== */
 var chartFotovoltaica = new ApexCharts(
     document.querySelector("#chartFotovoltaica"),
-    optionsFotovoltaica
+    optionsFotovoltaica,
 );
 chartFotovoltaica.render().then(() => aplicarZoomMobile(chartFotovoltaica));
 
@@ -2055,7 +2093,7 @@ periodsFotovoltaica.forEach((period) => {
         resetCssClasses(e);
         chartFotovoltaica.zoomX(
             new Date(period.start).getTime(),
-            new Date(period.end).getTime()
+            new Date(period.end).getTime(),
         );
     });
 });
@@ -2063,7 +2101,7 @@ periodsFotovoltaica.forEach((period) => {
 /* ========== GRÁFICO ENERGIA EÓLICA ========== */
 var chartEolica = new ApexCharts(
     document.querySelector("#chartEolica"),
-    optionsEolica
+    optionsEolica,
 );
 chartEolica.render().then(() => aplicarZoomMobile(chartEolica));
 
@@ -2092,7 +2130,7 @@ periodsEolica.forEach((period) => {
         resetCssClasses(e);
         chartEolica.zoomX(
             new Date(period.start).getTime(),
-            new Date(period.end).getTime()
+            new Date(period.end).getTime(),
         );
     });
 });
@@ -2100,7 +2138,7 @@ periodsEolica.forEach((period) => {
 /* ========== GRÁFICO ENERGIA X DEMANDA ======== */
 var chartEnergiaXDemanda = new ApexCharts(
     document.querySelector("#chartEnergiaXDemanda"),
-    optionsEnergiaXDemanda
+    optionsEnergiaXDemanda,
 );
 chartEnergiaXDemanda
     .render()
@@ -2131,7 +2169,7 @@ periodsEnergiaXDemanda.forEach((period) => {
         resetCssClasses(e);
         chartEnergiaXDemanda.zoomX(
             new Date(period.start).getTime(),
-            new Date(period.end).getTime()
+            new Date(period.end).getTime(),
         );
     });
 });
@@ -2139,7 +2177,7 @@ periodsEnergiaXDemanda.forEach((period) => {
 /* ========== GRÁFICO DESEMPENHO ========== */
 var chartDesempenho = new ApexCharts(
     document.querySelector("#chartDesempenho"),
-    optionsDesempenho
+    optionsDesempenho,
 );
 chartDesempenho.render().then(() => aplicarZoomMobile(chartDesempenho));
 
@@ -2168,7 +2206,7 @@ periodsDesempenho.forEach((period) => {
         resetCssClasses(e);
         chartDesempenho.zoomX(
             new Date(period.start).getTime(),
-            new Date(period.end).getTime()
+            new Date(period.end).getTime(),
         );
     });
 });
@@ -2176,7 +2214,7 @@ periodsDesempenho.forEach((period) => {
 /* ========== GRÁFICO ENERGIA X COMPENSAÇÃO ========== */
 var chartEnergiaXCompensacao = new ApexCharts(
     document.querySelector("#chartEnergiaXCompensacao"),
-    optionsEnergiaXCompensacao
+    optionsEnergiaXCompensacao,
 );
 chartEnergiaXCompensacao
     .render()
@@ -2207,7 +2245,7 @@ periodsEnergiaXCompensacao.forEach((period) => {
         resetCssClasses(e);
         chartEnergiaXCompensacao.zoomX(
             new Date(period.start).getTime(),
-            new Date(period.end).getTime()
+            new Date(period.end).getTime(),
         );
     });
 });
@@ -2215,7 +2253,7 @@ periodsEnergiaXCompensacao.forEach((period) => {
 /* ========== GRÁFICO BATERIA ==========*/
 var chartBateria = new ApexCharts(
     document.querySelector("#chartBateria"),
-    optionsBateria
+    optionsBateria,
 );
 chartBateria.render().then(() => aplicarZoomMobile(chartBateria));
 
@@ -2244,7 +2282,7 @@ periodsBateria.forEach((period) => {
         resetCssClasses(e);
         chartBateria.zoomX(
             new Date(period.start).getTime(),
-            new Date(period.end).getTime()
+            new Date(period.end).getTime(),
         );
     });
 });
@@ -2252,7 +2290,7 @@ periodsBateria.forEach((period) => {
 /* ========== GRÁFICO ST SOLAR ========== */
 var chartSTSolar = new ApexCharts(
     document.querySelector("#chartSTSolar"),
-    optionsSTSolar
+    optionsSTSolar,
 );
 chartSTSolar.render().then(() => aplicarZoomMobile(chartSTSolar));
 
@@ -2281,7 +2319,7 @@ periodsSTSolar.forEach((period) => {
         resetCssClasses(e);
         chartSTSolar.zoomX(
             new Date(period.start).getTime(),
-            new Date(period.end).getTime()
+            new Date(period.end).getTime(),
         );
     });
 });
@@ -2289,7 +2327,7 @@ periodsSTSolar.forEach((period) => {
 /* ========== GRÁFICO ST VENTO ========== */
 var chartSTVento = new ApexCharts(
     document.querySelector("#chartSTVento"),
-    optionsSTVento
+    optionsSTVento,
 );
 chartSTVento.render().then(() => aplicarZoomMobile(chartSTVento));
 
@@ -2318,7 +2356,7 @@ periodsSTVento.forEach((period) => {
         resetCssClasses(e);
         chartSTVento.zoomX(
             new Date(period.start).getTime(),
-            new Date(period.end).getTime()
+            new Date(period.end).getTime(),
         );
     });
 });
