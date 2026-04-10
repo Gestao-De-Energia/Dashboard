@@ -94,11 +94,11 @@ export default async function runMicrogrid(
 
     // Microgrid input
     if (!load_ind_cached)
-        load_ind_cached = await read_file("../../../js/loadind.txt");
+        load_ind_cached = await read_file("/js/loadind.txt");  // path em desenvolvimento: "../../../js/loadind.txt"; path em prod: "/js/loadind.txt"
     if (!solar_data_cached)
-        solar_data_cached = await read_file("../../../js/solreal.txt");
+        solar_data_cached = await read_file("/js/solreal.txt");  // path em desenvolvimento: "../../../js/solreal.txt"; path em prod: "/js/solreal.txt"
     if (!wind_data_cached)
-        wind_data_cached = await read_file("../../../js/wind_data.txt");
+        wind_data_cached = await read_file("/js/wind_data.txt");  // path em desenvolvimento: "../../../js/wind_data.txt"; path em prod: "/js/wind_data.txt"
 
     const load_ind = load_ind_cached;
     const solar_data = solar_data_cached;
