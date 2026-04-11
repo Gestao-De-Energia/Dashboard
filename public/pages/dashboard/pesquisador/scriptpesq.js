@@ -8,7 +8,12 @@ import {
     signOut,
     onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import runMicrogrid from "../../../js/run_microgrid.js";
+import runMicrogrid, {
+    bat_efficiency_list,
+    bat_cap_cost_list,
+    bat_lf_list,
+    bat_cycle_list,
+} from "../../../js/run_microgrid.js";
 import {
     deleteGeneralUserComment,
     deleteUserCommentByDate,
@@ -179,6 +184,25 @@ document.addEventListener("DOMContentLoaded", function () {
         "12 meses": 8640,
     };
 
+    function updateBatteryInfo(index) {
+        const eff = parseFloat((bat_efficiency_list[index] * 100).toFixed(2))
+            .toString()
+            .replace(".", ",");
+        const cost = bat_cap_cost_list[index].toFixed(2).replace(".", ",");
+        const lf = bat_lf_list[index];
+        const cycles = bat_cycle_list[index];
+
+        const effEl = document.getElementById("bat_eff");
+        const costEl = document.getElementById("bat_cost");
+        const lfEl = document.getElementById("bat_lf");
+        const cyclesEl = document.getElementById("bat_cycles");
+
+        if (effEl) effEl.innerText = `${eff}%`;
+        if (costEl) costEl.innerText = cost;
+        if (lfEl) lfEl.innerText = lf;
+        if (cyclesEl) cyclesEl.innerText = cycles;
+    }
+
     // Monta os botões de seleção de período e iterações
     function setupDropdown(buttonId, dropdownId) {
         const button = document.getElementById(buttonId);
@@ -217,6 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (buttonId === "battery_button") {
                     button.innerText = item.innerText;
                     selectedBattery = parseInt(newValue);
+                    updateBatteryInfo(selectedBattery);
                 } else {
                     button.innerText =
                         button.innerText.split(":")[0] + ": " + newValue + " ▼";
@@ -237,6 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setupDropdown("iterations_button", "iterations_dropdown");
     setupDropdown("period_button", "period_dropdown");
     setupDropdown("battery_button", "battery_dropdown");
+    updateBatteryInfo(0); // Atualiza com os valores iniciais
 
     runButton.addEventListener("click", function () {
         configButtons.style.display =
@@ -514,6 +540,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     el.innerText = valores[index];
                     el.classList.remove("temp"); // removendo opacidade
                 });
+
+                if (simulationData.chartData) {
+                    updateChartsWithData(simulationData.chartData, true);
+                }
             }
         }
     }
@@ -706,44 +736,60 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const commentSections = [
             {
-                selectId: "#select_date_fotovoltaica",
-                commentSectionId: "#comment_section_fotovoltaica",
-                commentInputId: "#comment_input_fotovoltaica",
-                chart: chartFotovoltaica,
-                options: optionsFotovoltaica,
-                name: "fotovoltaica",
+                selectId: "#select_date_demanda",
+                commentSectionId: "#comment_section_demanda",
+                commentInputId: "#comment_input_demanda",
+                chart: chartDemanda,
+                options: optionsDemanda,
+                name: "demanda",
             },
             {
-                selectId: "#select_date_eolica",
-                commentSectionId: "#comment_section_eolica",
-                commentInputId: "#comment_input_eolica",
-                chart: chartEolica,
-                options: optionsEolica,
-                name: "eolica",
+                selectId: "#select_date_fotoXDemanda",
+                commentSectionId: "#comment_section_fotoXDemanda",
+                commentInputId: "#comment_input_fotoXDemanda",
+                chart: chartFotoXDemanda,
+                options: optionsFotoXDemanda,
+                name: "fotoXDemanda",
             },
             {
-                selectId: "#select_date_energiaxdemanda",
-                commentSectionId: "#comment_section_energiaxdemanda",
-                commentInputId: "#comment_input_energiaxdemanda",
-                chart: chartEnergiaXDemanda,
-                options: optionsEnergiaXDemanda,
-                name: "energiaxdemanda",
+                selectId: "#select_date_eolicaXDemanda",
+                commentSectionId: "#comment_section_eolicaXDemanda",
+                commentInputId: "#comment_input_eolicaXDemanda",
+                chart: chartEolicaXDemanda,
+                options: optionsEolicaXDemanda,
+                name: "eolicaXDemanda",
             },
             {
-                selectId: "#select_date_desempenho",
-                commentSectionId: "#comment_section_desempenho",
-                commentInputId: "#comment_input_desempenho",
-                chart: chartDesempenho,
-                options: optionsDesempenho,
-                name: "desempenho",
+                selectId: "#select_date_energiaComprada",
+                commentSectionId: "#comment_section_energiaComprada",
+                commentInputId: "#comment_input_energiaComprada",
+                chart: chartEnergiaComprada,
+                options: optionsEnergiaComprada,
+                name: "energiaComprada",
             },
             {
-                selectId: "#select_date_energiaxcompensacao",
-                commentSectionId: "#comment_section_energiaxcompensacao",
-                commentInputId: "#comment_input_energiaxcompensacao",
-                chart: chartEnergiaXCompensacao,
-                options: optionsEnergiaXCompensacao,
-                name: "energiaxcompensacao",
+                selectId: "#select_date_energiaCreditada",
+                commentSectionId: "#comment_section_energiaCreditada",
+                commentInputId: "#comment_input_energiaCreditada",
+                chart: chartEnergiaCreditada,
+                options: optionsEnergiaCreditada,
+                name: "energiaCreditada",
+            },
+            {
+                selectId: "#select_date_energiaCompensada",
+                commentSectionId: "#comment_section_energiaCompensada",
+                commentInputId: "#comment_input_energiaCompensada",
+                chart: chartEnergiaCompensada,
+                options: optionsEnergiaCompensada,
+                name: "energiaCompensada",
+            },
+            {
+                selectId: "#select_date_energiaDescartada",
+                commentSectionId: "#comment_section_energiaDescartada",
+                commentInputId: "#comment_input_energiaDescartada",
+                chart: chartEnergiaDescartada,
+                options: optionsEnergiaDescartada,
+                name: "energiaDescartada",
             },
             {
                 selectId: "#select_date_bateria",
@@ -881,12 +927,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const sections = [
-        { section: "fotovoltaica" },
-        { section: "eolica" },
-        { section: "energiaxdemanda" },
-        { section: "desempenho" },
-        { section: "energiaxcompensacao" },
-        { section: "bateria" },
+        { section: "Demanda" },
+        { section: "FotoXDemanda" },
+        { section: "EolicaXDemanda" },
+        { section: "EnergiaComprada" },
+        { section: "EnergiaCreditada" },
+        { section: "EnergiaCompensada" },
+        { section: "EnergiaDescartada" },
+        { section: "CargaBateria" },
+        { section: "Bateria" },
+        { section: "DemandaBateria" },
         { section: "stsolar" },
         { section: "stvento" },
     ];
@@ -908,22 +958,31 @@ document.addEventListener("DOMContentLoaded", async () => {
             loadGeneralCommentsIntoDashboard(userGeneralComments);
 
             const sections = [
-                "fotovoltaica",
-                "eolica",
-                "energiaxdemanda",
-                "desempenho",
-                "energiaxcompensacao",
-                "bateria",
+                "Demanda",
+                "FotoXDemanda",
+                "EolicaXDemanda",
+                "EnergiaComprada",
+                "EnergiaCreditada",
+                "EnergiaCompensada",
+                "EnergiaDescartada",
+                "CargaBateria",
+                "Bateria",
+                "DemandaBateria",
                 "stsolar",
                 "stvento",
             ];
+
             const firebaseNames = [
-                "commentByDateFotovoltaica",
-                "commentByDateEolica",
-                "commentByDateEnergiaXDemanda",
-                "commentByDateDesempenho",
-                "commentByDateEnergiaXCompensacao",
+                "commentByDateDemanda",
+                "commentByDateFotoXDemanda",
+                "commentByDateEolicaXDemanda",
+                "commentByDateEnergiaComprada",
+                "commentByDateEnergiaCreditada",
+                "commentByDateEnergiaCompensada",
+                "commentByDateEnergiaDescartada",
+                "commentByDateCargaBateria",
                 "commentByDateBateria",
+                "commentByDateDemandaBateria",
                 "commentByDateSTSolar",
                 "commentByDateSTVento",
             ];
@@ -942,27 +1001,55 @@ document.addEventListener("DOMContentLoaded", async () => {
 function loadDateCommentsIntoCharts(userComments) {
     const sections = [
         {
-            section: "fotovoltaica",
-            chart: chartFotovoltaica,
-            options: optionsFotovoltaica,
-        },
-        { section: "eolica", chart: chartEolica, options: optionsEolica },
-        {
-            section: "energiaxdemanda",
-            chart: chartEnergiaXDemanda,
-            options: optionsEnergiaXDemanda,
+            section: "Demanda",
+            chart: chartDemanda,
+            options: optionsDemanda,
         },
         {
-            section: "desempenho",
-            chart: chartDesempenho,
-            options: optionsDesempenho,
+            section: "FotoXDemanda",
+            chart: chartFotoXDemanda,
+            options: optionsFotoXDemanda,
         },
         {
-            section: "energiaxcompensacao",
-            chart: chartEnergiaXCompensacao,
-            options: optionsEnergiaXCompensacao,
+            section: "EolicaXDemanda",
+            chart: chartEolicaXDemanda,
+            options: optionsEolicaXDemanda,
         },
-        { section: "bateria", chart: chartBateria, options: optionsBateria },
+        {
+            section: "EnergiaComprada",
+            chart: chartEnergiaComprada,
+            options: optionsEnergiaComprada,
+        },
+        {
+            section: "EnergiaCreditada",
+            chart: chartEnergiaCreditada,
+            options: optionsEnergiaCreditada,
+        },
+        {
+            section: "EnergiaCompensada",
+            chart: chartEnergiaCompensada,
+            options: optionsEnergiaCompensada,
+        },
+        {
+            section: "EnergiaDescartada",
+            chart: chartEnergiaDescartada,
+            options: optionsEnergiaDescartada,
+        },
+        {
+            section: "CargaBateria",
+            chart: chartCargaBateria,
+            options: optionsCargaBateria,
+        },
+        {
+            section: "Bateria",
+            chart: chartBateria,
+            options: optionsBateria,
+        },
+        {
+            section: "DemandaBateria",
+            chart: chartDemandaBateria,
+            options: optionsDemandaBateria,
+        },
         { section: "stsolar", chart: chartSTSolar, options: optionsSTSolar },
         { section: "stvento", chart: chartSTVento, options: optionsSTVento },
     ];
@@ -994,27 +1081,55 @@ function loadDateCommentsIntoCharts(userComments) {
 function loadGeneralCommentsIntoDashboard(userComments) {
     const sections = [
         {
-            section: "fotovoltaica",
-            chart: chartFotovoltaica,
-            options: optionsFotovoltaica,
-        },
-        { section: "eolica", chart: chartEolica, options: optionsEolica },
-        {
-            section: "energiaxdemanda",
-            chart: chartEnergiaXDemanda,
-            options: optionsEnergiaXDemanda,
+            section: "Demanda",
+            chart: chartDemanda,
+            options: optionsDemanda,
         },
         {
-            section: "desempenho",
-            chart: chartDesempenho,
-            options: optionsDesempenho,
+            section: "FotoXDemanda",
+            chart: chartFotoXDemanda,
+            options: optionsFotoXDemanda,
         },
         {
-            section: "energiaxcompensacao",
-            chart: chartEnergiaXCompensacao,
-            options: optionsEnergiaXCompensacao,
+            section: "EolicaXDemanda",
+            chart: chartEolicaXDemanda,
+            options: optionsEolicaXDemanda,
         },
-        { section: "bateria", chart: chartBateria, options: optionsBateria },
+        {
+            section: "EnergiaComprada",
+            chart: chartEnergiaComprada,
+            options: optionsEnergiaComprada,
+        },
+        {
+            section: "EnergiaCreditada",
+            chart: chartEnergiaCreditada,
+            options: optionsEnergiaCreditada,
+        },
+        {
+            section: "EnergiaCompensada",
+            chart: chartEnergiaCompensada,
+            options: optionsEnergiaCompensada,
+        },
+        {
+            section: "EnergiaDescartada",
+            chart: chartEnergiaDescartada,
+            options: optionsEnergiaDescartada,
+        },
+        {
+            section: "CargaBateria",
+            chart: chartCargaBateria,
+            options: optionsCargaBateria,
+        },
+        {
+            section: "Bateria",
+            chart: chartBateria,
+            options: optionsBateria,
+        },
+        {
+            section: "DemandaBateria",
+            chart: chartDemandaBateria,
+            options: optionsDemandaBateria,
+        },
         { section: "stsolar", chart: chartSTSolar, options: optionsSTSolar },
         { section: "stvento", chart: chartSTVento, options: optionsSTVento },
     ];
@@ -1135,507 +1250,92 @@ linkColor.forEach((l) => l.addEventListener("click", colorLink));
 
 /*==================== CARREGANDO DADOS DO JSON ====================*/
 
-let optionsFotovoltaica;
-let optionsEolica;
-let optionsEnergiaXDemanda;
-let optionsDesempenho;
-let optionsEnergiaXCompensacao;
+let optionsDemanda;
+let optionsFotoXDemanda;
+let optionsEolicaXDemanda;
+let optionsEnergiaComprada;
+let optionsEnergiaCreditada;
+let optionsEnergiaCompensada;
+let optionsEnergiaDescartada;
+let optionsCargaBateria;
 let optionsBateria;
+let optionsDemandaBateria;
 let optionsSTSolar;
 let optionsSTVento;
 
 // Carrega os dados do json e preenche nos gráficos
-// Cada "options" contém as configurações dos gráficos (tipo, cores, dados, nomes, etc.)
 // Poderia estar em um outro arquivo talvez.
 async function loadData() {
     try {
         const response = await fetch("../../../dados/dados.json");
         const data = await response.json();
 
-        /* OPTIONS FOTOVOLTAICA */
-        optionsFotovoltaica = {
-            series: [
-                {
-                    name: "Energia Fotovoltaica",
-                    color: "#2638DA",
-                    data: data.energiaF,
-                },
-            ],
-            chart: {
-                height: 350,
-                type: "line",
-                width: "100%",
-            },
-            responsive: [
-                {
-                    breakpoint: 768,
-                    options: {
-                        chart: {
-                            height: 300, // Gráfico um pouco menor no mobile
-                        },
-                        legend: {
-                            position: "bottom",
-                            offsetX: 0,
-                            offsetY: 0,
-                        },
-                        title: {
-                            style: {
-                                fontSize: "15px",
-                            },
-                        },
-                        xaxis: {
-                            tickAmount: 4,
-                            labels: {
-                                show: true,
-                                rotate: -45,
-                                hideOverlappingLabels: true, // Evita sobreposição
-                            },
-                        },
-                    },
-                },
-            ],
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                curve: "straight",
-            },
-            title: {
-                text: "Produção de Energia Fotovoltaica",
-                align: "center",
-                margin: 60,
-                style: {
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    fontFamily: "Arial",
-                    color: "#263238",
-                },
-            },
-            grid: {
-                row: {
-                    colors: ["#f3f3f3", "transparent"],
-                    opacity: 0.5,
-                },
-            },
-            xaxis: {
-                title: {
-                    text: "Dia",
-                },
-                type: "datetime",
-                min: new Date("01 Feb 2004").getTime(),
-                categories: data.data,
-            },
-            yaxis: {
-                title: {
-                    text: "Energia (kWh)",
-                },
-                decimalsInFloat: 3,
-            },
-        };
+        let savedData = null;
+        if (localStorage) {
+            savedData = JSON.parse(localStorage.getItem("simulationData"));
+        }
+        let chartData = savedData && savedData.chartData ? savedData.chartData : null;
 
-        /* OPTIONS EOLICA */
-        optionsEolica = {
-            series: [
-                {
-                    name: "Energia Eólica",
-                    color: "#19AA16",
-                    data: data.energiaV,
-                },
-            ],
-            chart: {
-                height: 350,
-                type: "line",
-                zoom: {
-                    autoScaleXasis: true,
-                },
-                width: "100%",
-            },
-            responsive: [
-                {
-                    breakpoint: 768,
-                    options: {
-                        chart: {
-                            height: 300, // Gráfico um pouco menor no mobile
-                        },
-                        legend: {
-                            position: "bottom",
-                            offsetX: 0,
-                            offsetY: 0,
-                        },
-                        title: {
-                            style: {
-                                fontSize: "15px",
-                            },
-                        },
+        // Gerando 8640 pontos horários (360 dias de 24h) a partir de 01/Fev/2004
+        const startTimestamp = new Date("01 Feb 2004").getTime();
+        const timestamps = [];
+        for (let i = 0; i < 8640; i++) {
+            timestamps.push(startTimestamp + i * 3600000); // adiciona 1 hora em milissegundos
+        }
+        
+        const maxRangeMs = 720 * 3600000; // 30 dias de 24h em milissegundos
+        const chartEvents = {
+            beforeZoom: function(e, { xaxis }) {
+                if (xaxis.max - xaxis.min > maxRangeMs) {
+                    return {
                         xaxis: {
-                            tickAmount: 4,
-                            labels: {
-                                show: true,
-                                rotate: -45,
-                                hideOverlappingLabels: true, // Evita sobreposição
-                            },
-                        },
-                    },
-                },
-            ],
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                curve: "straight",
-            },
-            title: {
-                text: "Produção de Energia Eólica",
-                align: "center",
-                margin: 60,
-                style: {
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    fontFamily: "Arial",
-                    color: "#263238",
-                },
-            },
-            grid: {
-                row: {
-                    colors: ["#f3f3f3", "transparent"],
-                    opacity: 0.5,
-                },
-            },
-            xaxis: {
-                title: {
-                    text: "Dia",
-                },
-                type: "datetime",
-                min: new Date("01 Feb 2004").getTime(),
-                categories: data.data,
-            },
-            yaxis: {
-                title: {
-                    text: "Energia (kWh)",
-                },
-                decimalsInFloat: 3,
-            },
-        };
-
-        /* OPTIONS ENERGIA X DEMANDA */
-        optionsEnergiaXDemanda = {
-            series: [
-                {
-                    name: "Energia produzida",
-                    type: "line",
-                    color: "#A155B9",
-                    data: data.energiaP,
-                },
-                {
-                    name: "Demanda Enegética",
-                    type: "line",
-                    color: "#E0CE2A",
-                    data: data.demanda,
-                },
-            ],
-            chart: {
-                height: 350,
-                type: "line",
-                stacked: false,
-                width: "100%",
-            },
-            responsive: [
-                {
-                    breakpoint: 768,
-                    options: {
-                        chart: {
-                            height: 300, // Gráfico um pouco menor no mobile
-                        },
-                        legend: {
-                            position: "bottom",
-                            offsetX: 0,
-                            offsetY: 0,
-                        },
-                        title: {
-                            style: {
-                                fontSize: "15px",
-                            },
-                        },
-                        xaxis: {
-                            tickAmount: 4,
-                            labels: {
-                                show: true,
-                                rotate: -45,
-                                hideOverlappingLabels: true, // Evita sobreposição
-                            },
-                        },
-                    },
-                },
-            ],
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                width: 2,
-            },
-            title: {
-                text: "Produção de energia x Demanda energética",
-                align: "center",
-                margin: 60,
-                style: {
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    fontFamily: "Arial",
-                    color: "#263238",
-                },
-            },
-            xaxis: {
-                title: {
-                    text: "Dia",
-                },
-                type: "datetime",
-                min: new Date("01 Feb 2004").getTime(),
-                categories: data.data,
-            },
-            yaxis: {
-                title: {
-                    text: "Energia (kWh)",
-                },
-                decimalsInFloat: 3,
-                labels: {
-                    style: {
-                        colors: ["#E0CE2A", "#A155B9"], // Cores das séries
-                    },
-                },
-            },
-            legend: {
-                horizontalAlign: "left",
-                offsetX: 40,
-            },
-            title: {
-                text: "Produção de Energia x Demanda Energética",
-                align: "center",
-                margin: 60,
-                style: {
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    fontFamily: "Arial",
-                    color: "#263238",
-                },
-            },
-        };
-
-        /* OPTIONS DESEMPENHO*/
-        optionsDesempenho = {
-            series: [
-                {
-                    name: "Energia Fotovoltaica",
-                    type: "column",
-                    data: data.energiaF,
-                },
-                {
-                    name: "Net metering",
-                    type: "area",
-                    data: data.netMetering,
-                },
-                {
-                    name: "Carga",
-                    type: "line",
-                    data: data.carga,
-                },
-                {
-                    name: "Grid público",
-                    type: "area",
-                    color: "#A7B7F3",
-                    data: data.grid,
-                },
-                {
-                    name: "Energia Eólica",
-                    type: "area",
-                    color: "#EC9340",
-                    data: data.energiaV,
-                },
-                {
-                    name: "Energia da bateria",
-                    type: "line",
-                    color: "#FF0101",
-                    data: data.bateria,
-                },
-            ],
-            chart: {
-                height: 350,
-                type: "line",
-                stacked: false,
-                width: "100%",
-            },
-            responsive: [
-                {
-                    breakpoint: 768,
-                    options: {
-                        chart: {
-                            height: 300, // Gráfico um pouco menor no mobile
-                        },
-                        legend: {
-                            position: "bottom",
-                            offsetX: 0,
-                            offsetY: 0,
-                        },
-                        title: {
-                            style: {
-                                fontSize: "15px",
-                            },
-                        },
-                        xaxis: {
-                            tickAmount: 4,
-                            labels: {
-                                show: true,
-                                rotate: -45,
-                                hideOverlappingLabels: true, // Evita sobreposição
-                            },
-                        },
-                    },
-                },
-            ],
-            stroke: {
-                width: [0, 2, 3, 2, 3, 3],
-                dashArray: [0, 0, 0, 0, 0, 5],
-                curve: "smooth",
-            },
-            plotOptions: {
-                bar: {
-                    columnWidth: "50%",
-                },
-            },
-            fill: {
-                opacity: [0.85, 0.25, 1],
-                gradient: {
-                    inverseColors: false,
-                    shade: "light",
-                    type: "vertical",
-                    opacityFrom: 0.85,
-                    opacityTo: 0.55,
-                    stops: [0, 100, 100, 100],
-                },
-            },
-            markers: {
-                size: 0,
-            },
-            xaxis: {
-                title: {
-                    text: "Dia",
-                },
-                type: "datetime",
-                categories: data.data,
-            },
-            yaxis: {
-                title: {
-                    text: "Energia (kWh)",
-                },
-                decimalsInFloat: 3,
-            },
-            legend: {
-                horizontalAlign: "left",
-                offsetX: 40,
-            },
-            title: {
-                text: "Desempenho",
-                align: "center",
-                margin: 60,
-                style: {
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    fontFamily: "Arial",
-                    color: "#263238",
-                },
-            },
-            tooltip: {
-                shared: true,
-                intersect: false,
-                y: {
-                    formatter: function (y) {
-                        if (typeof y !== "undefined") {
-                            return y.toFixed(0) + " Kw";
+                            min: xaxis.min,
+                            max: xaxis.min + maxRangeMs
                         }
-                        return y;
-                    },
-                },
+                    };
+                }
             },
+            beforeReset: function(e, opts) {
+                return {
+                    xaxis: {
+                        min: startTimestamp,
+                        max: startTimestamp + maxRangeMs
+                    }
+                };
+            }
         };
 
-        /* OPTIONS ENERGIA X COMPENSAÇÃO */
-        optionsEnergiaXCompensacao = {
-            series: [
-                {
-                    name: "Energia produzida",
-                    type: "line",
-                    color: "#A155B9",
-                    data: data.energiaP,
-                },
-                {
-                    name: "Net metering",
-                    type: "line",
-                    color: "#36ADE8",
-                    data: data.netMetering,
-                },
-            ],
+        let generateTemplate = (titleText, yaxisTitle, seriesData) => ({
+            series: seriesData,
             chart: {
                 height: 350,
                 type: "line",
-                stacked: false,
                 width: "100%",
+                zoom: { autoScaleYaxis: true },
+                events: chartEvents
             },
             responsive: [
                 {
                     breakpoint: 768,
                     options: {
-                        chart: {
-                            height: 300, // Gráfico um pouco menor no mobile
-                        },
-                        legend: {
-                            position: "bottom",
-                            offsetX: 0,
-                            offsetY: 0,
-                        },
-                        title: {
-                            style: {
-                                fontSize: "15px",
-                            },
-                        },
+                        chart: { height: 300 },
+                        legend: { position: "bottom", offsetX: 0, offsetY: 0 },
+                        title: { style: { fontSize: "15px" } },
                         xaxis: {
                             tickAmount: 4,
                             labels: {
                                 show: true,
                                 rotate: -45,
-                                hideOverlappingLabels: true, // Evita sobreposição
+                                hideOverlappingLabels: true,
                             },
                         },
                     },
                 },
             ],
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                width: 2,
-                dashArray: [5, 0],
-            },
-            xaxis: {
-                title: {
-                    text: "Dia",
-                },
-                type: "datetime",
-                min: new Date("01 Feb 2004").getTime(),
-                categories: data.data,
-            },
-            yaxis: [
-                {
-                    title: {
-                        text: "Energia (kWh)",
-                    },
-                    decimalsInFloat: 3,
-                },
-            ],
-            legend: {
-                horizontalAlign: "left",
-                offsetX: 40,
-            },
+            dataLabels: { enabled: false },
+            stroke: { curve: "straight" },
             title: {
-                text: "Produção de Energia x Compensação",
+                text: titleText,
                 align: "center",
                 margin: 60,
                 style: {
@@ -1645,18 +1345,82 @@ async function loadData() {
                     color: "#263238",
                 },
             },
-        };
+            grid: { row: { colors: ["#f3f3f3", "transparent"], opacity: 0.5 } },
+            xaxis: {
+                title: { text: "Dia" },
+                type: "datetime",
+                min: startTimestamp,
+                categories: timestamps,
+            },
+            yaxis: { title: { text: yaxisTitle }, decimalsInFloat: 3 },
+        });
+
+        optionsDemanda = generateTemplate(
+            "Demanda Energética",
+            "Energia (kWh)",
+            [{ name: "Demanda Energética", data: chartData ? chartData.demanda : [] }]
+        );
+
+        optionsFotoXDemanda = generateTemplate(
+            "Produção Fotovoltaica x Demanda Suprida",
+            "Energia (kWh)",
+            [
+                { name: "Produção Fotovoltaica", data: chartData ? chartData.energiaF : [] },
+                { name: "Demanda Suprida", data: chartData ? chartData.pv_meet : [] },
+            ]
+        );
+
+        optionsEolicaXDemanda = generateTemplate(
+            "Produção Eólica x Demanda Suprida",
+            "Energia (kWh)",
+            [
+                { name: "Produção Eólica", data: chartData ? chartData.energiaV : [] },
+                { name: "Demanda Suprida", data: chartData ? chartData.wt_meet : [] },
+            ]
+        );
+
+        optionsEnergiaComprada = generateTemplate(
+            "Energia Comprada da Rede",
+            "Energia (kWh)",
+            [{ name: "Energia Comprada da Rede", data: chartData ? chartData.energiaComprada : [] }]
+        );
+        optionsEnergiaCreditada = generateTemplate(
+            "Energia Creditada",
+            "Energia (kWh)",
+            [{ name: "Energia Creditada", data: chartData ? chartData.energiaCreditada : [] }]
+        );
+        optionsEnergiaCompensada = generateTemplate(
+            "Energia Compensada",
+            "Energia (kWh)",
+            [{ name: "Energia Compensada", data: chartData ? chartData.energiaCompensada : [] }]
+        );
+        optionsEnergiaDescartada = generateTemplate(
+            "Excesso de Energia Descartada",
+            "Energia (kWh)",
+            [{ name: "Excesso de Energia Descartada", data: chartData ? chartData.energiaDescartada : [] }]
+        );
+
+        optionsCargaBateria = generateTemplate(
+            "Quantidade de Carga na Bateria",
+            "Carga (%)",
+            [{ name: "Quantidade de Carga na Bateria", data: chartData ? chartData.cargaBateria : [] }]
+        );
+        optionsDemandaBateria = generateTemplate(
+            "Demanda Suprida pela Bateria",
+            "Energia (kWh)",
+            [{ name: "Demanda Suprida pela Bateria", data: chartData ? chartData.bateria_meet : [] }]
+        );
 
         /* OPTIONS BATERIA */
         optionsBateria = {
             series: [
                 {
                     name: "Carga",
-                    data: data.carga,
+                    data: chartData ? chartData.carga : (data.carga || []),
                 },
                 {
                     name: "Descarga",
-                    data: data.descarga,
+                    data: chartData ? chartData.descarga : (data.descarga || []),
                 },
             ],
             chart: {
@@ -1664,6 +1428,7 @@ async function loadData() {
                 height: 440,
                 stacked: true,
                 width: "100%",
+                events: chartEvents
             },
             responsive: [
                 {
@@ -1744,12 +1509,9 @@ async function loadData() {
                 },
             },
             xaxis: {
-                title: {
-                    text: "tempo",
-                },
                 type: "datetime",
-                min: new Date("01 Feb 2004").getTime(),
-                categories: data.data,
+                min: startTimestamp,
+                categories: timestamps,
                 title: {
                     text: "Dia",
                 },
@@ -1797,6 +1559,7 @@ async function loadData() {
                     autoScaleYaxis: true,
                 },
                 width: "100%",
+                events: chartEvents
             },
             responsive: [
                 {
@@ -1869,8 +1632,8 @@ async function loadData() {
                     text: "Dia",
                 },
                 type: "datetime",
-                min: new Date("01 Feb 2004").getTime(),
-                categories: data.data,
+                min: startTimestamp,
+                categories: timestamps,
             },
             yaxis: {
                 title: {
@@ -1922,6 +1685,7 @@ async function loadData() {
                     autoScaleYaxis: true,
                 },
                 width: "100%",
+                events: chartEvents
             },
             responsive: [
                 {
@@ -1994,8 +1758,8 @@ async function loadData() {
                     text: "Dia",
                 },
                 type: "datetime",
-                min: new Date("01 Feb 2004").getTime(),
-                categories: data.data,
+                min: startTimestamp,
+                categories: timestamps,
             },
             yaxis: {
                 title: {
@@ -2020,43 +1784,7 @@ async function loadData() {
 
 await loadData();
 
-const THIRD_BREAKPOINT = 500;
-const SECOND_BREAKPOINT = 768;
-const FIRST_BREAKPOINT = 1024;
-
-function aplicarZoomMobile(chart) {
-    if (window.innerWidth <= FIRST_BREAKPOINT) {
-        const dataInicio = new Date("01 Feb 2004").getTime();
-        const dataFim = new Date("30 Jul 2004").getTime();
-        chart.zoomX(dataInicio, dataFim);
-    }
-    if (window.innerWidth <= SECOND_BREAKPOINT) {
-        const dataInicio = new Date("01 Feb 2004").getTime();
-        const dataFim = new Date("30 Apr 2004").getTime();
-        chart.zoomX(dataInicio, dataFim);
-    }
-    if (window.innerWidth <= FIRST_BREAKPOINT) {
-        const dataInicio = new Date("01 Feb 2004").getTime();
-        const dataFim = new Date("31 Mar 2004").getTime();
-        chart.zoomX(dataInicio, dataFim);
-    }
-}
-
 /*==================== RENDERIZANDO GRÁFICOS ====================*/
-
-/* .render() cria o gráfico com as options dadas */
-
-/*
- * cada "periods..." indica um possível período de tempo do gráfico, selecionável por meio dos botões
- * o id faz referência ao html
- */
-
-/* ========== GRÁFICO ENERGIA FOTOVOLTAICA ========== */
-var chartFotovoltaica = new ApexCharts(
-    document.querySelector("#chartFotovoltaica"),
-    optionsFotovoltaica,
-);
-chartFotovoltaica.render().then(() => aplicarZoomMobile(chartFotovoltaica));
 
 var resetCssClasses = function (activeEl) {
     var els = document.querySelectorAll("button");
@@ -2068,298 +1796,186 @@ var resetCssClasses = function (activeEl) {
     activeEl.target.classList.add("active");
 };
 
-const periodsFotovoltaica = [
-    { id: "#fev_f", start: "01 Feb 2004", end: "29 Feb 2004" },
-    { id: "#fev_2005_f", start: "01 Feb 2005", end: "03 Feb 2005" },
-    { id: "#jan_f", start: "01 Jan 2005", end: "30 Jan 2005" },
-    { id: "#mar_f", start: "01 Mar 2004", end: "31 Mar 2004" },
-    { id: "#abr_f", start: "01 Apr 2004", end: "30 Apr 2004" },
-    { id: "#mai_f", start: "01 May 2004", end: "30 May 2004" },
-    { id: "#jun_f", start: "01 Jun 2004", end: "30 Jun 2004" },
-    { id: "#jul_f", start: "01 Jul 2004", end: "30 Jul 2004" },
-    { id: "#ago_f", start: "01 Aug 2004", end: "30 Aug 2004" },
-    { id: "#set_f", start: "01 Sept 2004", end: "30 Sept 2004" },
-    { id: "#out_f", start: "01 Oct 2004", end: "30 Oct 2004" },
-    { id: "#nov_f", start: "01 Nov 2004", end: "30 Nov 2004" },
-    { id: "#dez_f", start: "01 Dec 2004", end: "30 Dec 2004" },
-    { id: "#sem1_f", start: "01 Feb 2004", end: "30 Jul 2004" },
-    { id: "#sem2_f", start: "01 Aug 2004", end: "03 Feb 2005" },
-    { id: "#one_year_f", start: "01 Feb 2004", end: "03 Feb 2005" },
-];
+function renderChartWithPeriods(chartId, options, prefix) {
+    var chart = new ApexCharts(document.querySelector(chartId), options);
 
-// mudar o gráfico de acordo com o botão clicado
-periodsFotovoltaica.forEach((period) => {
-    document.querySelector(period.id).addEventListener("click", function (e) {
-        resetCssClasses(e);
-        chartFotovoltaica.zoomX(
-            new Date(period.start).getTime(),
-            new Date(period.end).getTime(),
-        );
+    const monthNames = [
+        "Fevereiro(2004)",
+        "Março(2004)",
+        "Abril(2004)",
+        "Maio(2004)",
+        "Junho(2004)",
+        "Julho(2004)",
+        "Agosto(2004)",
+        "Setembro(2004)",
+        "Outubro(2004)",
+        "Novembro(2004)",
+        "Dezembro(2004)",
+        "Janeiro(2005)",
+    ];
+
+    let currentMonth = 0;
+
+    function zoomToMonth(monthIndex) {
+        if (monthIndex < 0) monthIndex = 0;
+        if (monthIndex > 11) monthIndex = 11;
+        currentMonth = monthIndex;
+
+        const btnMes = document.querySelector(`#btn_mes_${prefix}`);
+        if (btnMes) btnMes.innerText = monthNames[currentMonth];
+
+        const startIdx = currentMonth * 720;
+        let endIdx = startIdx + 719;
+        if (endIdx > 8639) endIdx = 8639;
+
+        const startTimestamp = new Date("01 Feb 2004").getTime();
+        const tStart = startTimestamp + startIdx * 3600000;
+        const tEnd = startTimestamp + endIdx * 3600000;
+
+        chart.zoomX(tStart, tEnd);
+    }
+
+    chart.render().then(() => {
+        zoomToMonth(0);
     });
-});
 
-/* ========== GRÁFICO ENERGIA EÓLICA ========== */
-var chartEolica = new ApexCharts(
-    document.querySelector("#chartEolica"),
-    optionsEolica,
+    for (let i = 0; i < 12; i++) {
+        const el = document.querySelector(`#m${i}_${prefix}`);
+        if (el) {
+            el.addEventListener("click", function (e) {
+                resetCssClasses(e);
+                zoomToMonth(i);
+            });
+        }
+    }
+
+    const leftArrow = document.querySelector(`#left_${prefix}`);
+    if (leftArrow) {
+        leftArrow.addEventListener("click", function (e) {
+            if (currentMonth > 0) {
+                zoomToMonth(currentMonth - 1);
+            }
+        });
+    }
+
+    const rightArrow = document.querySelector(`#right_${prefix}`);
+    if (rightArrow) {
+        rightArrow.addEventListener("click", function (e) {
+            if (currentMonth < 11) {
+                zoomToMonth(currentMonth + 1);
+            }
+        });
+    }
+
+    return chart;
+}
+
+var chartDemanda = renderChartWithPeriods(
+    "#chartDemanda",
+    optionsDemanda,
+    "demanda",
 );
-chartEolica.render().then(() => aplicarZoomMobile(chartEolica));
-
-const periodsEolica = [
-    { id: "#fev_e", start: "01 Feb 2004", end: "29 Feb 2004" },
-    { id: "#fev_2005_e", start: "01 Feb 2005", end: "03 Feb 2005" },
-    { id: "#jan_e", start: "01 Jan 2005", end: "30 Jan 2005" },
-    { id: "#mar_e", start: "01 Mar 2004", end: "31 Mar 2004" },
-    { id: "#abr_e", start: "01 Apr 2004", end: "30 Apr 2004" },
-    { id: "#mai_e", start: "01 May 2004", end: "30 May 2004" },
-    { id: "#jun_e", start: "01 Jun 2004", end: "30 Jun 2004" },
-    { id: "#jul_e", start: "01 Jul 2004", end: "30 Jul 2004" },
-    { id: "#ago_e", start: "01 Aug 2004", end: "30 Aug 2004" },
-    { id: "#set_e", start: "01 Sept 2004", end: "30 Sept 2004" },
-    { id: "#out_e", start: "01 Oct 2004", end: "30 Oct 2004" },
-    { id: "#nov_e", start: "01 Nov 2004", end: "30 Nov 2004" },
-    { id: "#dez_e", start: "01 Dec 2004", end: "30 Dec 2004" },
-    { id: "#sem1_e", start: "01 Feb 2004", end: "30 Jul 2004" },
-    { id: "#sem2_e", start: "01 Aug 2004", end: "03 Feb 2005" },
-    { id: "#one_year_e", start: "01 Feb 2004", end: "03 Feb 2005" },
-];
-
-// mudar o gráfico de acordo com o botão clicado
-periodsEolica.forEach((period) => {
-    document.querySelector(period.id).addEventListener("click", function (e) {
-        resetCssClasses(e);
-        chartEolica.zoomX(
-            new Date(period.start).getTime(),
-            new Date(period.end).getTime(),
-        );
-    });
-});
-
-/* ========== GRÁFICO ENERGIA X DEMANDA ======== */
-var chartEnergiaXDemanda = new ApexCharts(
-    document.querySelector("#chartEnergiaXDemanda"),
-    optionsEnergiaXDemanda,
+var chartFotoXDemanda = renderChartWithPeriods(
+    "#chartFotoXDemanda",
+    optionsFotoXDemanda,
+    "fotoXDemanda",
 );
-chartEnergiaXDemanda
-    .render()
-    .then(() => aplicarZoomMobile(chartEnergiaXDemanda));
-
-const periodsEnergiaXDemanda = [
-    { id: "#fev_exd", start: "01 Feb 2004", end: "29 Feb 2004" },
-    { id: "#fev_2005_exd", start: "01 Feb 2005", end: "03 Feb 2005" },
-    { id: "#jan_exd", start: "01 Jan 2005", end: "30 Jan 2005" },
-    { id: "#mar_exd", start: "01 Mar 2004", end: "31 Mar 2004" },
-    { id: "#abr_exd", start: "01 Apr 2004", end: "30 Apr 2004" },
-    { id: "#mai_exd", start: "01 May 2004", end: "30 May 2004" },
-    { id: "#jun_exd", start: "01 Jun 2004", end: "30 Jun 2004" },
-    { id: "#jul_exd", start: "01 Jul 2004", end: "30 Jul 2004" },
-    { id: "#ago_exd", start: "01 Aug 2004", end: "30 Aug 2004" },
-    { id: "#set_exd", start: "01 Sept 2004", end: "30 Sept 2004" },
-    { id: "#out_exd", start: "01 Oct 2004", end: "30 Oct 2004" },
-    { id: "#nov_exd", start: "01 Nov 2004", end: "30 Nov 2004" },
-    { id: "#dez_exd", start: "01 Dec 2004", end: "30 Dec 2004" },
-    { id: "#sem1_exd", start: "01 Feb 2004", end: "30 Jul 2004" },
-    { id: "#sem2_exd", start: "01 Aug 2004", end: "03 Feb 2005" },
-    { id: "#one_year_exd", start: "01 Feb 2004", end: "03 Feb 2005" },
-];
-
-// mudar o gráfico de acordo com o botão clicado
-periodsEnergiaXDemanda.forEach((period) => {
-    document.querySelector(period.id).addEventListener("click", function (e) {
-        resetCssClasses(e);
-        chartEnergiaXDemanda.zoomX(
-            new Date(period.start).getTime(),
-            new Date(period.end).getTime(),
-        );
-    });
-});
-
-/* ========== GRÁFICO DESEMPENHO ========== */
-var chartDesempenho = new ApexCharts(
-    document.querySelector("#chartDesempenho"),
-    optionsDesempenho,
+var chartEolicaXDemanda = renderChartWithPeriods(
+    "#chartEolicaXDemanda",
+    optionsEolicaXDemanda,
+    "eolicaXDemanda",
 );
-chartDesempenho.render().then(() => aplicarZoomMobile(chartDesempenho));
-
-const periodsDesempenho = [
-    { id: "#fev_des", start: "01 Feb 2004", end: "29 Feb 2004" },
-    { id: "#fev_2005_des", start: "01 Feb 2005", end: "03 Feb 2005" },
-    { id: "#jan_des", start: "01 Jan 2005", end: "30 Jan 2005" },
-    { id: "#mar_des", start: "01 Mar 2004", end: "31 Mar 2004" },
-    { id: "#abr_des", start: "01 Apr 2004", end: "30 Apr 2004" },
-    { id: "#mai_des", start: "01 May 2004", end: "30 May 2004" },
-    { id: "#jun_des", start: "01 Jun 2004", end: "30 Jun 2004" },
-    { id: "#jul_des", start: "01 Jul 2004", end: "30 Jul 2004" },
-    { id: "#ago_des", start: "01 Aug 2004", end: "30 Aug 2004" },
-    { id: "#set_des", start: "01 Sept 2004", end: "30 Sept 2004" },
-    { id: "#out_des", start: "01 Oct 2004", end: "30 Oct 2004" },
-    { id: "#nov_des", start: "01 Nov 2004", end: "30 Nov 2004" },
-    { id: "#dez_des", start: "01 Dec 2004", end: "30 Dec 2004" },
-    { id: "#sem1_des", start: "01 Feb 2004", end: "30 Jul 2004" },
-    { id: "#sem2_des", start: "01 Aug 2004", end: "03 Feb 2005" },
-    { id: "#one_year_des", start: "01 Feb 2004", end: "03 Feb 2005" },
-];
-
-// mudar o gráfico de acordo com o botão clicado
-periodsDesempenho.forEach((period) => {
-    document.querySelector(period.id).addEventListener("click", function (e) {
-        resetCssClasses(e);
-        chartDesempenho.zoomX(
-            new Date(period.start).getTime(),
-            new Date(period.end).getTime(),
-        );
-    });
-});
-
-/* ========== GRÁFICO ENERGIA X COMPENSAÇÃO ========== */
-var chartEnergiaXCompensacao = new ApexCharts(
-    document.querySelector("#chartEnergiaXCompensacao"),
-    optionsEnergiaXCompensacao,
+var chartEnergiaComprada = renderChartWithPeriods(
+    "#chartEnergiaComprada",
+    optionsEnergiaComprada,
+    "energiaComprada",
 );
-chartEnergiaXCompensacao
-    .render()
-    .then(() => aplicarZoomMobile(chartEnergiaXCompensacao));
-
-const periodsEnergiaXCompensacao = [
-    { id: "#fev_exc", start: "01 Feb 2004", end: "29 Feb 2004" },
-    { id: "#fev_2005_exc", start: "01 Feb 2005", end: "03 Feb 2005" },
-    { id: "#jan_exc", start: "01 Jan 2005", end: "30 Jan 2005" },
-    { id: "#mar_exc", start: "01 Mar 2004", end: "31 Mar 2004" },
-    { id: "#abr_exc", start: "01 Apr 2004", end: "30 Apr 2004" },
-    { id: "#mai_exc", start: "01 May 2004", end: "30 May 2004" },
-    { id: "#jun_exc", start: "01 Jun 2004", end: "30 Jun 2004" },
-    { id: "#jul_exc", start: "01 Jul 2004", end: "30 Jul 2004" },
-    { id: "#ago_exc", start: "01 Aug 2004", end: "30 Aug 2004" },
-    { id: "#set_exc", start: "01 Sept 2004", end: "30 Sept 2004" },
-    { id: "#out_exc", start: "01 Oct 2004", end: "30 Oct 2004" },
-    { id: "#nov_exc", start: "01 Nov 2004", end: "30 Nov 2004" },
-    { id: "#dez_exc", start: "01 Dec 2004", end: "30 Dec 2004" },
-    { id: "#sem1_exc", start: "01 Feb 2004", end: "30 Jul 2004" },
-    { id: "#sem2_exc", start: "01 Aug 2004", end: "03 Feb 2005" },
-    { id: "#one_year_exc", start: "01 Feb 2004", end: "03 Feb 2005" },
-];
-
-// mudar o gráfico de acordo com o botão clicado
-periodsEnergiaXCompensacao.forEach((period) => {
-    document.querySelector(period.id).addEventListener("click", function (e) {
-        resetCssClasses(e);
-        chartEnergiaXCompensacao.zoomX(
-            new Date(period.start).getTime(),
-            new Date(period.end).getTime(),
-        );
-    });
-});
-
-/* ========== GRÁFICO BATERIA ==========*/
-var chartBateria = new ApexCharts(
-    document.querySelector("#chartBateria"),
+var chartEnergiaCreditada = renderChartWithPeriods(
+    "#chartEnergiaCreditada",
+    optionsEnergiaCreditada,
+    "energiaCreditada",
+);
+var chartEnergiaCompensada = renderChartWithPeriods(
+    "#chartEnergiaCompensada",
+    optionsEnergiaCompensada,
+    "energiaCompensada",
+);
+var chartEnergiaDescartada = renderChartWithPeriods(
+    "#chartEnergiaDescartada",
+    optionsEnergiaDescartada,
+    "energiaDescartada",
+);
+var chartCargaBateria = renderChartWithPeriods(
+    "#chartCargaBateria",
+    optionsCargaBateria,
+    "cargaBateria",
+);
+var chartBateria = renderChartWithPeriods(
+    "#chartBateria",
     optionsBateria,
+    "bat",
 );
-chartBateria.render().then(() => aplicarZoomMobile(chartBateria));
-
-const periodsBateria = [
-    { id: "#fev_bat", start: "01 Feb 2004", end: "29 Feb 2004" },
-    { id: "#fev_2005_bat", start: "01 Feb 2005", end: "03 Feb 2005" },
-    { id: "#jan_bat", start: "01 Jan 2005", end: "30 Jan 2005" },
-    { id: "#mar_bat", start: "01 Mar 2004", end: "31 Mar 2004" },
-    { id: "#abr_bat", start: "01 Apr 2004", end: "30 Apr 2004" },
-    { id: "#mai_bat", start: "01 May 2004", end: "30 May 2004" },
-    { id: "#jun_bat", start: "01 Jun 2004", end: "30 Jun 2004" },
-    { id: "#jul_bat", start: "01 Jul 2004", end: "30 Jul 2004" },
-    { id: "#ago_bat", start: "01 Aug 2004", end: "30 Aug 2004" },
-    { id: "#set_bat", start: "01 Sept 2004", end: "30 Sept 2004" },
-    { id: "#out_bat", start: "01 Oct 2004", end: "30 Oct 2004" },
-    { id: "#nov_bat", start: "01 Nov 2004", end: "30 Nov 2004" },
-    { id: "#dez_bat", start: "01 Dec 2004", end: "30 Dec 2004" },
-    { id: "#sem1_bat", start: "01 Feb 2004", end: "30 Jul 2004" },
-    { id: "#sem2_bat", start: "01 Aug 2004", end: "03 Feb 2005" },
-    { id: "#one_year_bat", start: "01 Feb 2004", end: "03 Feb 2005" },
-];
-
-// mudar o gráfico de acordo com o botão clicado
-periodsBateria.forEach((period) => {
-    document.querySelector(period.id).addEventListener("click", function (e) {
-        resetCssClasses(e);
-        chartBateria.zoomX(
-            new Date(period.start).getTime(),
-            new Date(period.end).getTime(),
-        );
-    });
-});
-
-/* ========== GRÁFICO ST SOLAR ========== */
-var chartSTSolar = new ApexCharts(
-    document.querySelector("#chartSTSolar"),
+var chartDemandaBateria = renderChartWithPeriods(
+    "#chartDemandaBateria",
+    optionsDemandaBateria,
+    "demandaBateria",
+);
+var chartSTSolar = renderChartWithPeriods(
+    "#chartSTSolar",
     optionsSTSolar,
+    "sts",
 );
-chartSTSolar.render().then(() => aplicarZoomMobile(chartSTSolar));
-
-const periodsSTSolar = [
-    { id: "#fev_sts", start: "01 Feb 2004", end: "29 Feb 2004" },
-    { id: "#fev_2005_sts", start: "01 Feb 2005", end: "03 Feb 2005" },
-    { id: "#jan_sts", start: "01 Jan 2005", end: "30 Jan 2005" },
-    { id: "#mar_sts", start: "01 Mar 2004", end: "31 Mar 2004" },
-    { id: "#abr_sts", start: "01 Apr 2004", end: "30 Apr 2004" },
-    { id: "#mai_sts", start: "01 May 2004", end: "30 May 2004" },
-    { id: "#jun_sts", start: "01 Jun 2004", end: "30 Jun 2004" },
-    { id: "#jul_sts", start: "01 Jul 2004", end: "30 Jul 2004" },
-    { id: "#ago_sts", start: "01 Aug 2004", end: "30 Aug 2004" },
-    { id: "#set_sts", start: "01 Sept 2004", end: "30 Sept 2004" },
-    { id: "#out_sts", start: "01 Oct 2004", end: "30 Oct 2004" },
-    { id: "#nov_sts", start: "01 Nov 2004", end: "30 Nov 2004" },
-    { id: "#dez_sts", start: "01 Dec 2004", end: "30 Dec 2004" },
-    { id: "#sem1_sts", start: "01 Feb 2004", end: "30 Jul 2004" },
-    { id: "#sem2_sts", start: "01 Aug 2004", end: "03 Feb 2005" },
-    { id: "#one_year_sts", start: "01 Feb 2004", end: "03 Feb 2005" },
-];
-
-// mudar o gráfico de acordo com o botão clicado
-periodsSTSolar.forEach((period) => {
-    document.querySelector(period.id).addEventListener("click", function (e) {
-        resetCssClasses(e);
-        chartSTSolar.zoomX(
-            new Date(period.start).getTime(),
-            new Date(period.end).getTime(),
-        );
-    });
-});
-
-/* ========== GRÁFICO ST VENTO ========== */
-var chartSTVento = new ApexCharts(
-    document.querySelector("#chartSTVento"),
+var chartSTVento = renderChartWithPeriods(
+    "#chartSTVento",
     optionsSTVento,
+    "stv",
 );
-chartSTVento.render().then(() => aplicarZoomMobile(chartSTVento));
 
-const periodsSTVento = [
-    { id: "#fev_stv", start: "01 Feb 2004", end: "29 Feb 2004" },
-    { id: "#fev_2005_stv", start: "01 Feb 2005", end: "03 Feb 2005" },
-    { id: "#jan_stv", start: "01 Jan 2005", end: "30 Jan 2005" },
-    { id: "#mar_stv", start: "01 Mar 2004", end: "31 Mar 2004" },
-    { id: "#abr_stv", start: "01 Apr 2004", end: "30 Apr 2004" },
-    { id: "#mai_stv", start: "01 May 2004", end: "30 May 2004" },
-    { id: "#jun_stv", start: "01 Jun 2004", end: "30 Jun 2004" },
-    { id: "#jul_stv", start: "01 Jul 2004", end: "30 Jul 2004" },
-    { id: "#ago_stv", start: "01 Aug 2004", end: "30 Aug 2004" },
-    { id: "#set_stv", start: "01 Sept 2004", end: "30 Sept 2004" },
-    { id: "#out_stv", start: "01 Oct 2004", end: "30 Oct 2004" },
-    { id: "#nov_stv", start: "01 Nov 2004", end: "30 Nov 2004" },
-    { id: "#dez_stv", start: "01 Dec 2004", end: "30 Dec 2004" },
-    { id: "#sem1_stv", start: "01 Feb 2004", end: "30 Jul 2004" },
-    { id: "#sem2_stv", start: "01 Aug 2004", end: "03 Feb 2005" },
-    { id: "#one_year_stv", start: "01 Feb 2004", end: "03 Feb 2005" },
-];
+async function updateChartsWithData(chartData, withPause = false) {
+    if (!chartData) return;
 
-// mudar o gráfico de acordo com o botão clicado
-periodsSTVento.forEach((period) => {
-    document.querySelector(period.id).addEventListener("click", function (e) {
-        resetCssClasses(e);
-        chartSTVento.zoomX(
-            new Date(period.start).getTime(),
-            new Date(period.end).getTime(),
-        );
-    });
-});
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const PAUSE_MS = withPause ? 500 : 0;
+
+    const startTimestamp = new Date("01 Feb 2004").getTime();
+    const tStart = startTimestamp;
+    const tEnd = startTimestamp + 719 * 3600000;
+
+    const updateAndZoom = async (chart, series) => {
+        if (chart) {
+            chart.updateSeries(series, withPause);
+            chart.zoomX(tStart, tEnd);
+            if (withPause) {
+                await delay(PAUSE_MS);
+            }
+        }
+    };
+
+    await updateAndZoom(chartDemanda, [{ name: "Demanda Energética", data: chartData.demanda }]);
+    
+    await updateAndZoom(chartFotoXDemanda, [
+        { name: "Produção Fotovoltaica", data: chartData.energiaF },
+        { name: "Demanda Suprida", data: chartData.pv_meet },
+    ]);
+
+    await updateAndZoom(chartEolicaXDemanda, [
+        { name: "Produção Eólica", data: chartData.energiaV },
+        { name: "Demanda Suprida", data: chartData.wt_meet },
+    ]);
+
+    await updateAndZoom(chartEnergiaComprada, [{ name: "Energia Comprada da Rede", data: chartData.energiaComprada }]);
+    await updateAndZoom(chartEnergiaCreditada, [{ name: "Energia Creditada", data: chartData.energiaCreditada }]);
+    await updateAndZoom(chartEnergiaCompensada, [{ name: "Energia Compensada", data: chartData.energiaCompensada }]);
+    await updateAndZoom(chartEnergiaDescartada, [{ name: "Excesso de Energia Descartada", data: chartData.energiaDescartada }]);
+    await updateAndZoom(chartCargaBateria, [{ name: "Quantidade de Carga na Bateria", data: chartData.cargaBateria }]);
+    
+    await updateAndZoom(chartBateria, [
+        { name: "Carga", data: chartData.carga },
+        { name: "Descarga", data: chartData.descarga },
+    ]);
+
+    await updateAndZoom(chartDemandaBateria, [{ name: "Demanda Suprida pela Bateria", data: chartData.bateria_meet }]);
+}
 
 // tirando o aviso de "Carregando gráfico"
 let loadingChartWarning = document.querySelectorAll(".loading_chart");

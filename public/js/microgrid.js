@@ -381,50 +381,55 @@ export default class Microgrid {
         return [this.lcoe, this.renewable_factor, this.meef];
     }
 
-    logging(file_name) {
-        const header = [
-            "Load [kWh]",
-            "Photovoltaic Panel Generation [kWh]",
-            "Wind Turbine Generation [kWh]",
-            "Photovoltaic Panel Supply [kWh]",
-            "Wind Turbine Supply [kWh]",
-            "Battery State of Charge [kWh]",
-            "Battery Charge [kWh]",
-            "Battery Discharge [kWh]",
-            "Battery Supply [kWh]",
-            "Energy Purchased [kWh]",
-            "Energy Credited [kWh]",
-            "Energy Compensated [kWh]",
-            "Energy Surplus [kWh]",
-        ];
+    getChartData() {
+        // Função auxiliar para evitar números gigantescos no JSON e diminuir o peso do arquivo
+        const formatArray = (arr) =>
+            Array.from(arr).map((v) => Number(v.toFixed(3)));
 
-        let csv = header.join(",") + "\n";
+        const data = {
+            demanda: formatArray(this.load),
+            energiaF: this.photovoltaic_panel
+                ? formatArray(this.photovoltaic_panel.output_power)
+                : [],
+            pv_meet: this.photovoltaic_panel
+                ? formatArray(this.photovoltaic_panel.meet_demand)
+                : [],
+            energiaV: this.wind_turbine
+                ? formatArray(this.wind_turbine.output_power)
+                : [],
+            wt_meet: this.wind_turbine
+                ? formatArray(this.wind_turbine.meet_demand)
+                : [],
+            cargaBateria: this.battery
+                ? Array.from(this.battery.state_of_charge)
+                      .slice(0, this.hour_steps)
+                      .map((v) =>
+                          Number(
+                              ((v / this.battery.capacity) * 100).toFixed(3),
+                          ),
+                      )
+                : [],
+            carga: this.battery ? formatArray(this.battery.energy_charged) : [],
+            descarga: this.battery
+                ? Array.from(this.battery.energy_discharged).map((v) =>
+                      Number((-v).toFixed(3)),
+                  )
+                : [],
+            bateria_meet: this.battery
+                ? formatArray(this.battery.meet_demand)
+                : [],
+            energiaComprada: this.public_grid
+                ? formatArray(this.public_grid.energy_purchased)
+                : [],
+            energiaCreditada: this.public_grid
+                ? formatArray(this.public_grid.energy_credited)
+                : [],
+            energiaCompensada: this.public_grid
+                ? formatArray(this.public_grid.energy_compensated)
+                : [],
+            energiaDescartada: formatArray(this.surplus_energy),
+        };
 
-        for (let i = 0; i < this.hour_steps; i++) {
-            const row = [
-                this.load[i],
-                this.photovoltaic_panel
-                    ? this.photovoltaic_panel.output_power[i]
-                    : 0,
-                this.wind_turbine ? this.wind_turbine.output_power[i] : 0,
-                this.photovoltaic_panel
-                    ? this.photovoltaic_panel.meet_demand[i]
-                    : 0,
-                this.wind_turbine ? this.wind_turbine.meet_demand[i] : 0,
-                this.battery ? this.battery.state_of_charge[i] : 0,
-                this.battery ? this.battery.energy_charged[i] : 0,
-                this.battery ? this.battery.energy_discharged[i] : 0,
-                this.battery ? this.battery.meet_demand[i] : 0,
-                this.public_grid ? this.public_grid.energy_purchased[i] : 0,
-                this.public_grid ? this.public_grid.energy_credited[i] : 0,
-                this.public_grid ? this.public_grid.energy_compensated[i] : 0,
-                this.surplus_energy[i],
-            ];
-
-            csv += row.join(",") + "\n";
-        }
-
-        const full_path = `${file_name}.csv`;
-        //fs.writeFileSync(full_path, csv, "utf8");
+        return data;
     }
 }

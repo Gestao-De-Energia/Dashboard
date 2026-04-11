@@ -27,6 +27,26 @@ let load_ind_cached = null;
 let solar_data_cached = null;
 let wind_data_cached = null;
 
+export const bat_efficiency_list = [
+    0.765, 0.9, 0.92, 0.96, 0.94, 0.938, 0.9155, 0.95, 0.86, 0.855, 0.7,
+    0.8, 0.75, 0.7,
+];
+// Each battery capacity cost in [€$]
+export const bat_cap_cost_list = [
+    7.31393, 28.575, 28.575, 9.8066225, 20.67004375, 7.540625, 10.1099133,
+    6.746875, 38.1, 6.99371645, 9.55675, 31.40075, 45.10395475, 14.5415,
+    12.4139325,
+];
+// Each battery lifetime in [years]
+export const bat_lf_list = [
+    18, 17.5, 7, 15, 10, 10, 10, 20, 14, 13.5, 20, 3, 15, 6.5,
+];
+// Each battery cycle number
+export const bat_cycle_list = [
+    1400, 8000, 600, 5000, 1500, 4000, 3000, 1000, 3000, 3250, 1250, 1000,
+    10000, 2000,
+];
+
 export default async function runMicrogrid(
     max_it = 10,
     initial_bat = 0,
@@ -55,25 +75,6 @@ export default async function runMicrogrid(
     // Battery input
     const bat_dod = 0.8;
     const bat_cap = 200;
-    const bat_efficiency_list = [
-        0.765, 0.9, 0.92, 0.96, 0.94, 0.938, 0.9155, 0.95, 0.86, 0.855, 0.7,
-        0.8, 0.75, 0.7,
-    ];
-    // Each battery capacity cost in [€$]
-    const bat_cap_cost_list = [
-        7.31393, 28.575, 28.575, 9.8066225, 20.67004375, 7.540625, 10.1099133,
-        6.746875, 38.1, 6.99371645, 9.55675, 31.40075, 45.10395475, 14.5415,
-        12.4139325,
-    ];
-    // Each battery lifetime in [years]
-    const bat_lf_list = [
-        18, 17.5, 7, 15, 10, 10, 10, 20, 14, 13.5, 20, 3, 15, 6.5,
-    ];
-    // Each battery cycle number
-    const bat_cycle_list = [
-        1400, 8000, 600, 5000, 1500, 4000, 3000, 1000, 3000, 3250, 1250, 1000,
-        10000, 2000,
-    ];
 
     // Public grid input
     const grid_cost_per_kwh = 0.2;
@@ -418,11 +419,16 @@ export default async function runMicrogrid(
         );
     }
 
+    // Roda a microrrede com a melhor solução global encontrada
+    microgrid.run(max_pan_val, max_wind_val);
+    const chartData = microgrid.getChartData();
+
     return {
         lcoe: globalbest.cost,
         rf: globalbest.rf,
         meef: globalbest.meef,
         max_pan: max_pan_val,
         max_wind: max_wind_val,
+        chartData: chartData
     };
 }
