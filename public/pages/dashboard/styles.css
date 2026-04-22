@@ -72,131 +72,6 @@
     margin: 0;
 }
 
-/* ---------- Navigation menu ---------- */
-
-.nav {
-    position: fixed;
-    top: 0;
-    height: 100vh;
-    background-color: var(--container-color);
-    box-shadow: 1px 0 0 rgba(22, 8, 43, 0.1);
-    z-index: var(--z-fixed);
-    transition: 0.4s;
-    left: 0;
-    padding: 1.2rem 1.5rem 0;
-    width: 68px; /* Reduced navbar */
-}
-
-.nav-container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-bottom: 3rem;
-    overflow: auto;
-    scrollbar-width: none; /* For mozilla */
-}
-
-/* Botão de Fechar dentro da Nav (Padrão: oculto no desktop) */
-.nav-close {
-    position: absolute;
-    top: 0.75rem;
-    right: 1rem;
-    font-size: 1.5rem;
-    color: var(--title-color);
-    cursor: pointer;
-    display: none;
-}
-
-/* For Google Chrome and others */
-.nav-container::-webkit-scrollbar {
-    display: none;
-}
-
-.nav-logo {
-    font-weight: var(--font-semi-bold);
-    margin-bottom: 2.5rem;
-}
-
-.nav-list,
-.nav-items {
-    display: grid;
-}
-
-.nav-list {
-    row-gap: 2.5rem;
-}
-
-.nav-items {
-    row-gap: 1.7rem;
-}
-
-.nav-link {
-    display: flex;
-    align-items: center;
-    color: var(--text-color);
-    gap: 6px;
-}
-
-.nav-link:hover {
-    color: var(--first-color);
-}
-
-.nav-icon {
-    font-size: 1.3rem;
-    margin-right: 0.5rem;
-}
-
-.nav-name {
-    padding-left: 10px;
-    font-size: var(--small-font-size);
-    font-weight: var(--font-medium);
-    white-space: nowrap;
-}
-
-/* Dropdown */
-.nav-dropdown {
-    overflow: hidden;
-    max-height: 21px;
-    transition: 0.4s ease-in-out;
-}
-
-.nav-dropdown-collapse {
-    background-color: var(--first-color-light);
-    border-radius: 0.25rem;
-    margin-top: 1rem;
-}
-
-.nav-dropdown-content {
-    display: grid;
-    row-gap: 0.5rem;
-    padding: 0.75rem 2.5rem 0.75rem 1.8rem;
-}
-
-.nav-dropdown-item {
-    font-size: var(--smaller-font-size);
-    font-weight: var(--font-medium);
-    color: var(--text-color);
-}
-
-.nav-dropdown-item:hover {
-    color: var(--first-color);
-}
-
-.nav-dropdown:hover,
-.nav-dropdown.expanded {
-    max-height: 100%;
-}
-
-/* Element opacity */
-.nav-logo-name,
-.nav-name,
-.nav-subtitle,
-.nav-dropdown-icon {
-    opacity: 0;
-    transition: 0.3s;
-}
-
 /*===== Active link =====*/
 .active {
     color: var(--first-color);
@@ -489,7 +364,6 @@ button:hover,
 .meses:hover {
     background-color: rgba(123, 123, 187, 0.336);
     transition: 0.3s;
-    border: 0px;
 }
 
 .dropdown {
@@ -656,12 +530,6 @@ button:hover,
 
 /* ---------- Charts --------- */
 
-#Energia,
-#Bateria,
-#SerieTemp {
-    padding-top: 80px;
-}
-
 .chart {
     min-width: auto;
     width: 100%;
@@ -679,6 +547,35 @@ main {
     overflow-x: hidden;
     margin-left: 0;
     padding-top: 80px;
+}
+
+/* ---------- Botões de Seção ---------- */
+
+.section_buttons_container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.section_button {
+    background-color: white;
+    border: 2px solid var(--first-color);
+    color: var(--first-color);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.section_button:hover,
+.section_button.active {
+    background-color: var(--first-color);
+    color: white;
 }
 
 /* =========================================
@@ -701,22 +598,6 @@ main {
    ========================================= */
 
 @media screen and (min-width: 1025px) {
-    .nav:hover {
-        width: var(--nav-width);
-    }
-
-    .nav:hover + main {
-        margin-left: 10rem; /* Ajuste conforme sua var(--nav-width) */
-    }
-
-    /* Mostrar textos e ícones no hover apenas no desktop */
-    .nav:hover .nav-logo-name,
-    .nav:hover .nav-subtitle,
-    .nav:hover .nav-name,
-    .nav:hover .nav-dropdown-icon {
-        opacity: 1;
-    }
-
     /* Mostrar "desconectar-se" ao passar o mouse em cima do perfil */
     .user-container:hover .dropdown-menu {
         display: flex;
@@ -737,42 +618,8 @@ main {
         display: block;
     }
 
-    /* Sidebar Escondida por padrão */
-    .nav {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 80%;
-        max-width: 300px;
-        height: 100vh;
-        padding: 2rem 1rem;
-        z-index: 200;
-        transition: 0.4s;
-        box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-close {
-        display: block;
-    }
-
     .show-menu {
         left: 0;
-    }
-
-    .nav.show-menu .nav-logo-name,
-    .nav.show-menu .nav-name,
-    .nav.show-menu .nav-subtitle,
-    .nav.show-menu .nav-dropdown-icon {
-        opacity: 1;
-    }
-
-    .nav:hover + main {
-        margin-left: 0;
-    }
-
-    .nav-list {
-        display: flex;
-        flex-direction: column;
     }
 
     .dropdown-menu.show-profile {
@@ -831,10 +678,6 @@ main {
 
     /* --- Celulares (até 768px) --- */
     @media screen and (max-width: 768px) {
-        /* Ajuste da Navegação Lateral para Mobile (Ícones na parte inferior ou lateral fina) */
-        .nav {
-            width: 85%;
-        }
 
         /* Ajusta o padding do Header */
         .header {
@@ -844,11 +687,6 @@ main {
 
         .header-profile {
             justify-content: flex-end;
-        }
-
-        /* Ajusta o Main para não ficar por baixo da nav se ela estiver fixa */
-        .nav:hover + main {
-            margin-left: 0; /* Remove empurrão da main no mobile */
         }
 
         .dashboard-metrica {
@@ -909,21 +747,6 @@ main {
 
         .comment_section {
             width: 100%;
-        }
-
-        #Energia,
-        #Bateria,
-        #SerieTemp,
-        #chartFotovoltaica,
-        #chartEolica,
-        #chartEnergiaXDemanda,
-        #chartDesempenho,
-        #chartEnergiaXCompensacao,
-        #chartBateria,
-        #chartSTSolar,
-        #chartSTVento {
-            padding-top: 0;
-            scroll-margin-top: 100px;
         }
 
         .chartFotovoltaica,

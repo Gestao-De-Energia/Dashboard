@@ -382,52 +382,42 @@ export default class Microgrid {
     }
 
     getChartData() {
-        // Função auxiliar para evitar números gigantescos no JSON e diminuir o peso do arquivo
-        const formatArray = (arr) =>
-            Array.from(arr).map((v) => Number(v.toFixed(3)));
+        // Função auxiliar para calcular a média diária agrupando a cada 24 horas
+        // (24 horas x 360 dias = 8640 registros)
+        const formatDailyAverage = (arr, transformFn = (v) => v) => {
+            const dailyAverages = [];
+            const chunkSize = 24; 
+            const dataArray = Array.from(arr);
+
+            for (let i = 0; i < dataArray.length; i += chunkSize) {
+                let sum = 0;
+                let count = 0;
+                for (let j = 0; j < chunkSize && (i + j) < dataArray.length; j++) {
+                    sum += transformFn(dataArray[i + j]);
+                    count++;
+                }
+                const avg = count > 0 ? sum / count : 0;
+                dailyAverages.push(Number(avg.toFixed(3)));
+            }
+            return dailyAverages;
+        };
 
         const data = {
-            demanda: formatArray(this.load),
-            energiaF: this.photovoltaic_panel
-                ? formatArray(this.photovoltaic_panel.output_power)
+            demanda: formatDailyAverage(this.load),
+            energiaF: this.photovoltaic_panel ? formatDailyAverage(this.photovoltaic_panel.output_power) : [],
+            pv_meet: this.photovoltaic_panel ? formatDailyAverage(this.photovoltaic_panel.meet_demand) : [],
+            energiaV: this.wind_turbine ? formatDailyAverage(this.wind_turbine.output_power) : [],
+            wt_meet: this.wind_turbine ? formatDailyAverage(this.wind_turbine.meet_demand) : [],
+            cargaBateria: this.battery 
+                ? formatDailyAverage(this.battery.state_of_charge.slice(0, this.hour_steps), (v) => (v / this.battery.capacity) * 100) 
                 : [],
-            pv_meet: this.photovoltaic_panel
-                ? formatArray(this.photovoltaic_panel.meet_demand)
-                : [],
-            energiaV: this.wind_turbine
-                ? formatArray(this.wind_turbine.output_power)
-                : [],
-            wt_meet: this.wind_turbine
-                ? formatArray(this.wind_turbine.meet_demand)
-                : [],
-            cargaBateria: this.battery
-                ? Array.from(this.battery.state_of_charge)
-                      .slice(0, this.hour_steps)
-                      .map((v) =>
-                          Number(
-                              ((v / this.battery.capacity) * 100).toFixed(3),
-                          ),
-                      )
-                : [],
-            carga: this.battery ? formatArray(this.battery.energy_charged) : [],
-            descarga: this.battery
-                ? Array.from(this.battery.energy_discharged).map((v) =>
-                      Number((-v).toFixed(3)),
-                  )
-                : [],
-            bateria_meet: this.battery
-                ? formatArray(this.battery.meet_demand)
-                : [],
-            energiaComprada: this.public_grid
-                ? formatArray(this.public_grid.energy_purchased)
-                : [],
-            energiaCreditada: this.public_grid
-                ? formatArray(this.public_grid.energy_credited)
-                : [],
-            energiaCompensada: this.public_grid
-                ? formatArray(this.public_grid.energy_compensated)
-                : [],
-            energiaDescartada: formatArray(this.surplus_energy),
+            carga: this.battery ? formatDailyAverage(this.battery.energy_charged) : [],
+            descarga: this.battery ? formatDailyAverage(this.battery.energy_discharged, (v) => -v) : [],
+            bateria_meet: this.battery ? formatDailyAverage(this.battery.meet_demand) : [],
+            energiaComprada: this.public_grid ? formatDailyAverage(this.public_grid.energy_purchased) : [],
+            energiaCreditada: this.public_grid ? formatDailyAverage(this.public_grid.energy_credited) : [],
+            energiaCompensada: this.public_grid ? formatDailyAverage(this.public_grid.energy_compensated) : [],
+            energiaDescartada: formatDailyAverage(this.surplus_energy),
         };
 
         return data;

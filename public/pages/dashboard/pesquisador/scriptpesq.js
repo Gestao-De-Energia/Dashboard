@@ -567,6 +567,49 @@ window.addEventListener("load", () => {
     }
 });
 
+/*==================== BOTÕES DE SEÇÃO DE GRÁFICOS ====================*/
+document.addEventListener("DOMContentLoaded", () => {
+    const btnEnergia = document.getElementById("btn_section_energia");
+    const btnBateria = document.getElementById("btn_section_bateria");
+    const btnSerieTemp = document.getElementById("btn_section_serietemp");
+
+    const contentEnergia = document.getElementById("section_energia_content");
+    const contentBateria = document.getElementById("section_bateria_content");
+    const contentSerieTemp = document.getElementById(
+        "section_serietemp_content",
+    );
+
+    const buttons = [btnEnergia, btnBateria, btnSerieTemp];
+    const contents = [contentEnergia, contentBateria, contentSerieTemp];
+
+    function switchSection(activeIndex) {
+        buttons.forEach((btn, index) => {
+            if (btn && contents[index]) {
+                if (index === activeIndex) {
+                    btn.classList.add("active");
+                    contents[index].style.display = "block";
+                } else {
+                    btn.classList.remove("active");
+                    contents[index].style.display = "none";
+                }
+            }
+        });
+        // Disparar o evento de redimensionamento da janela ajuda a forçar a
+        // atualização de largura dos gráficos ApexCharts renderizados em divs que estavam ocultas.
+        window.dispatchEvent(new Event("resize"));
+        setTimeout(() => {
+            window.dispatchEvent(new Event("resize"));
+        }, 50);
+    }
+
+    if (btnEnergia)
+        btnEnergia.addEventListener("click", () => switchSection(0));
+    if (btnBateria)
+        btnBateria.addEventListener("click", () => switchSection(1));
+    if (btnSerieTemp)
+        btnSerieTemp.addEventListener("click", () => switchSection(2));
+});
+
 /*==================== DROPDOWNS DOS GRÁFICOS (Mês e 6M) ====================*/
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -649,8 +692,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             options,
             name,
         ) {
-            var selectedDate = null;
             const buttonElement = document.querySelector(buttonId);
+            if (!buttonElement) return;
+
+            var selectedDate = null;
             const commentSection = document.querySelector(commentSectionId);
             const commentInput = document.querySelector(commentInputId);
 
@@ -705,12 +750,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                     if (comment !== "") {
                         // adicionar no gráfico
-                        addAnnotationToChart(
-                            selectedDate,
-                            comment,
-                            chart,
-                            options,
-                        );
+                        if (chart) {
+                            addAnnotationToChart(
+                                selectedDate,
+                                comment,
+                                chart,
+                                options,
+                            );
+                        }
 
                         // salvar o comentário no firestore
                         await saveUserCommentByDate(
@@ -760,6 +807,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                 name: "eolicaXDemanda",
             },
             {
+                selectId: "#select_date_desempenho",
+                commentSectionId: "#comment_section_desempenho",
+                commentInputId: "#comment_input_desempenho",
+                chart: chartDesempenho,
+                options: optionsDesempenho,
+                name: "desempenho",
+            },
+            {
                 selectId: "#select_date_energiaComprada",
                 commentSectionId: "#comment_section_energiaComprada",
                 commentInputId: "#comment_input_energiaComprada",
@@ -790,6 +845,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                 chart: chartEnergiaDescartada,
                 options: optionsEnergiaDescartada,
                 name: "energiaDescartada",
+            },
+            {
+                selectId: "#select_date_cargaBateria",
+                commentSectionId: "#comment_section_cargaBateria",
+                commentInputId: "#comment_input_cargaBateria",
+                chart: chartCargaBateria,
+                options: optionsCargaBateria,
+                name: "cargaBateria",
             },
             {
                 selectId: "#select_date_bateria",
@@ -845,6 +908,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 document.addEventListener("DOMContentLoaded", function () {
     function setupGeneralComment(section) {
         const gcWindow = document.getElementById(`gc_window_${section}`);
+        if (!gcWindow) return;
+
         const textarea = document.getElementById(`gc_input_${section}`);
         const openButton = document.getElementById(`open_gc_${section}`);
         const editButton = document.getElementById(`edit_gc_${section}`);
@@ -930,6 +995,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { section: "Demanda" },
         { section: "FotoXDemanda" },
         { section: "EolicaXDemanda" },
+        { section: "Desempenho" },
         { section: "EnergiaComprada" },
         { section: "EnergiaCreditada" },
         { section: "EnergiaCompensada" },
@@ -961,6 +1027,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "Demanda",
                 "FotoXDemanda",
                 "EolicaXDemanda",
+                "Desempenho",
                 "EnergiaComprada",
                 "EnergiaCreditada",
                 "EnergiaCompensada",
@@ -976,6 +1043,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "commentByDateDemanda",
                 "commentByDateFotoXDemanda",
                 "commentByDateEolicaXDemanda",
+                "commentByDateDesempenho",
                 "commentByDateEnergiaComprada",
                 "commentByDateEnergiaCreditada",
                 "commentByDateEnergiaCompensada",
@@ -1014,6 +1082,11 @@ function loadDateCommentsIntoCharts(userComments) {
             section: "EolicaXDemanda",
             chart: chartEolicaXDemanda,
             options: optionsEolicaXDemanda,
+        },
+        {
+            section: "Desempenho",
+            chart: chartDesempenho,
+            options: optionsDesempenho,
         },
         {
             section: "EnergiaComprada",
@@ -1067,13 +1140,17 @@ function loadDateCommentsIntoCharts(userComments) {
             if (comments.length > 0) {
                 divElement.style.display = "flex";
             } else {
-                chart.clearAnnotations();
+                if (chart && typeof chart.clearAnnotations === "function") {
+                    chart.clearAnnotations();
+                }
                 divElement.style.display = "none";
             }
         }
 
         comments.forEach(({ comment, date }) => {
-            addAnnotationToChart(date, comment, chart, options);
+            if (chart) {
+                addAnnotationToChart(date, comment, chart, options);
+            }
         });
     });
 }
@@ -1094,6 +1171,11 @@ function loadGeneralCommentsIntoDashboard(userComments) {
             section: "EolicaXDemanda",
             chart: chartEolicaXDemanda,
             options: optionsEolicaXDemanda,
+        },
+        {
+            section: "Desempenho",
+            chart: chartDesempenho,
+            options: optionsDesempenho,
         },
         {
             section: "EnergiaComprada",
@@ -1136,6 +1218,7 @@ function loadGeneralCommentsIntoDashboard(userComments) {
 
     sections.forEach(({ section }) => {
         const textarea = document.getElementById(`gc_input_${section}`); // area do comentario geral
+        if (!textarea) return;
 
         // carregar comentário geral
         const generalComment = userComments[`generalComment${section}`] || "";
@@ -1149,6 +1232,7 @@ function loadGeneralCommentsIntoDashboard(userComments) {
 
 function setupDeleteCommentForSection(section, userComments, name) {
     const deleteBtn = document.getElementById(`delete_date_${section}`);
+    if (!deleteBtn) return;
     const dateOptionsDiv = document.getElementById(`date_options_${section}`);
     const confirmBtn = document.getElementById(`confirm_delete_${section}`);
     let allComments = userComments;
@@ -1253,6 +1337,7 @@ linkColor.forEach((l) => l.addEventListener("click", colorLink));
 let optionsDemanda;
 let optionsFotoXDemanda;
 let optionsEolicaXDemanda;
+let optionsDesempenho;
 let optionsEnergiaComprada;
 let optionsEnergiaCreditada;
 let optionsEnergiaCompensada;
@@ -1274,161 +1359,299 @@ async function loadData() {
         if (localStorage) {
             savedData = JSON.parse(localStorage.getItem("simulationData"));
         }
-        let chartData = savedData && savedData.chartData ? savedData.chartData : null;
+        let chartData =
+            savedData && savedData.chartData ? savedData.chartData : null;
 
-        // Gerando 8640 pontos horários (360 dias de 24h) a partir de 01/Fev/2004
+        // Gerando pontos a partir de 01/Fev/2004
         const startTimestamp = new Date("01 Feb 2004").getTime();
-        const timestamps = [];
+
+        const timestampsHourly = [];
         for (let i = 0; i < 8640; i++) {
-            timestamps.push(startTimestamp + i * 3600000); // adiciona 1 hora em milissegundos
+            timestampsHourly.push(startTimestamp + i * 3600000); // adiciona 1 hora em milissegundos
         }
-        
+
+        const timestampsDaily = [];
+        for (let i = 0; i < 360; i++) {
+            timestampsDaily.push(startTimestamp + i * 86400000); // adiciona 1 dia em milissegundos (24h)
+        }
+
         const maxRangeMs = 720 * 3600000; // 30 dias de 24h em milissegundos
         const chartEvents = {
-            beforeZoom: function(e, { xaxis }) {
+            beforeZoom: function (e, { xaxis }) {
                 if (xaxis.max - xaxis.min > maxRangeMs) {
                     return {
                         xaxis: {
                             min: xaxis.min,
-                            max: xaxis.min + maxRangeMs
-                        }
+                            max: xaxis.min + maxRangeMs,
+                        },
                     };
                 }
             },
-            beforeReset: function(e, opts) {
+            beforeReset: function (e, opts) {
                 return {
                     xaxis: {
                         min: startTimestamp,
-                        max: startTimestamp + maxRangeMs
-                    }
+                        max: startTimestamp + maxRangeMs,
+                    },
                 };
-            }
+            },
         };
 
-        let generateTemplate = (titleText, yaxisTitle, seriesData) => ({
-            series: seriesData,
-            chart: {
-                height: 350,
-                type: "line",
-                width: "100%",
-                zoom: { autoScaleYaxis: true },
-                events: chartEvents
-            },
-            responsive: [
-                {
-                    breakpoint: 768,
-                    options: {
-                        chart: { height: 300 },
-                        legend: { position: "bottom", offsetX: 0, offsetY: 0 },
-                        title: { style: { fontSize: "15px" } },
-                        xaxis: {
-                            tickAmount: 4,
-                            labels: {
-                                show: true,
-                                rotate: -45,
-                                hideOverlappingLabels: true,
+        let generateTemplate = (titleText, yaxisTitle, seriesData, colors) => {
+            let maxVal = 0;
+            let minVal = 0;
+            seriesData.forEach((s) => {
+                if (s.data && s.data.length > 0) {
+                    let sMax = Math.max(...s.data);
+                    let sMin = Math.min(...s.data);
+                    if (sMax > maxVal) maxVal = sMax;
+                    if (sMin < minVal) minVal = sMin;
+                }
+            });
+            let yMax = Math.ceil(maxVal) || 10;
+            let yMin = Math.floor(minVal);
+            if (yMin > 0) yMin = 0;
+
+            let template = {
+                series: seriesData,
+                chart: {
+                    height: 350,
+                    type: "line",
+                    width: "100%",
+                    zoom: { autoScaleYaxis: false },
+                    events: chartEvents,
+                },
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        options: {
+                            chart: { height: 300 },
+                            legend: {
+                                position: "bottom",
+                                offsetX: 0,
+                                offsetY: 0,
+                            },
+                            title: { style: { fontSize: "15px" } },
+                            xaxis: {
+                                tickAmount: 4,
+                                labels: {
+                                    show: true,
+                                    rotate: -45,
+                                    hideOverlappingLabels: true,
+                                },
                             },
                         },
                     },
+                ],
+                dataLabels: { enabled: false },
+                stroke: { curve: "straight" },
+                title: {
+                    text: titleText,
+                    align: "center",
+                    margin: 60,
+                    style: {
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        fontFamily: "Arial",
+                        color: "#263238",
+                    },
                 },
-            ],
-            dataLabels: { enabled: false },
-            stroke: { curve: "straight" },
-            title: {
-                text: titleText,
-                align: "center",
-                margin: 60,
-                style: {
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    fontFamily: "Arial",
-                    color: "#263238",
+                grid: {
+                    row: { colors: ["#f3f3f3", "transparent"], opacity: 0.5 },
                 },
-            },
-            grid: { row: { colors: ["#f3f3f3", "transparent"], opacity: 0.5 } },
-            xaxis: {
-                title: { text: "Dia" },
-                type: "datetime",
-                min: startTimestamp,
-                categories: timestamps,
-            },
-            yaxis: { title: { text: yaxisTitle }, decimalsInFloat: 3 },
-        });
+                xaxis: {
+                    title: { text: "Dia" },
+                    type: "datetime",
+                    min: startTimestamp,
+                    categories: timestampsDaily,
+                },
+                yaxis: {
+                    title: { text: yaxisTitle },
+                    decimalsInFloat: 3,
+                    min: yMin,
+                    max: yMax,
+                },
+            };
+
+            if (colors) {
+                template.colors = colors;
+            }
+
+            return template;
+        };
 
         optionsDemanda = generateTemplate(
             "Demanda Energética",
             "Energia (kWh)",
-            [{ name: "Demanda Energética", data: chartData ? chartData.demanda : [] }]
+            [
+                {
+                    name: "Demanda Energética",
+                    data: chartData ? chartData.demanda : [],
+                },
+            ],
+            ["#FEB019"]
         );
 
         optionsFotoXDemanda = generateTemplate(
             "Produção Fotovoltaica x Demanda Suprida",
             "Energia (kWh)",
             [
-                { name: "Produção Fotovoltaica", data: chartData ? chartData.energiaF : [] },
-                { name: "Demanda Suprida", data: chartData ? chartData.pv_meet : [] },
-            ]
+                {
+                    name: "Produção Fotovoltaica",
+                    data: chartData ? chartData.energiaF : [],
+                },
+                {
+                    name: "Demanda Suprida",
+                    data: chartData ? chartData.pv_meet : [],
+                },
+            ],
         );
 
         optionsEolicaXDemanda = generateTemplate(
             "Produção Eólica x Demanda Suprida",
             "Energia (kWh)",
             [
-                { name: "Produção Eólica", data: chartData ? chartData.energiaV : [] },
-                { name: "Demanda Suprida", data: chartData ? chartData.wt_meet : [] },
-            ]
+                {
+                    name: "Produção Eólica",
+                    data: chartData ? chartData.energiaV : [],
+                },
+                {
+                    name: "Demanda Suprida",
+                    data: chartData ? chartData.wt_meet : [],
+                },
+            ],
+        );
+
+        const sumArrays = (arr1, arr2) => {
+            if (!arr1 || !arr2) return [];
+            return arr1.map((val, idx) => Number((val + (arr2[idx] || 0)).toFixed(3)));
+        };
+
+        const energiaProduzida = chartData
+            ? sumArrays(chartData.energiaF, chartData.energiaV)
+            : [];
+        const demandaSupridaTotal = chartData
+            ? sumArrays(chartData.pv_meet, chartData.wt_meet)
+            : [];
+
+        optionsDesempenho = generateTemplate("Desempenho", "Energia (kWh)", [
+            {
+                name: "Energia produzida",
+                data: energiaProduzida,
+            },
+            {
+                name: "Demanda Suprida pelas Fontes Renováveis",
+                data: demandaSupridaTotal,
+            },
+            {
+                name: "Demanda Energética Total",
+                data: chartData ? chartData.demanda : [],
+            },
+            {
+                name: "Energia Comprada da Rede",
+                data: chartData ? chartData.energiaComprada : [],
+            },
+        ],
+        ["#008FFB", "#00E396", "#FEB019", "#9C27B0"]
         );
 
         optionsEnergiaComprada = generateTemplate(
             "Energia Comprada da Rede",
             "Energia (kWh)",
-            [{ name: "Energia Comprada da Rede", data: chartData ? chartData.energiaComprada : [] }]
+            [
+                {
+                    name: "Energia Comprada da Rede",
+                    data: chartData ? chartData.energiaComprada : [],
+                },
+            ],
+            ["#9C27B0"]
         );
         optionsEnergiaCreditada = generateTemplate(
             "Energia Creditada",
             "Energia (kWh)",
-            [{ name: "Energia Creditada", data: chartData ? chartData.energiaCreditada : [] }]
+            [
+                {
+                    name: "Energia Creditada",
+                    data: chartData ? chartData.energiaCreditada : [],
+                },
+            ],
         );
         optionsEnergiaCompensada = generateTemplate(
             "Energia Compensada",
             "Energia (kWh)",
-            [{ name: "Energia Compensada", data: chartData ? chartData.energiaCompensada : [] }]
+            [
+                {
+                    name: "Energia Compensada",
+                    data: chartData ? chartData.energiaCompensada : [],
+                },
+            ],
         );
         optionsEnergiaDescartada = generateTemplate(
             "Excesso de Energia Descartada",
             "Energia (kWh)",
-            [{ name: "Excesso de Energia Descartada", data: chartData ? chartData.energiaDescartada : [] }]
+            [
+                {
+                    name: "Excesso de Energia Descartada",
+                    data: chartData ? chartData.energiaDescartada : [],
+                },
+            ],
         );
 
         optionsCargaBateria = generateTemplate(
-            "Quantidade de Carga na Bateria",
-            "Carga (%)",
-            [{ name: "Quantidade de Carga na Bateria", data: chartData ? chartData.cargaBateria : [] }]
+            "Nível de carga na bateria",
+            "Carga (kWh)",
+            [
+                {
+                    name: "Nível de carga na bateria",
+                    data: chartData ? chartData.cargaBateria : [],
+                },
+            ],
         );
         optionsDemandaBateria = generateTemplate(
             "Demanda Suprida pela Bateria",
             "Energia (kWh)",
-            [{ name: "Demanda Suprida pela Bateria", data: chartData ? chartData.bateria_meet : [] }]
+            [
+                {
+                    name: "Demanda Suprida pela Bateria",
+                    data: chartData ? chartData.bateria_meet : [],
+                },
+            ],
         );
 
         /* OPTIONS BATERIA */
+        let batMax = 0;
+        let batMin = 0;
+        const batSeries = [
+            {
+                name: "Carga",
+                data: chartData ? chartData.carga : data.carga || [],
+            },
+            {
+                name: "Descarga",
+                data: chartData ? chartData.descarga : data.descarga || [],
+            },
+        ];
+
+        batSeries.forEach((s) => {
+            if (s.data && s.data.length > 0) {
+                let mMax = Math.max(...s.data);
+                let mMin = Math.min(...s.data);
+                if (mMax > batMax) batMax = mMax;
+                if (mMin < batMin) batMin = mMin;
+            }
+        });
+        let yMaxBat = Math.ceil(batMax) || 10;
+        let yMinBat = Math.floor(batMin) || -10;
+
         optionsBateria = {
-            series: [
-                {
-                    name: "Carga",
-                    data: chartData ? chartData.carga : (data.carga || []),
-                },
-                {
-                    name: "Descarga",
-                    data: chartData ? chartData.descarga : (data.descarga || []),
-                },
-            ],
+            series: batSeries,
             chart: {
                 type: "bar",
                 height: 440,
                 stacked: true,
                 width: "100%",
-                events: chartEvents
+                zoom: { autoScaleYaxis: false },
+                events: chartEvents,
             },
             responsive: [
                 {
@@ -1481,10 +1704,10 @@ async function loadData() {
                         show: false,
                     },
                 },
-            },
-            yaxis: {
-                stepSize: 10,
-                decimalsInFloat: 3,
+                padding: {
+                    left: 25,
+                    right: 25,
+                },
             },
             tooltip: {
                 shared: false,
@@ -1498,7 +1721,7 @@ async function loadData() {
                 },
             },
             title: {
-                text: "Quantidade de cargas e descargas",
+                text: "Carregamento e descarregamento na bateria",
                 align: "center",
                 margin: 60,
                 style: {
@@ -1511,7 +1734,7 @@ async function loadData() {
             xaxis: {
                 type: "datetime",
                 min: startTimestamp,
-                categories: timestamps,
+                categories: timestampsDaily,
                 title: {
                     text: "Dia",
                 },
@@ -1519,18 +1742,21 @@ async function loadData() {
                     format: "MMM 'yy",
                 },
             },
-            yaxis: [
-                {
-                    title: {
-                        text: "Energia (kWh)",
-                    },
-                    decimalsInFloat: 3,
+            yaxis: {
+                title: {
+                    text: "Energia (kWh)",
                 },
-            ],
+                stepSize: 10,
+                decimalsInFloat: 3,
+                min: yMinBat,
+                max: yMaxBat,
+            },
         };
 
         /* OPTIONS ST SOLAR */
         const irradiacoes = data.irradiacao.map((item) => item[1]);
+        const maxIrradiacao = Math.max(...irradiacoes);
+        const yMaxSolar = Math.ceil(maxIrradiacao);
         const mediaIrradiacao =
             irradiacoes.reduce((sum, val) => sum + val, 0) / irradiacoes.length;
         optionsSTSolar = {
@@ -1557,9 +1783,10 @@ async function loadData() {
                 height: 350,
                 zoom: {
                     autoScaleYaxis: true,
+                    autoScaleYaxis: false,
                 },
                 width: "100%",
-                events: chartEvents
+                events: chartEvents,
             },
             responsive: [
                 {
@@ -1609,7 +1836,7 @@ async function loadData() {
                         strokeDashArray: 5,
                         label: {
                             show: true,
-                            text: "Média",
+                            text: `Média do ano: ${mediaIrradiacao.toFixed(3)}`,
                             style: {
                                 color: "#fff",
                                 background: "#FF0000",
@@ -1633,13 +1860,15 @@ async function loadData() {
                 },
                 type: "datetime",
                 min: startTimestamp,
-                categories: timestamps,
+                categories: timestampsHourly,
             },
             yaxis: {
                 title: {
                     text: "Irradiação solar (Wh/m^2)",
                 },
                 decimalsInFloat: 3,
+                min: 0,
+                max: yMaxSolar,
             },
             fill: {
                 type: "gradient",
@@ -1654,6 +1883,8 @@ async function loadData() {
 
         /* OPTIONS ST VENTO*/
         const ventos = data.vento.map((item) => item[1]);
+        const maxVento = Math.max(...ventos);
+        const yMaxVento = Math.ceil(maxVento);
         const mediaVento =
             ventos.reduce((sum, val) => sum + val, 0) / ventos.length;
         optionsSTVento = {
@@ -1683,9 +1914,10 @@ async function loadData() {
                 height: 350,
                 zoom: {
                     autoScaleYaxis: true,
+                    autoScaleYaxis: false,
                 },
                 width: "100%",
-                events: chartEvents
+                events: chartEvents,
             },
             responsive: [
                 {
@@ -1735,7 +1967,7 @@ async function loadData() {
                         strokeDashArray: 5,
                         label: {
                             show: true,
-                            text: "Média",
+                            text: `Média do ano: ${mediaVento.toFixed(3)}`,
                             style: {
                                 color: "#fff",
                                 background: "#FF0000",
@@ -1759,13 +1991,15 @@ async function loadData() {
                 },
                 type: "datetime",
                 min: startTimestamp,
-                categories: timestamps,
+                categories: timestampsHourly,
             },
             yaxis: {
                 title: {
                     text: "Velocidade do vento (m/s)",
                 },
                 decimalsInFloat: 3,
+                min: 0,
+                max: yMaxVento,
             },
             fill: {
                 type: "gradient",
@@ -1797,7 +2031,10 @@ var resetCssClasses = function (activeEl) {
 };
 
 function renderChartWithPeriods(chartId, options, prefix) {
-    var chart = new ApexCharts(document.querySelector(chartId), options);
+    const container = document.querySelector(chartId);
+    if (!container) return null;
+
+    var chart = new ApexCharts(container, options);
 
     const monthNames = [
         "Fevereiro(2004)",
@@ -1837,6 +2074,14 @@ function renderChartWithPeriods(chartId, options, prefix) {
 
     chart.render().then(() => {
         zoomToMonth(0);
+
+        const loadingWarning = container.nextElementSibling;
+        if (
+            loadingWarning &&
+            loadingWarning.classList.contains("loading_chart")
+        ) {
+            loadingWarning.style.display = "none";
+        }
     });
 
     for (let i = 0; i < 12; i++) {
@@ -1884,6 +2129,11 @@ var chartEolicaXDemanda = renderChartWithPeriods(
     "#chartEolicaXDemanda",
     optionsEolicaXDemanda,
     "eolicaXDemanda",
+);
+var chartDesempenho = renderChartWithPeriods(
+    "#chartDesempenho",
+    optionsDesempenho,
+    "desempenho",
 );
 var chartEnergiaComprada = renderChartWithPeriods(
     "#chartEnergiaComprada",
@@ -1943,6 +2193,28 @@ async function updateChartsWithData(chartData, withPause = false) {
 
     const updateAndZoom = async (chart, series) => {
         if (chart) {
+            let maxVal = 0;
+            let minVal = 0;
+            series.forEach((s) => {
+                if (s.data && s.data.length > 0) {
+                    let sMax = Math.max(...s.data);
+                    let sMin = Math.min(...s.data);
+                    if (sMax > maxVal) maxVal = sMax;
+                    if (sMin < minVal) minVal = sMin;
+                }
+            });
+
+            let yMax = Math.ceil(maxVal) || 10;
+            let yMin = Math.floor(minVal);
+            if (yMin > 0) yMin = 0;
+
+            chart.updateOptions({
+                yaxis: {
+                    min: yMin,
+                    max: yMax,
+                },
+            });
+
             chart.updateSeries(series, withPause);
             chart.zoomX(tStart, tEnd);
             if (withPause) {
@@ -1951,8 +2223,10 @@ async function updateChartsWithData(chartData, withPause = false) {
         }
     };
 
-    await updateAndZoom(chartDemanda, [{ name: "Demanda Energética", data: chartData.demanda }]);
-    
+    await updateAndZoom(chartDemanda, [
+        { name: "Demanda Energética", data: chartData.demanda },
+    ]);
+
     await updateAndZoom(chartFotoXDemanda, [
         { name: "Produção Fotovoltaica", data: chartData.energiaF },
         { name: "Demanda Suprida", data: chartData.pv_meet },
@@ -1963,20 +2237,52 @@ async function updateChartsWithData(chartData, withPause = false) {
         { name: "Demanda Suprida", data: chartData.wt_meet },
     ]);
 
-    await updateAndZoom(chartEnergiaComprada, [{ name: "Energia Comprada da Rede", data: chartData.energiaComprada }]);
-    await updateAndZoom(chartEnergiaCreditada, [{ name: "Energia Creditada", data: chartData.energiaCreditada }]);
-    await updateAndZoom(chartEnergiaCompensada, [{ name: "Energia Compensada", data: chartData.energiaCompensada }]);
-    await updateAndZoom(chartEnergiaDescartada, [{ name: "Excesso de Energia Descartada", data: chartData.energiaDescartada }]);
-    await updateAndZoom(chartCargaBateria, [{ name: "Quantidade de Carga na Bateria", data: chartData.cargaBateria }]);
-    
+    const sumArrays = (arr1, arr2) => {
+        if (!arr1 || !arr2) return [];
+        return arr1.map((val, idx) => Number((val + (arr2[idx] || 0)).toFixed(3)));
+    };
+
+    await updateAndZoom(chartDesempenho, [
+        {
+            name: "Energia produzida",
+            data: sumArrays(chartData.energiaF, chartData.energiaV),
+        },
+        {
+            name: "Demanda Suprida pelas Fontes Renováveis",
+            data: sumArrays(chartData.pv_meet, chartData.wt_meet),
+        },
+        { name: "Demanda Energética Total", data: chartData.demanda },
+        { name: "Energia Comprada da Rede", data: chartData.energiaComprada },
+    ]);
+
+    await updateAndZoom(chartEnergiaComprada, [
+        { name: "Energia Comprada da Rede", data: chartData.energiaComprada },
+    ]);
+    await updateAndZoom(chartEnergiaCreditada, [
+        { name: "Energia Creditada", data: chartData.energiaCreditada },
+    ]);
+    await updateAndZoom(chartEnergiaCompensada, [
+        { name: "Energia Compensada", data: chartData.energiaCompensada },
+    ]);
+    await updateAndZoom(chartEnergiaDescartada, [
+        {
+            name: "Excesso de Energia Descartada",
+            data: chartData.energiaDescartada,
+        },
+    ]);
+    await updateAndZoom(chartCargaBateria, [
+        {
+            name: "Nível de carga na bateria",
+            data: chartData.cargaBateria,
+        },
+    ]);
+
     await updateAndZoom(chartBateria, [
         { name: "Carga", data: chartData.carga },
         { name: "Descarga", data: chartData.descarga },
     ]);
 
-    await updateAndZoom(chartDemandaBateria, [{ name: "Demanda Suprida pela Bateria", data: chartData.bateria_meet }]);
+    await updateAndZoom(chartDemandaBateria, [
+        { name: "Demanda Suprida pela Bateria", data: chartData.bateria_meet },
+    ]);
 }
-
-// tirando o aviso de "Carregando gráfico"
-let loadingChartWarning = document.querySelectorAll(".loading_chart");
-loadingChartWarning.forEach((element) => (element.style.display = "none"));
