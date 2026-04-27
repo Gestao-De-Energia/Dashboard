@@ -81,46 +81,6 @@ window.addEventListener("click", (e) => {
     }
 });
 
-/*==================== SHOW MENU & CLOSE MENU ====================*/
-const navMenu = document.getElementById("navbar"),
-    navToggle = document.getElementById("header-toggle"),
-    navClose = document.getElementById("nav-close");
-
-if (navToggle) {
-    navToggle.addEventListener("click", () => {
-        navMenu.classList.add("show-menu");
-    });
-}
-
-if (navClose) {
-    navClose.addEventListener("click", () => {
-        navMenu.classList.remove("show-menu");
-    });
-}
-
-const navLink = document.querySelectorAll(".nav-link");
-
-function linkAction() {
-    if (this.parentNode.classList.contains("nav-dropdown")) {
-        return;
-    }
-    navMenu.classList.remove("show-menu");
-}
-navLink.forEach((n) => n.addEventListener("click", linkAction));
-
-/*==================== FECHAR SIDEBAR AO CLICAR NO SUB-ITEM ====================*/
-// Seleciona todos os links que estão DENTRO dos dropdowns
-const dropdownSubItems = document.querySelectorAll(".nav-dropdown-item");
-
-dropdownSubItems.forEach((item) => {
-    item.addEventListener("click", () => {
-        const navMenu = document.getElementById("navbar");
-
-        if (navMenu) {
-            navMenu.classList.remove("show-menu");
-        }
-    });
-});
 
 /*==================== RESPONSIVIDADE DROPDOWN (MOBILE/TABLET) ====================*/
 // Seleciona todos os dropdowns da sidebar
