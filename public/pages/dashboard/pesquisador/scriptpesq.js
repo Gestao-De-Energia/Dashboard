@@ -416,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     let valores = [
                         (data.rf * 100).toFixed(2).replace(".", ",") + "%",
                         (data.meef * 100).toFixed(2).replace(".", ",") + "%",
-                        "R$" + data.lcoe.toFixed(3).replace(".", ",") + "/kWh",
+                        "$" + data.lcoe.toFixed(3).replace(".", ",") + "/kWh",
                         data.max_wind + " kW",
                         data.max_pan + " kW",
                     ];
@@ -488,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         "%",
                     (simulationData.meef * 100).toFixed(2).replace(".", ",") +
                         "%",
-                    "R$" +
+                    "$" +
                         simulationData.lcoe.toFixed(3).replace(".", ",") +
                         "/kWh",
                     simulationData.max_wind + " kW",
@@ -521,7 +521,7 @@ window.addEventListener("load", () => {
         metricas[1].innerText =
             (savedData.meef * 100).toFixed(2).replace(".", ",") + "%";
         metricas[2].innerText =
-            "R$" + savedData.lcoe.toFixed(3).replace(".", ",") + "/kWh";
+            "$" + savedData.lcoe.toFixed(3).replace(".", ",") + "/kWh";
         metricas[3].innerText = savedData.max_wind + " kW";
         metricas[4].innerText = savedData.max_pan + " kW";
     }
