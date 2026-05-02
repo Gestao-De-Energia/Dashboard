@@ -28,8 +28,8 @@ let solar_data_cached = null;
 let wind_data_cached = null;
 
 export const bat_efficiency_list = [
-    0.765, 0.9, 0.92, 0.96, 0.94, 0.938, 0.9155, 0.95, 0.86, 0.855, 0.7,
-    0.8, 0.75, 0.7,
+    0.765, 0.9, 0.92, 0.96, 0.94, 0.938, 0.9155, 0.95, 0.86, 0.855, 0.7, 0.8,
+    0.75, 0.7,
 ];
 // Each battery capacity cost in [€$]
 export const bat_cap_cost_list = [
@@ -94,12 +94,11 @@ export default async function runMicrogrid(
     const converter_lifetime = 15;
 
     // Microgrid input
-    if (!load_ind_cached)
-        load_ind_cached = await read_file("/js/loadind.txt");  // path em desenvolvimento: "../../../js/loadind.txt"; path em prod: "/js/loadind.txt"
+    if (!load_ind_cached) load_ind_cached = await read_file("/js/loadind.txt"); // path em desenvolvimento: "../../../js/loadind.txt"; path em prod: "/js/loadind.txt"
     if (!solar_data_cached)
-        solar_data_cached = await read_file("/js/solreal.txt");  // path em desenvolvimento: "../../../js/solreal.txt"; path em prod: "/js/solreal.txt"
+        solar_data_cached = await read_file("/js/solreal.txt"); // path em desenvolvimento: "../../../js/solreal.txt"; path em prod: "/js/solreal.txt"
     if (!wind_data_cached)
-        wind_data_cached = await read_file("/js/wind_data.txt");  // path em desenvolvimento: "../../../js/wind_data.txt"; path em prod: "/js/wind_data.txt"
+        wind_data_cached = await read_file("/js/wind_data.txt"); // path em desenvolvimento: "../../../js/wind_data.txt"; path em prod: "/js/wind_data.txt"
 
     const load_ind = load_ind_cached;
     const solar_data = solar_data_cached;
@@ -113,31 +112,34 @@ export default async function runMicrogrid(
     const microgrid_discount_rate = 0.1;
 
     class Best {
-        constructor(position, cost, rf, meef) {
+        constructor(position, cost, rf, meef, fitness) {
             this.position = position;
             this.cost = cost;
             this.rf = rf;
             this.meef = meef;
+            this.fitness = fitness;
         }
     }
 
     class EmptyParticle {
-        constructor(position, velocity, cost, rf, meef, best) {
+        constructor(position, velocity, cost, rf, meef, best, fitness) {
             this.position = position;
             this.velocity = velocity;
             this.cost = cost;
             this.rf = rf;
             this.meef = meef;
             this.best = best;
+            this.fitness = fitness;
         }
     }
 
     class GlobalBest {
-        constructor(cost, rf, meef, position) {
+        constructor(cost, rf, meef, position, fitness) {
             this.cost = cost;
             this.rf = rf;
             this.meef = meef;
             this.position = position;
+            this.fitness = fitness;
         }
     }
 
@@ -210,9 +212,9 @@ export default async function runMicrogrid(
         meef: meef,
     });
 
-    const NPOP = 100; // população
+    const NPOP = 10; // população
     const LB = [10, 10]; // lower boundary da geraçao maxima dos paineis e turbina respectivamente
-    const UB = [150, 150]; // upper boundary
+    const UB = [1000, 1000]; // upper boundary
 
     const phi1 = 2.05;
     const phi2 = 2.05;
@@ -226,11 +228,19 @@ export default async function runMicrogrid(
     let particle = [];
     for (let i = 0; i < NPOP; i++) {
         particle.push(
-            new EmptyParticle([], [], [], [], [], new Best([], [], [], [])),
+            new EmptyParticle(
+                [],
+                [],
+                [],
+                [],
+                [],
+                new Best([], [], [], [], Infinity),
+                Infinity,
+            ),
         );
     }
 
-    let globalbest = new GlobalBest(Infinity, Infinity, Infinity, []);
+    let globalbest = new GlobalBest(Infinity, Infinity, Infinity, [], Infinity);
 
     // inicialização
     for (let i = 0; i < NPOP; i++) {
@@ -254,22 +264,26 @@ export default async function runMicrogrid(
         let max_wind = particle[i].position[1];
 
         let [lcoe, renewable_factor, meef] = microgrid.run(max_pan, max_wind);
+        let fitness = 0.5 * lcoe + 0.5 * (1 - renewable_factor) + 0.5 * meef;
 
         particle[i].cost = lcoe;
         particle[i].rf = renewable_factor;
         particle[i].meef = meef;
+        particle[i].fitness = fitness;
 
         particle[i].best.position = [...particle[i].position];
         particle[i].best.cost = particle[i].cost;
         particle[i].best.rf = particle[i].rf;
         particle[i].best.meef = particle[i].meef;
+        particle[i].best.fitness = particle[i].fitness;
 
-        if (particle[i].best.cost < globalbest.cost) {
+        if (particle[i].best.fitness < globalbest.fitness) {
             globalbest = new GlobalBest(
                 particle[i].best.cost,
                 particle[i].best.rf,
                 particle[i].best.meef,
                 [...particle[i].best.position],
+                particle[i].best.fitness,
             );
         }
     }
@@ -321,7 +335,10 @@ export default async function runMicrogrid(
             Math.round(globalbest.position[1]) !== currentFixed.turbines
         )
             gbViolated = true;
-        if (gbViolated || batChanged) globalbest.cost = Infinity;
+        if (gbViolated || batChanged) {
+            globalbest.cost = Infinity;
+            globalbest.fitness = Infinity;
+        }
 
         for (let i = 0; i < NPOP; i++) {
             let pViolated = false;
@@ -336,7 +353,10 @@ export default async function runMicrogrid(
                     currentFixed.turbines
             )
                 pViolated = true;
-            if (pViolated || batChanged) particle[i].best.cost = Infinity;
+            if (pViolated || batChanged) {
+                particle[i].best.cost = Infinity;
+                particle[i].best.fitness = Infinity;
+            }
 
             for (let y = 0; y < 2; y++) {
                 let mut = Math.random();
@@ -374,22 +394,28 @@ export default async function runMicrogrid(
                 max_wind,
             );
 
+            let fitness =
+                0.5 * lcoe + 0.5 * (1 - renewable_factor) + 0.5 * meef;
+
             particle[i].cost = lcoe;
             particle[i].rf = renewable_factor;
             particle[i].meef = meef;
+            particle[i].fitness = fitness;
 
-            if (particle[i].cost < particle[i].best.cost) {
+            if (particle[i].fitness < particle[i].best.fitness) {
                 particle[i].best.cost = particle[i].cost;
                 particle[i].best.rf = particle[i].rf;
                 particle[i].best.meef = particle[i].meef;
                 particle[i].best.position = [...particle[i].position];
+                particle[i].best.fitness = particle[i].fitness;
 
-                if (particle[i].best.cost < globalbest.cost) {
+                if (particle[i].best.fitness < globalbest.fitness) {
                     globalbest = new GlobalBest(
                         particle[i].best.cost,
                         particle[i].best.rf,
                         particle[i].best.meef,
                         [...particle[i].best.position],
+                        particle[i].best.fitness,
                     );
                 }
             }
@@ -409,6 +435,7 @@ export default async function runMicrogrid(
             meef: Meef[u],
             max_pan: max_pan_val,
             max_wind: max_wind_val,
+            fitness: globalbest.fitness,
         });
 
         console.log(
@@ -429,6 +456,6 @@ export default async function runMicrogrid(
         meef: globalbest.meef,
         max_pan: max_pan_val,
         max_wind: max_wind_val,
-        chartData: chartData
+        chartData: chartData,
     };
 }

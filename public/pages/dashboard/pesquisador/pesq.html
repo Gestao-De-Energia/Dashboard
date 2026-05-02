@@ -196,6 +196,21 @@
                 <button id="btn_section_energia" class="section_button active">Energia</button>
                 <button id="btn_section_bateria" class="section_button">Bateria</button>
                 <button id="btn_section_serietemp" class="section_button">Série Temporal</button>
+                <button id="btn_section_simulacao" class="section_button">Simulação</button>
+            </div>
+
+            <!-- Containers para os 6 gráficos de convergência -->
+            <div id="section_simulacao_content" style="display: none;">
+                <h2 id="Simulacao">Simulação</h2>
+                <p id="run_simulacao_warning" style="text-align: center; margin-top: 50px; font-size: 18px; color: gray;">Rode a simulação para ver os resultados.</p>
+                <div id="convergencia_charts_container" style="display: none; flex-direction: column; gap: 20px; margin-bottom: 40px; margin-top: 20px">
+                    <div id="chartConvPaineis"></div>
+                    <div id="chartConvTurbinas"></div>
+                    <div id="chartConvRF"></div>
+                    <div id="chartConvMEEF"></div>
+                    <div id="chartConvLCOE"></div>
+                    <div id="chartConvFitness"></div>
+                </div>
             </div>
 
             <div id="section_energia_content">

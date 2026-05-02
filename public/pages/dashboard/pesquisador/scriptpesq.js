@@ -81,7 +81,6 @@ window.addEventListener("click", (e) => {
     }
 });
 
-
 /*==================== RESPONSIVIDADE DROPDOWN (MOBILE/TABLET) ====================*/
 // Seleciona todos os dropdowns da sidebar
 const navDropdowns = document.querySelectorAll(".nav-dropdown");
@@ -264,10 +263,10 @@ document.addEventListener("DOMContentLoaded", function () {
             // Salva os valores exatos que estão na tela antes de torná-los editáveis
             valuesBeforePause.turbines = metricas[3].innerText
                 .trim()
-                .replace(/\s*kW$/, "");
+                .replace(/\s*kWh$/, "");
             valuesBeforePause.panels = metricas[4].innerText
                 .trim()
-                .replace(/\s*kW$/, "");
+                .replace(/\s*kWh$/, "");
 
             // Torna editáveis apenas se não estiverem fixos
             [3, 4].forEach((i) => {
@@ -276,9 +275,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     const valorAtual = metricas[i].innerText
                         .trim()
                         .split(" ")[0];
+                    const sufixo = "kWh";
                     metricas[i].innerHTML =
                         `<span class="editavel-numero" contenteditable="true">${valorAtual}</span>` +
-                        ' <span class="sufixo-unidade">kW</span>';
+                        ` <span class="sufixo-unidade">${sufixo}</span>`;
                 }
             });
         } else {
@@ -310,7 +310,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         fixedValues.turbines !== null
                             ? fixedValues.turbines
                             : novoValorStr;
-                    metricas[3].innerText = valorFinal + " kW";
+                    metricas[3].innerText = valorFinal + " kWh";
                 }
             }
 
@@ -335,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         fixedValues.panels !== null
                             ? fixedValues.panels
                             : novoValorStr;
-                    metricas[4].innerText = valorFinal + " kW";
+                    metricas[4].innerText = valorFinal + " kWh";
                 }
             }
 
@@ -372,6 +372,16 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
         let textIndex = 0;
         let interval;
+
+        let historyConvergence = {
+            iterations: [],
+            max_pan: [],
+            max_wind: [],
+            rf: [],
+            meef: [],
+            lcoe: [],
+            fitness: [],
+        };
 
         try {
             // Escurece fundo dos lugares onde ficam as métricas, indicando que está executando a simulação.
@@ -413,12 +423,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 () => selectedBattery,
                 (data) => {
                     runningSimStatus.innerText = `Rodando iteração ${Math.min(data.iteration + 2, selectedIteration)}/${selectedIteration}`;
+
+                    // Registrando o histórico da iteração para os gráficos de convergência
+                    historyConvergence.iterations.push(data.iteration + 1);
+                    historyConvergence.max_pan.push(data.max_pan);
+                    historyConvergence.max_wind.push(data.max_wind);
+                    historyConvergence.rf.push(data.rf);
+                    historyConvergence.meef.push(data.meef);
+                    historyConvergence.lcoe.push(data.lcoe);
+                    historyConvergence.fitness.push(data.fitness);
+
                     let valores = [
                         (data.rf * 100).toFixed(2).replace(".", ",") + "%",
                         (data.meef * 100).toFixed(2).replace(".", ",") + "%",
                         "$" + data.lcoe.toFixed(3).replace(".", ",") + "/kWh",
-                        data.max_wind + " kW",
-                        data.max_pan + " kW",
+                        data.max_wind + " kWh",
+                        data.max_pan + " kWh",
                     ];
                     metricas.forEach((el, index) => {
                         if (
@@ -431,9 +451,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                         el.style.display = "inline";
                         if (index === 3 && fixedValues.turbines !== null) {
-                            el.innerText = fixedValues.turbines + " kW";
+                            el.innerText = fixedValues.turbines + " kWh";
                         } else if (index === 4 && fixedValues.panels !== null) {
-                            el.innerText = fixedValues.panels + " kW";
+                            el.innerText = fixedValues.panels + " kWh";
                         } else {
                             el.innerText = valores[index];
                         }
@@ -449,6 +469,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 },
             );
+
+            resultado.historyConvergence = historyConvergence;
             localStorage.setItem("simulationData", JSON.stringify(resultado));
         } catch (error) {
             console.error("Erro ao rodar a simulação:", error);
@@ -491,8 +513,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     "$" +
                         simulationData.lcoe.toFixed(3).replace(".", ",") +
                         "/kWh",
-                    simulationData.max_wind + " kW",
-                    simulationData.max_pan + " kW",
+                    simulationData.max_wind + " kWh",
+                    simulationData.max_pan + " kWh",
                 ];
 
                 metricas.forEach((el, index) => {
@@ -504,10 +526,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (simulationData.chartData) {
                     updateChartsWithData(simulationData.chartData, true);
                 }
+                if (simulationData.historyConvergence) {
+                    renderConvergenceChart(simulationData.historyConvergence);
+                }
             }
         }
     }
 });
+
+let convCharts = {};
 
 // Recuperar valores das métricas ao recarregar a página
 window.addEventListener("load", () => {
@@ -522,8 +549,12 @@ window.addEventListener("load", () => {
             (savedData.meef * 100).toFixed(2).replace(".", ",") + "%";
         metricas[2].innerText =
             "$" + savedData.lcoe.toFixed(3).replace(".", ",") + "/kWh";
-        metricas[3].innerText = savedData.max_wind + " kW";
-        metricas[4].innerText = savedData.max_pan + " kW";
+        metricas[3].innerText = savedData.max_wind + " kWh";
+        metricas[4].innerText = savedData.max_pan + " kWh";
+
+        if (savedData.historyConvergence) {
+            renderConvergenceChart(savedData.historyConvergence);
+        }
     }
 });
 
@@ -532,15 +563,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnEnergia = document.getElementById("btn_section_energia");
     const btnBateria = document.getElementById("btn_section_bateria");
     const btnSerieTemp = document.getElementById("btn_section_serietemp");
+    const btnSimulacao = document.getElementById("btn_section_simulacao");
 
     const contentEnergia = document.getElementById("section_energia_content");
     const contentBateria = document.getElementById("section_bateria_content");
     const contentSerieTemp = document.getElementById(
         "section_serietemp_content",
     );
+    const contentSimulacao = document.getElementById(
+        "section_simulacao_content",
+    );
 
-    const buttons = [btnEnergia, btnBateria, btnSerieTemp];
-    const contents = [contentEnergia, contentBateria, contentSerieTemp];
+    const buttons = [btnEnergia, btnBateria, btnSerieTemp, btnSimulacao];
+    const contents = [contentEnergia, contentBateria, contentSerieTemp, contentSimulacao];
 
     function switchSection(activeIndex) {
         buttons.forEach((btn, index) => {
@@ -568,6 +603,8 @@ document.addEventListener("DOMContentLoaded", () => {
         btnBateria.addEventListener("click", () => switchSection(1));
     if (btnSerieTemp)
         btnSerieTemp.addEventListener("click", () => switchSection(2));
+    if (btnSimulacao)
+        btnSimulacao.addEventListener("click", () => switchSection(3));
 });
 
 /*==================== DROPDOWNS DOS GRÁFICOS (Mês e 6M) ====================*/
@@ -1449,7 +1486,7 @@ async function loadData() {
                     data: chartData ? chartData.demanda : [],
                 },
             ],
-            ["#FEB019"]
+            ["#FEB019"],
         );
 
         optionsFotoXDemanda = generateTemplate(
@@ -1484,7 +1521,9 @@ async function loadData() {
 
         const sumArrays = (arr1, arr2) => {
             if (!arr1 || !arr2) return [];
-            return arr1.map((val, idx) => Number((val + (arr2[idx] || 0)).toFixed(3)));
+            return arr1.map((val, idx) =>
+                Number((val + (arr2[idx] || 0)).toFixed(3)),
+            );
         };
 
         const energiaProduzida = chartData
@@ -1494,25 +1533,28 @@ async function loadData() {
             ? sumArrays(chartData.pv_meet, chartData.wt_meet)
             : [];
 
-        optionsDesempenho = generateTemplate("Desempenho", "Energia (kWh)", [
-            {
-                name: "Energia produzida",
-                data: energiaProduzida,
-            },
-            {
-                name: "Demanda Suprida pelas Fontes Renováveis",
-                data: demandaSupridaTotal,
-            },
-            {
-                name: "Demanda Energética Total",
-                data: chartData ? chartData.demanda : [],
-            },
-            {
-                name: "Energia Comprada da Rede",
-                data: chartData ? chartData.energiaComprada : [],
-            },
-        ],
-        ["#008FFB", "#00E396", "#FEB019", "#9C27B0"]
+        optionsDesempenho = generateTemplate(
+            "Desempenho",
+            "Energia (kWh)",
+            [
+                {
+                    name: "Energia produzida",
+                    data: energiaProduzida,
+                },
+                {
+                    name: "Demanda Suprida pelas Fontes Renováveis",
+                    data: demandaSupridaTotal,
+                },
+                {
+                    name: "Demanda Energética Total",
+                    data: chartData ? chartData.demanda : [],
+                },
+                {
+                    name: "Energia Comprada da Rede",
+                    data: chartData ? chartData.energiaComprada : [],
+                },
+            ],
+            ["#008FFB", "#00E396", "#FEB019", "#9C27B0"],
         );
 
         optionsEnergiaComprada = generateTemplate(
@@ -1524,7 +1566,7 @@ async function loadData() {
                     data: chartData ? chartData.energiaComprada : [],
                 },
             ],
-            ["#9C27B0"]
+            ["#9C27B0"],
         );
         optionsEnergiaCreditada = generateTemplate(
             "Energia Creditada",
@@ -2199,7 +2241,9 @@ async function updateChartsWithData(chartData, withPause = false) {
 
     const sumArrays = (arr1, arr2) => {
         if (!arr1 || !arr2) return [];
-        return arr1.map((val, idx) => Number((val + (arr2[idx] || 0)).toFixed(3)));
+        return arr1.map((val, idx) =>
+            Number((val + (arr2[idx] || 0)).toFixed(3)),
+        );
     };
 
     await updateAndZoom(chartDesempenho, [
@@ -2245,4 +2289,130 @@ async function updateChartsWithData(chartData, withPause = false) {
     await updateAndZoom(chartDemandaBateria, [
         { name: "Demanda Suprida pela Bateria", data: chartData.bateria_meet },
     ]);
+}
+
+function renderConvergenceChart(history) {
+    const warningText = document.getElementById("run_simulacao_warning");
+    const chartsContainer = document.getElementById("convergencia_charts_container");
+
+    if (warningText) warningText.style.display = "none";
+    if (chartsContainer) chartsContainer.style.display = "flex";
+
+    const commonOptions = {
+        chart: {
+            type: "line",
+            height: 300,
+            zoom: { enabled: true },
+            toolbar: { show: true, tools: { download: true } },
+        },
+        stroke: { width: 2, curve: "smooth" },
+        xaxis: { 
+            categories: history.iterations, 
+            title: { text: "Iteração" },
+            tickAmount: Math.max(1, history.iterations.length - 1),
+            labels: {
+                formatter: function (val) {
+                    return Math.round(val);
+                }
+            }
+        },
+        title: {
+            align: "center",
+            style: {
+                fontSize: "16px",
+                fontWeight: "bold",
+                fontFamily: "Arial",
+                color: "#263238",
+            },
+        },
+        legend: { position: "bottom" },
+    };
+
+    const configs = [
+        {
+            id: "chartConvPaineis",
+            title: "Geração Máxima dos Painéis (kWh)",
+            data: history.max_pan,
+            color: "#008FFB",
+            yAxisTitle: "Valor (kWh)",
+        },
+        {
+            id: "chartConvTurbinas",
+            title: "Geração Máxima das Turbinas (kWh)",
+            data: history.max_wind,
+            color: "#00E396",
+            yAxisTitle: "Valor (kWh)",
+        },
+        {
+            id: "chartConvRF",
+            title: "Média Fator Renovável",
+            data: history.rf,
+            color: "#FEB019",
+            yAxisTitle: "Valor (%)",
+            decimals: 5,
+        },
+        {
+            id: "chartConvMEEF",
+            title: "Fator Excesso de Energia",
+            data: history.meef,
+            color: "#FF4560",
+            yAxisTitle: "Valor (%)",
+            decimals: 5,
+        },
+        {
+            id: "chartConvLCOE",
+            title: "Custo Energia Elétrica (LCOE)",
+            data: history.lcoe,
+            color: "#775DD0",
+            yAxisTitle: "Valor ($/kWh)",
+            decimals: 5,
+        },
+        {
+            id: "chartConvFitness",
+            title: "Evolução do Fitness",
+            data: history.fitness,
+            color: "#F86624",
+            yAxisTitle: "Valor",
+            decimals: 5,
+        },
+    ];
+
+    configs.forEach((c) => {
+        const container = document.getElementById(c.id);
+        if (!container) return;
+
+        let yaxisOptions = { 
+            title: { text: c.yAxisTitle }, 
+            forceNiceScale: true
+        };
+
+        if (c.decimals !== undefined) {
+            yaxisOptions.labels = {
+                formatter: function(val) {
+                    return typeof val === 'number' ? val.toFixed(c.decimals) : val;
+                }
+            };
+        }
+
+        const options = {
+            ...commonOptions,
+            series: [{ name: c.title, data: c.data }],
+            title: { ...commonOptions.title, text: c.title },
+            colors: [c.color],
+            yaxis: yaxisOptions,
+        };
+
+        if (convCharts[c.id]) {
+            convCharts[c.id].updateOptions({
+                xaxis: { 
+                    categories: history.iterations,
+                    tickAmount: Math.max(1, history.iterations.length - 1)
+                },
+            });
+            convCharts[c.id].updateSeries(options.series);
+        } else {
+            convCharts[c.id] = new ApexCharts(container, options);
+            convCharts[c.id].render();
+        }
+    });
 }
