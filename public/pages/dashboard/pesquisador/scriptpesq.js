@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Configura os dropdowns apenas uma vez
     setupDropdown("iterations_button", "iterations_dropdown");
     setupDropdown("executions_button", "executions_dropdown");
-    setupDropdown("period_button", "period_dropdown");
+    // setupDropdown("period_button", "period_dropdown"); (botão de período removido momentaneamente, nao está sendo usado)
     setupDropdown("battery_button", "battery_dropdown");
     setupDropdown("algorithm_button", "algorithm_dropdown");
     updateBatteryInfo(0); // Atualiza com os valores iniciais
