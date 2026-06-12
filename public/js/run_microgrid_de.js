@@ -122,9 +122,8 @@ export default async function runMicrogrid(
     }
 
     class EmptyParticle {
-        constructor(position, velocity, cost, rf, meef, best, fitness) {
+        constructor(position, cost, rf, meef, best, fitness) {
             this.position = position;
-            this.velocity = velocity;
             this.cost = cost;
             this.rf = rf;
             this.meef = meef;
@@ -212,24 +211,16 @@ export default async function runMicrogrid(
         meef: meef,
     });
 
+    /* ========================================================= */
+
     const NPOP = 10; // população
     const LB = [10, 10]; // lower boundary da geraçao maxima dos paineis e turbina respectivamente
     const UB = [1000, 1000]; // upper boundary
-
-    const phi1 = 2.05;
-    const phi2 = 2.05;
-    const phi = phi1 + phi2;
-    const chi = 2 / (phi - 2 + Math.sqrt(Math.pow(phi, 2) - 4 * phi));
-
-    const w1 = chi; // Inertia weight
-    const c1 = chi * phi1; // Personal learning coefficient
-    const c2 = chi * phi2; // Global learning coefficient
 
     let particle = [];
     for (let i = 0; i < NPOP; i++) {
         particle.push(
             new EmptyParticle(
-                [],
                 [],
                 [],
                 [],
@@ -244,21 +235,8 @@ export default async function runMicrogrid(
 
     // inicialização
     for (let i = 0; i < NPOP; i++) {
-        let currentFixed = getFixedValues();
-        particle[i].position.push(
-            currentFixed.panels !== null
-                ? currentFixed.panels
-                : Math.random() * (UB[0] - LB[0]) + LB[0],
-        );
-        particle[i].position.push(
-            currentFixed.turbines !== null
-                ? currentFixed.turbines
-                : Math.random() * (UB[1] - LB[1]) + LB[1],
-        );
-
-        for (let y = 0; y < 2; y++) {
-            particle[i].velocity.push(Math.random());
-        }
+        particle[i].position.push(Math.random() * (UB[0] - LB[0]) + LB[0]);
+        particle[i].position.push(Math.random() * (UB[1] - LB[1]) + LB[1]);
 
         let max_pan = particle[i].position[0];
         let max_wind = particle[i].position[1];
@@ -292,6 +270,84 @@ export default async function runMicrogrid(
     let Rf = new Array(max_it).fill(0);
     let Meef = new Array(max_it).fill(0);
 
+    function getIndexes(i) {
+        const indexes = new Array(2);
+        while (1) {
+            let min = 0;
+            let max = NPOP;
+            for (let n = 0; n < 2; n++) {
+                indexes[n] = Math.floor(Math.random() * (max - min) + min);
+            }
+
+            if (indexes[0] === i || indexes[1] === i) {
+                // indexes diferentes do vetor base atual
+                continue;
+            } else if (indexes[0] === indexes[1]) {
+                // indexes diferentes
+                continue;
+            } else {
+                break;
+            }
+        }
+        return indexes;
+    }
+
+    function mutation(i) {
+        const indexes = getIndexes(i);
+        const F = 0.5; // fator de perturbação
+
+        const best = globalbest.position;
+        const random1 = particle[indexes[0]].position;
+        const random2 = particle[indexes[1]].position;
+
+        const mutatedPosition = new Array(2);
+        for (let j = 0; j < 2; j++) {
+            mutatedPosition[j] = best[j] + F * (random1[j] - random2[j]);
+        }
+
+        return mutatedPosition;
+    }
+
+    function crossover(x, mutant) {
+        const aux = new Array(2);
+        const rec_rate = 0.2;
+
+        for (let i = 0; i < 2; i++) {
+            if (rec_rate >= Math.random()) {
+                aux[i] = x[i];
+            } else {
+                aux[i] = mutant[i];
+            }
+        }
+        return aux;
+    }
+
+    function selection(trial, particle) {
+        let trialPosition = [...trial];
+        for (let y = 0; y < 2; y++) {
+            trialPosition[y] = Math.max(
+                LB[y],
+                Math.min(trialPosition[y], UB[y]),
+            );
+        }
+
+        let [lcoe, renewable_factor, meef] = microgrid.run(
+            trialPosition[0],
+            trialPosition[1],
+        );
+        let trialFitness =
+            0.5 * lcoe + 0.5 * (1 - renewable_factor) + 0.5 * meef;
+
+        if (trialFitness < particle.fitness) {
+            particle.position = trialPosition;
+            particle.cost = lcoe;
+            particle.rf = renewable_factor;
+            particle.meef = meef;
+            particle.fitness = trialFitness;
+        }
+        return particle;
+    }
+
     for (let u = 0; u < max_it; u++) {
         // Libera a thread principal para o navegador atualizar a interface (exibir GIFs e animar botão)
         await new Promise((resolve) => setTimeout(resolve, 0));
@@ -308,99 +364,15 @@ export default async function runMicrogrid(
             await new Promise((resolve) => setTimeout(resolve, 100));
         }
 
-        let currentBat = getBattery();
-        let batChanged = false;
-        if (currentBat !== select_bat) {
-            select_bat = currentBat;
-            microgrid.battery = new Battery({
-                capacity: bat_cap,
-                cost_per_kwh: bat_cap_cost_list[select_bat] * exchange_rate,
-                efficiency: bat_efficiency_list[select_bat],
-                lifetime: bat_lf_list[select_bat],
-                number_of_cycles: bat_cycle_list[select_bat],
-                depth_of_discharge: bat_dod,
-            });
-            batChanged = true;
-        }
-
-        let currentFixed = getFixedValues();
-        let gbViolated = false;
-        if (
-            currentFixed.panels !== null &&
-            Math.round(globalbest.position[0]) !== currentFixed.panels
-        )
-            gbViolated = true;
-        if (
-            currentFixed.turbines !== null &&
-            Math.round(globalbest.position[1]) !== currentFixed.turbines
-        )
-            gbViolated = true;
-        if (gbViolated || batChanged) {
-            globalbest.cost = Infinity;
-            globalbest.fitness = Infinity;
-        }
-
         for (let i = 0; i < NPOP; i++) {
-            let pViolated = false;
-            if (
-                currentFixed.panels !== null &&
-                Math.round(particle[i].best.position[0]) !== currentFixed.panels
-            )
-                pViolated = true;
-            if (
-                currentFixed.turbines !== null &&
-                Math.round(particle[i].best.position[1]) !==
-                    currentFixed.turbines
-            )
-                pViolated = true;
-            if (pViolated || batChanged) {
-                particle[i].best.cost = Infinity;
-                particle[i].best.fitness = Infinity;
-            }
+            // mutação: de/best/1/bin
+            const mutatedPosition = mutation(i);
 
-            for (let y = 0; y < 2; y++) {
-                let mut = Math.random();
-                particle[i].velocity[y] =
-                    w1 * mut * particle[i].velocity[y] +
-                    c1 *
-                        mut *
-                        Math.random() *
-                        (particle[i].best.position[y] -
-                            particle[i].position[y]) +
-                    c2 *
-                        mut *
-                        Math.random() *
-                        (globalbest.position[y] - particle[i].position[y]);
+            // recombinação
+            const trial = crossover(particle[i].position, mutatedPosition);
 
-                particle[i].position[y] =
-                    particle[i].position[y] + particle[i].velocity[y];
-                particle[i].position[y] = Math.max(
-                    LB[y],
-                    Math.min(particle[i].position[y], UB[y]),
-                );
-            }
-
-            currentFixed = getFixedValues();
-            if (currentFixed.panels !== null)
-                particle[i].position[0] = currentFixed.panels;
-            if (currentFixed.turbines !== null)
-                particle[i].position[1] = currentFixed.turbines;
-
-            let max_pan = particle[i].position[0];
-            let max_wind = particle[i].position[1];
-
-            let [lcoe, renewable_factor, meef] = microgrid.run(
-                max_pan,
-                max_wind,
-            );
-
-            let fitness =
-                0.5 * lcoe + 0.5 * (1 - renewable_factor) + 0.5 * meef;
-
-            particle[i].cost = lcoe;
-            particle[i].rf = renewable_factor;
-            particle[i].meef = meef;
-            particle[i].fitness = fitness;
+            // seleção
+            particle[i] = selection(trial, particle[i]);
 
             if (particle[i].fitness < particle[i].best.fitness) {
                 particle[i].best.cost = particle[i].cost;
@@ -445,6 +417,8 @@ export default async function runMicrogrid(
             `Best solution max_pan = ${max_pan_val}, max_wind = ${max_wind_val}`,
         );
     }
+
+    /* ========================================================= */
 
     // Roda a microrrede com a melhor solução global encontrada
     microgrid.run(max_pan_val, max_wind_val);

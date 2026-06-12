@@ -8,12 +8,14 @@ import {
     signOut,
     onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import runMicrogrid, {
+import runMicrogridCDEEPSO, {
     bat_efficiency_list,
     bat_cap_cost_list,
     bat_lf_list,
     bat_cycle_list,
-} from "../../../js/run_microgrid.js";
+} from "../../../js/run_microgrid_cdeepso.js";
+import runMicrogridDE from "../../../js/run_microgrid_de.js";
+import runMicrogridPSO from "../../../js/run_microgrid_pso.js";
 import {
     deleteGeneralUserComment,
     deleteUserCommentByDate,
@@ -130,8 +132,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let isPaused = false;
     let isRunning = false;
     let selectedIteration = 10;
+    let selectedExecutions = 1;
     let selectedPeriod = 8640; // 12 meses (8640 horas)
     let selectedBattery = 0; // LAG AGM (0)
+    let selectedAlgorithm = "CDEEPSO";
 
     const periodMapping = {
         "1 semana": 168,
@@ -207,6 +211,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (buttonId === "iterations_button") {
                         selectedIteration = parseInt(newValue);
+                    } else if (buttonId === "executions_button") {
+                        selectedExecutions = parseInt(newValue);
+                    } else if (buttonId === "algorithm_button") {
+                        selectedAlgorithm = newValue;
                     } else {
                         selectedPeriod = periodMapping[newValue];
                     }
@@ -217,10 +225,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Preenche o dropdown de execuções (1 a 30)
+    const executionsDropdown = document.getElementById("executions_dropdown");
+    if (executionsDropdown) {
+        for (let i = 1; i <= 30; i++) {
+            const btn = document.createElement("button");
+            btn.className = "dropdown_item";
+            btn.dataset.value = i;
+            btn.innerText = i;
+            executionsDropdown.appendChild(btn);
+        }
+    }
+
     // Configura os dropdowns apenas uma vez
     setupDropdown("iterations_button", "iterations_dropdown");
+    setupDropdown("executions_button", "executions_dropdown");
     setupDropdown("period_button", "period_dropdown");
     setupDropdown("battery_button", "battery_dropdown");
+    setupDropdown("algorithm_button", "algorithm_dropdown");
     updateBatteryInfo(0); // Atualiza com os valores iniciais
 
     runButton.addEventListener("click", function () {
@@ -373,16 +395,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let textIndex = 0;
         let interval;
 
-        let historyConvergence = {
-            iterations: [],
-            max_pan: [],
-            max_wind: [],
-            rf: [],
-            meef: [],
-            lcoe: [],
-            fitness: [],
-        };
-
         try {
             // Escurece fundo dos lugares onde ficam as métricas, indicando que está executando a simulação.
             valorContainer.forEach((container) => {
@@ -397,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function () {
             batteryButton.classList.add("running");
 
             // Animação do botão
-            runningSimStatus.innerText = `Rodando iteração 1/${selectedIteration}`;
+            runningSimStatus.innerText = `Preparando simulação...`;
             interval = setInterval(() => {
                 if (isPaused) {
                     runButtonText.innerHTML = "Simulação pausada";
@@ -415,63 +427,129 @@ document.addEventListener("DOMContentLoaded", function () {
             // Dá tempo ao navegador para renderizar os GIFs na tela antes de iniciar o processamento pesado
             await new Promise((resolve) => setTimeout(resolve, 10));
 
-            let resultado = await runMicrogrid(
-                selectedIteration,
-                selectedBattery,
-                () => isPaused,
-                () => fixedValues,
-                () => selectedBattery,
-                (data) => {
-                    runningSimStatus.innerText = `Rodando iteração ${Math.min(data.iteration + 2, selectedIteration)}/${selectedIteration}`;
+            let runAlgorithm;
+            if (selectedAlgorithm === "DE") {
+                runAlgorithm = runMicrogridDE;
+            } else if (selectedAlgorithm === "PSO") {
+                runAlgorithm = runMicrogridPSO;
+            } else {
+                runAlgorithm = runMicrogridCDEEPSO;
+            }
 
-                    // Registrando o histórico da iteração para os gráficos de convergência
-                    historyConvergence.iterations.push(data.iteration + 1);
-                    historyConvergence.max_pan.push(data.max_pan);
-                    historyConvergence.max_wind.push(data.max_wind);
-                    historyConvergence.rf.push(data.rf);
-                    historyConvergence.meef.push(data.meef);
-                    historyConvergence.lcoe.push(data.lcoe);
-                    historyConvergence.fitness.push(data.fitness);
+            let allExecutionsFinalData = [];
 
-                    let valores = [
-                        (data.rf * 100).toFixed(2).replace(".", ",") + "%",
-                        (data.meef * 100).toFixed(2).replace(".", ",") + "%",
-                        "$" + data.lcoe.toFixed(3).replace(".", ",") + "/kWh",
-                        data.max_wind + " kWh",
-                        data.max_pan + " kWh",
-                    ];
-                    metricas.forEach((el, index) => {
-                        if (
-                            isPaused &&
-                            (index === 3 || index === 4) &&
-                            fixedValues[index === 3 ? "turbines" : "panels"] ===
-                                null
-                        ) {
-                            return; // Se estiver pausado e não fixado, não sobrescreve a edição
-                        }
-                        el.style.display = "inline";
-                        if (index === 3 && fixedValues.turbines !== null) {
-                            el.innerText = fixedValues.turbines + " kWh";
-                        } else if (index === 4 && fixedValues.panels !== null) {
-                            el.innerText = fixedValues.panels + " kWh";
-                        } else {
-                            el.innerText = valores[index];
-                        }
-                        el.classList.remove("temp");
+            for (let exec = 0; exec < selectedExecutions; exec++) {
+                if (exec > 0) {
+                    // Reseta os valores fixados e a interface para uma nova execução
+                    fixedValues = { turbines: null, panels: null };
+                    valuesBeforePause = { turbines: null, panels: null };
+                    Object.values(fixedIcons).forEach(
+                        (icon) => (icon.style.display = "none"),
+                    );
+                    metricas.forEach((el) => (el.style.display = "none"));
+                    gifs.forEach((gif) => (gif.style.display = "inline"));
+                }
+
+                let historyConvergence = {
+                    iterations: [],
+                    max_pan: [],
+                    max_wind: [],
+                    rf: [],
+                    meef: [],
+                    lcoe: [],
+                    fitness: [],
+                };
+
+                let resultado = await runAlgorithm(
+                    selectedIteration,
+                    selectedBattery,
+                    () => isPaused,
+                    () => fixedValues,
+                    () => selectedBattery,
+                    (data) => {
+                        runningSimStatus.innerText = `Execução ${exec + 1}/${selectedExecutions} - Iteração ${Math.min(data.iteration + 2, selectedIteration)}/${selectedIteration}`;
+
+                        // Registrando o histórico da iteração para os gráficos de convergência
+                        historyConvergence.iterations.push(data.iteration + 1);
+                        historyConvergence.max_pan.push(data.max_pan);
+                        historyConvergence.max_wind.push(data.max_wind);
+                        historyConvergence.rf.push(data.rf);
+                        historyConvergence.meef.push(data.meef);
+                        historyConvergence.lcoe.push(data.lcoe);
+                        historyConvergence.fitness.push(data.fitness);
+
+                        let valores = [
+                            (data.rf * 100).toFixed(2).replace(".", ",") + "%",
+                            (data.meef * 100).toFixed(2).replace(".", ",") + "%",
+                            "$" + data.lcoe.toFixed(3).replace(".", ",") + "/kWh",
+                            data.max_wind + " kWh",
+                            data.max_pan + " kWh",
+                        ];
+                        metricas.forEach((el, index) => {
+                            if (
+                                isPaused &&
+                                (index === 3 || index === 4) &&
+                                fixedValues[index === 3 ? "turbines" : "panels"] ===
+                                    null
+                            ) {
+                                return; // Se estiver pausado e não fixado, não sobrescreve a edição
+                            }
+                            el.style.display = "inline";
+                            if (index === 3 && fixedValues.turbines !== null) {
+                                el.innerText = fixedValues.turbines + " kWh";
+                            } else if (index === 4 && fixedValues.panels !== null) {
+                                el.innerText = fixedValues.panels + " kWh";
+                            } else {
+                                el.innerText = valores[index];
+                            }
+                            el.classList.remove("temp");
+                        });
+                        gifs.forEach((gif, index) => {
+                            if (index === 3 && fixedValues.turbines !== null) {
+                                gif.style.display = "none";
+                            }
+                            if (index === 4 && fixedValues.panels !== null) {
+                                gif.style.display = "none";
+                            }
+                        });
+                    },
+                );
+
+                resultado.historyConvergence = historyConvergence;
+                localStorage.setItem("simulationData", JSON.stringify(resultado));
+
+                // Coletando dados da última iteração desta execução
+                let lastIdx = historyConvergence.iterations.length - 1;
+                if (lastIdx >= 0) {
+                    allExecutionsFinalData.push({
+                        exec: exec + 1,
+                        max_pan: historyConvergence.max_pan[lastIdx],
+                        max_wind: historyConvergence.max_wind[lastIdx],
+                        rf: historyConvergence.rf[lastIdx],
+                        meef: historyConvergence.meef[lastIdx],
+                        lcoe: historyConvergence.lcoe[lastIdx],
+                        fitness: historyConvergence.fitness[lastIdx]
                     });
-                    gifs.forEach((gif, index) => {
-                        if (index === 3 && fixedValues.turbines !== null) {
-                            gif.style.display = "none";
-                        }
-                        if (index === 4 && fixedValues.panels !== null) {
-                            gif.style.display = "none";
-                        }
-                    });
-                },
-            );
+                }
+            }
 
-            resultado.historyConvergence = historyConvergence;
-            localStorage.setItem("simulationData", JSON.stringify(resultado));
+            // Gerando e baixando o arquivo CSV
+            if (allExecutionsFinalData.length > 0) {
+                let csvContent = "Execucao,max_pan,max_wind,rf,meef,lcoe,fitness\n";
+                allExecutionsFinalData.forEach(row => {
+                    csvContent += `${row.exec},${row.max_pan},${row.max_wind},${row.rf},${row.meef},${row.lcoe},${row.fitness}\n`;
+                });
+
+                const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", `resultados_execucoes_${selectedAlgorithm}.csv`);
+                link.style.display = "none";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         } catch (error) {
             console.error("Erro ao rodar a simulação:", error);
             localStorage.clear();
